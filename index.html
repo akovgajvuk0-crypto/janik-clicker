@@ -1739,4 +1739,112 @@ $('u7GuildDonate')?.addEventListener('click',()=>{
 });
 function craft(type){
  const recipe=type==='charm'?{shards:3,dust:2,essence:0}:{shards:5,dust:0,essence:3};
- if(u7.shards<recipe.shards||u7.dust<recipe.dust||u7.essence<recipe.essence){tell('Не хватает материалов. Открывай мега-сундуки и выигрывай на а
+ if(u7.shards<recipe.shards||u7.dust<recipe.dust||u7.essence<recipe.essence){tell('Не хватает материалов. Открывай мега-сундуки и выигрывай на арене.');return}
+ u7.shards-=recipe.shards;u7.dust-=recipe.dust;u7.essence-=recipe.essence;
+ if(type==='charm')u7.craftedCharm++;else u7.craftedCore++;
+ persistU7();refresh();$('u7CraftResult').textContent=type==='charm'?'✨ Создан звёздный амулет! Коллекция пополнена.':'💠 Создано галактическое ядро! Коллекция пополнена.';
+}
+$('u7CraftCharm')?.addEventListener('click',()=>craft('charm'));
+$('u7CraftCore')?.addEventListener('click',()=>craft('core'));
+$('u7ArenaFight')?.addEventListener('click',()=>{
+ const power=Math.max(1,Number(typeof clickGain==='function'?clickGain():1)||1),enemy=power*(.65+Math.random()*.8);
+ const won=power>=enemy;
+ if(won){u7.arenaWins++;u7.arenaRating+=12;u7.shards+=1+Math.floor(Math.random()*2);u7.essence+=Math.random()<.25?1:0;gain(Math.max(10000,Math.floor(power*50)));}
+ else{u7.arenaRating=Math.max(0,u7.arenaRating-5);u7.dust++;}
+ $('u7ArenaResult').textContent=won?'🏆 Победа! Награда: лапки и кристаллы.':'🤖 Соперник оказался сильнее. Получена звёздная пыль за участие.';
+ persistU7();if(typeof save==='function')save();refresh();
+});
+$('u7PrestigeBtn')?.addEventListener('click',()=>{
+ const price=1e9*Math.pow(10,u7.prestige);
+ if(!Number.isFinite(price)||!spend(price))return;
+ u7.prestige++;u7.shards+=5;
+ persistU7();if(typeof save==='function')save();refresh();tell('👑 Новый престиж получен! +5 кристаллов. Основной прогресс сохранён.');
+});
+$('u7PassClaim')?.addEventListener('click',claimPass);
+document.querySelector('.menu-btn[data-page="ultra7"]')?.addEventListener('click',()=>setTimeout(refresh,0));
+document.querySelector('.menu-btn[data-page="home"]')?.addEventListener('click',()=>setTimeout(refresh,0));
+const resetBtn=$('reset');
+resetBtn?.addEventListener('click',()=>{setTimeout(()=>{try{refresh()}catch(e){}},0)});
+refresh();
+})();
+</script>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+import { getDatabase, ref, get, set, update, push, onChildAdded, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js";
+const firebaseConfig={apiKey:"AIzaSyD43sMaVlzgABfIDUrbo0vBHpjB15ah6pQ",authDomain:"janik-clicker-online.firebaseapp.com",databaseURL:"https://janik-clicker-online-default-rtdb.europe-west1.firebasedatabase.app",projectId:"janik-clicker-online",storageBucket:"janik-clicker-online.firebasestorage.app",messagingSenderId:"249823838375",appId:"1:249823838375:web:c146b8d19a37962e2e1b82"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
+const $=id=>document.getElementById(id), KEY='janik_clicker_ultra_lite_300_v1';
+let currentUser=null,cloudReady=false,writeTimer=null;
+function message(t,error=false){$('onlineMessage').textContent=t;$('onlineMessage').style.color=error?'#ff8d9d':'#a1a9d1'}
+function status(t){$('onlineStatus').textContent=t}
+function localGame(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}}
+async function uploadGame(show=true){if(!currentUser)return;const game=localGame();if(!game){message('Локальное сохранение не найдено.',true);return}try{await set(ref(db,'users/'+currentUser.uid+'/game'),{data:game,updatedAt:Date.now()});if(show)message('☁️ Прогресс сохранён в облаке!');}catch(e){message('Ошибка облачного сохранения: '+e.message,true)}}
+function scheduleUpload(){if(!currentUser||!cloudReady)return;clearTimeout(writeTimer);writeTimer=setTimeout(()=>uploadGame(false),1400)}
+
+// Online guilds and real-time guild chat.
+let activeGuildId=null,stopGuildChat=null;
+const guildPanel=$('guildOnlinePanel');
+const guildStatus=(t,error=false)=>{const el=$('guildChatStatus');if(el){el.textContent=t;el.style.color=error?'#ff8d9d':'var(--muted)'}};
+const playerName=()=>String(currentUser?.displayName||currentUser?.email?.split('@')[0]||'Игрок').replace(/[<>]/g,'').slice(0,24);
+function clearGuildChat(){if(stopGuildChat){stopGuildChat();stopGuildChat=null}activeGuildId=null;if(guildPanel)guildPanel.hidden=true;}
+function addGuildMessage(m){const box=$('guildChatMessages');if(!box)return;const empty=box.querySelector('[data-empty]');if(empty)empty.remove();const row=document.createElement('div');row.style.cssText='padding:7px 9px;border:1px solid #34416c;border-radius:10px;background:#11182b;max-width:100%;overflow-wrap:anywhere';const head=document.createElement('div');head.style.cssText='font-size:11px;color:#8edfff;margin-bottom:3px';head.textContent=(m.name||'Игрок')+' · '+new Date(Number(m.createdAt)||Date.now()).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});const body=document.createElement('div');body.style.cssText='font-size:13px;white-space:pre-wrap';body.textContent=String(m.text||'');row.append(head,body);box.append(row);while(box.children.length>80)box.firstElementChild.remove();box.scrollTop=box.scrollHeight;}
+async function showGuild(gid,guild){
+ clearGuildChat();activeGuildId=gid;guildPanel.hidden=false;$('guildInviteCode').textContent=gid;$('u7GuildInfo').textContent='🛡️ '+guild.name+' · '+(guild.memberCount||1)+' участник(ов)';
+ $('guildChatMessages').replaceChildren();const membersSnap=await get(ref(db,'guilds/'+gid+'/members'));const members=membersSnap.val()||{};const names=Object.values(members).map(m=>(m.name||'Игрок')+(m.role==='leader'?' 👑':''));$('guildMembers').textContent='👥 Участники ('+names.length+'): '+names.join(', ');
+ const q=query(ref(db,'guildChats/'+gid),orderByChild('createdAt'),limitToLast(60));stopGuildChat=onChildAdded(q,snap=>addGuildMessage(snap.val()||{}),err=>guildStatus('Не удалось загрузить чат: '+err.message,true));
+ guildStatus('Ты в гильдии «'+guild.name+'». Пиши сообщение!');
+}
+async function loadMyGuild(){
+ clearGuildChat();if(!currentUser)return;
+ try{const memberships=await get(ref(db,'guildMembers/'+currentUser.uid));if(!memberships.exists()){guildPanel.hidden=true;$('u7GuildInfo').textContent='Ты пока не состоишь в гильдии. Создай свою или введи код приглашения.';return}
+ const ids=Object.keys(memberships.val()||{});for(const gid of ids){const snap=await get(ref(db,'guilds/'+gid));if(snap.exists()){await showGuild(gid,snap.val());return}}
+ guildPanel.hidden=true;$('u7GuildInfo').textContent='Гильдия не найдена. Возможно, её удалили.';
+ }catch(e){guildPanel.hidden=true;$('u7GuildInfo').textContent='Ошибка доступа к гильдиям: '+e.message;}
+}
+async function createOnlineGuild(){
+ if(!currentUser){message('Сначала войди в аккаунт.',true);return}
+ const name=String($('u7GuildName').value||'').trim().replace(/[<>]/g,'').slice(0,18);if(name.length<3){message('Название должно содержать минимум 3 символа.',true);return}
+ try{const existing=await get(ref(db,'guildMembers/'+currentUser.uid));if(existing.exists()&&Object.keys(existing.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
+ const gid=push(ref(db,'guilds')).key,now=Date.now(),member={name:playerName(),role:'leader',joinedAt:now};const updates={};updates['guilds/'+gid]={name,leaderUid:currentUser.uid,leaderName:playerName(),createdAt:now,memberCount:1,members:{[currentUser.uid]:member}};updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildName').value='';const snap=await get(ref(db,'guilds/'+gid));await showGuild(gid,snap.val());message('Гильдия создана! Поделись кодом приглашения.');
+ }catch(e){message('Не удалось создать гильдию: '+e.message,true)}
+}
+async function joinOnlineGuild(){
+ if(!currentUser){message('Сначала войди в аккаунт.',true);return}
+ const gid=String($('u7GuildJoinCode').value||'').trim();if(!gid){message('Введи код гильдии.',true);return}
+ try{const mine=await get(ref(db,'guildMembers/'+currentUser.uid));if(mine.exists()&&Object.keys(mine.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
+ const snap=await get(ref(db,'guilds/'+gid));if(!snap.exists()){message('Гильдия с таким кодом не найдена.',true);return}
+ const g=snap.val(),now=Date.now(),member={name:playerName(),role:'member',joinedAt:now};const updates={};updates['guilds/'+gid+'/members/'+currentUser.uid]=member;updates['guilds/'+gid+'/memberCount']=Object.keys(g.members||{}).length+1;updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildJoinCode').value='';const fresh=await get(ref(db,'guilds/'+gid));await showGuild(gid,fresh.val());message('Ты вступил в гильдию «'+g.name+'»!');
+ }catch(e){message('Не удалось вступить: '+e.message,true)}
+}
+async function sendGuildMessage(){
+ if(!currentUser||!activeGuildId){guildStatus('Сначала вступи в гильдию.',true);return}
+ const input=$('guildChatInput'),textValue=String(input.value||'').trim();if(!textValue)return;if(textValue.length>300){guildStatus('Сообщение слишком длинное.',true);return}
+ try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:playerName(),text:textValue,createdAt:Date.now()});input.value='';guildStatus('Сообщение отправлено.');}catch(e){guildStatus('Не удалось отправить: '+e.message,true)}
+}
+$('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',joinOnlineGuild);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код гильдии скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
+window.addEventListener('janik:save',scheduleUpload);
+async function register(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||password.length<6){message('Введи почту и пароль минимум из 6 символов.',true);return}try{await createUserWithEmailAndPassword(auth,email,password);message('Аккаунт создан! Проверяем облачное сохранение…')}catch(e){message(friendly(e),true)}}
+async function login(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||!password){message('Введи почту и пароль.',true);return}try{await signInWithEmailAndPassword(auth,email,password)}catch(e){message(friendly(e),true)}}
+function friendly(e){const c=e?.code||'';return ({'auth/email-already-in-use':'Эта почта уже зарегистрирована. Нажми «Войти».','auth/invalid-email':'Неправильный адрес почты.','auth/weak-password':'Пароль слишком простой. Используй минимум 6 символов.','auth/invalid-credential':'Неверная почта или пароль.','auth/network-request-failed':'Нет соединения. Проверь интернет и попробуй снова.','auth/too-many-requests':'Слишком много попыток. Подожди и попробуй позже.','auth/operation-not-allowed':'В Firebase не включён Email/Password.'})[c]||('Не удалось выполнить действие: '+(e?.message||c))}
+$('onlineRegister').addEventListener('click',register);$('onlineLogin').addEventListener('click',login);
+$('onlineLogout').addEventListener('click',async()=>{try{await signOut(auth)}catch(e){message(friendly(e),true)}});
+$('onlineAccountLogout').addEventListener('click',async()=>{try{await signOut(auth)}catch(e){message(friendly(e),true)}});
+$('onlineSync').addEventListener('click',()=>uploadGame(true));
+onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('onlinePanel').hidden=!!user;$('onlineAccountLogout').hidden=!user;$('onlineLogout').hidden=!user;$('onlineSync').hidden=!user;$('onlineEmail').disabled=!!user;$('onlinePassword').disabled=!!user;$('onlineRegister').hidden=!!user;$('onlineLogin').hidden=!!user;
+ if(!user){clearGuildChat();status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
+ status('Выполнен вход: '+(user.email||'игрок'));message('Проверяем облачное сохранение…');
+ try{const snap=await get(ref(db,'users/'+user.uid+'/game'));if(snap.exists()&&snap.val()?.data){const cloud=snap.val().data,local=localGame();const cloudTime=Number(snap.val().updatedAt)||0,localTime=Number(local?.lastSeen)||0;
+   if(!local){localStorage.setItem(KEY,JSON.stringify(cloud));location.reload();return}
+   if(cloudTime>localTime&&confirm('Найдено более новое облачное сохранение. Загрузить его вместо сохранения на этом устройстве?')){localStorage.setItem(KEY,JSON.stringify(cloud));location.reload();return}
+   if(localTime>=cloudTime){await uploadGame(false);message('Локальный прогресс сохранён в облаке.')}else{message('Оставили локальный прогресс. Для загрузки облака выйди и войди снова, затем подтверди загрузку.')}
+  }else{await uploadGame(false);message('Первое сохранение отправлено в облако!')}
+  cloudReady=true;
+ }catch(e){message('Не удалось прочитать базу: '+e.message,true)}
+ loadMyGuild();
+});
+</script>
+
+</body></html>
