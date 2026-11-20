@@ -644,6 +644,15 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
   <input id="u7GuildJoinCode" class="search" maxlength="24" placeholder="Код гильдии" style="min-width:0;flex:1">
   <button class="btn" id="u7GuildJoin">Вступить</button>
  </div>
+ <div class="panel" style="margin-top:10px;padding:10px;background:#090f20">
+  <div class="actions" style="align-items:center;justify-content:space-between">
+   <h4 style="margin:0">🌐 Открытые гильдии</h4>
+   <button class="btn" id="u7GuildRefresh" type="button">🔄 Обновить</button>
+  </div>
+  <div id="u7GuildDirectory" style="display:flex;flex-direction:column;gap:8px;margin-top:9px">
+   Войди в аккаунт, чтобы посмотреть список гильдий.
+  </div>
+ </div>
  <p id="u7GuildInfo" style="font-size:12px;color:var(--muted)">Войди в аккаунт, чтобы создать гильдию или вступить по коду.</p>
  <div id="guildOnlinePanel" hidden style="margin-top:10px">
   <div class="stat" style="margin-bottom:9px"><span>🔑 Код для приглашения</span><strong id="guildInviteCode" style="font-size:14px;user-select:text;overflow-wrap:anywhere">—</strong><button class="btn" id="guildCopyCode" style="margin-top:7px">📋 Скопировать код</button></div>
@@ -1804,84 +1813,76 @@ async function loadMyGuild(){
  guildPanel.hidden=true;$('u7GuildInfo').textContent='Гильдия не найдена. Возможно, её удалили.';
  }catch(e){guildPanel.hidden=true;$('u7GuildInfo').textContent='Ошибка доступа к гильдиям: '+e.message;}
 }
+async function loadGuildDirectory(){
+ const box=$('u7GuildDirectory');
+ if(!box)return;
+ if(!currentUser){box.textContent='Войди в аккаунт, чтобы посмотреть гильдии.';return;}
+ box.textContent='Загружаем гильдии…';
+ try{
+  const [guildSnap,mineSnap]=await Promise.all([
+   get(query(ref(db,'guilds'),orderByChild('createdAt'),limitToLast(50))),
+   get(ref(db,'guildMembers/'+currentUser.uid))
+  ]);
+  if(!guildSnap.exists()){box.textContent='Пока нет открытых гильдий. Создай первую!';return;}
+  const mine=mineSnap.exists()&&Object.keys(mineSnap.val()||{}).length>0;
+  const entries=Object.entries(guildSnap.val()||{}).sort((a,b)=>(Number(b[1]?.createdAt)||0)-(Number(a[1]?.createdAt)||0));
+  box.replaceChildren();
+  for(const [gid,guild] of entries){
+   const members=guild.members||{};
+   const count=Object.keys(members).length;
+   const card=document.createElement('div');
+   card.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid #34416c;border-radius:10px;background:#11182b';
+   const info=document.createElement('div');
+   info.style.cssText='min-width:0;flex:1';
+   const title=document.createElement('strong');
+   title.style.cssText='display:block;overflow-wrap:anywhere';
+   title.textContent='🛡️ '+String(guild.name||'Без названия');
+   const detail=document.createElement('div');
+   detail.style.cssText='font-size:11px;color:var(--muted);margin-top:4px';
+   detail.textContent='👥 '+count+' · 👑 '+String(guild.leaderName||'Игрок');
+   info.append(title,detail);
+   const btn=document.createElement('button');
+   btn.className='btn primary';
+   btn.type='button';
+   btn.textContent=mine?'Уже в гильдии':'Вступить';
+   btn.disabled=mine;
+   btn.addEventListener('click',()=>joinOnlineGuild(gid));
+   card.append(info,btn);
+   box.append(card);
+  }
+ }catch(e){box.textContent='Не удалось загрузить гильдии: '+e.message;}
+}
+
 async function createOnlineGuild(){
  if(!currentUser){message('Сначала войди в аккаунт.',true);return}
  const name=String($('u7GuildName').value||'').trim().replace(/[<>]/g,'').slice(0,18);if(name.length<3){message('Название должно содержать минимум 3 символа.',true);return}
  try{const existing=await get(ref(db,'guildMembers/'+currentUser.uid));if(existing.exists()&&Object.keys(existing.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
- const gid=push(ref(db,'guilds')).key,now=Date.now(),member={name:playerName(),role:'leader',joinedAt:now};const updates={};updates['guilds/'+gid]={name,leaderUid:currentUser.uid,leaderName:playerName(),createdAt:now,memberCount:1,members:{[currentUser.uid]:member}};updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildName').value='';const snap=await get(ref(db,'guilds/'+gid));await showGuild(gid,snap.val());message('Гильдия создана! Поделись кодом приглашения.');
+ const gid=push(ref(db,'guilds')).key,now=Date.now(),member={name:playerName(),role:'leader',joinedAt:now};const updates={};updates['guilds/'+gid]={name,leaderUid:currentUser.uid,leaderName:playerName(),createdAt:now,memberCount:1,members:{[currentUser.uid]:member}};updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildName').value='';const snap=await get(ref(db,'guilds/'+gid));await showGuild(gid,snap.val());await loadGuildDirectory();message('Гильдия создана! Поделись кодом приглашения.');
  }catch(e){message('Не удалось создать гильдию: '+e.message,true)}
 }
-
-async function joinOnlineGuild(){
-  if(!currentUser){
-    message('Сначала войди в аккаунт.',true);
-    return;
-  }
-
-  const gid=String($('u7GuildJoinCode').value||'').trim();
-
-  if(!gid){
-    message('Введи код гильдии.',true);
-    return;
-  }
-
-  try{
-    const mine=await get(ref(db,'guildMembers/'+currentUser.uid));
-
-    if(mine.exists()&&Object.keys(mine.val()||{}).length){
-      message('Ты уже состоишь в гильдии.',true);
-      return;
-    }
-
-    const snap=await get(ref(db,'guilds/'+gid));
-
-    if(!snap.exists()){
-      message('Гильдия с таким кодом не найдена.',true);
-      return;
-    }
-
-    const g=snap.val();
-    const now=Date.now();
-
-    const member={
-      name:playerName(),
-      role:'member',
-      joinedAt:now
-    };
-
-    const updates={};
-
-    updates['guilds/'+gid+'/members/'+currentUser.uid]=member;
-    updates['guildMembers/'+currentUser.uid+'/'+gid]=true;
-
-    await update(ref(db),updates);
-
-    try{
-      await update(ref(db),{
-        ['guilds/'+gid+'/memberCount']:Object.keys(g.members||{}).length+1
-      });
-    }catch(countError){
-      console.warn('Не удалось обновить счётчик:',countError);
-    }
-
-    $('u7GuildJoinCode').value='';
-
-    const fresh=await get(ref(db,'guilds/'+gid));
-
-    await showGuild(gid,fresh.val());
-
-    message('Ты вступил в гильдию «'+g.name+'»!');
-
-  }catch(e){
-    message('Не удалось вступить: '+e.message,true);
-  }
-}
-
+async function joinOnlineGuild(guildId=null){
  if(!currentUser){message('Сначала войди в аккаунт.',true);return}
- const gid=String($('u7GuildJoinCode').value||'').trim();if(!gid){message('Введи код гильдии.',true);return}
- try{const mine=await get(ref(db,'guildMembers/'+currentUser.uid));if(mine.exists()&&Object.keys(mine.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
- const snap=await get(ref(db,'guilds/'+gid));if(!snap.exists()){message('Гильдия с таким кодом не найдена.',true);return}
- const g=snap.val(),now=Date.now(),member={name:playerName(),role:'member',joinedAt:now};const updates={};updates['guilds/'+gid+'/members/'+currentUser.uid]=member;updates['guilds/'+gid+'/memberCount']=Object.keys(g.members||{}).length+1;updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildJoinCode').value='';const fresh=await get(ref(db,'guilds/'+gid));await showGuild(gid,fresh.val());message('Ты вступил в гильдию «'+g.name+'»!');
+ const gid=String(guildId||$('u7GuildJoinCode').value||'').trim();
+ if(!gid){message('Введи код гильдии.',true);return}
+ try{
+  const mine=await get(ref(db,'guildMembers/'+currentUser.uid));
+  if(mine.exists()&&Object.keys(mine.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
+  const snap=await get(ref(db,'guilds/'+gid));
+  if(!snap.exists()){message('Гильдия с таким кодом не найдена.',true);return}
+  const g=snap.val(),now=Date.now();
+  const member={name:playerName(),role:'member',joinedAt:now};
+  const updates={};
+  updates['guilds/'+gid+'/members/'+currentUser.uid]=member;
+  updates['guildMembers/'+currentUser.uid+'/'+gid]=true;
+  await update(ref(db),updates);
+  try{
+   await update(ref(db),{['guilds/'+gid+'/memberCount']:Object.keys(g.members||{}).length+1});
+  }catch(countError){console.warn('Не удалось обновить счётчик гильдии:',countError);}
+  $('u7GuildJoinCode').value='';
+  const fresh=await get(ref(db,'guilds/'+gid));
+  await showGuild(gid,fresh.val());
+  await loadGuildDirectory();
+  message('Ты вступил в гильдию «'+g.name+'»!');
  }catch(e){message('Не удалось вступить: '+e.message,true)}
 }
 async function sendGuildMessage(){
@@ -1889,7 +1890,7 @@ async function sendGuildMessage(){
  const input=$('guildChatInput'),textValue=String(input.value||'').trim();if(!textValue)return;if(textValue.length>300){guildStatus('Сообщение слишком длинное.',true);return}
  try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:playerName(),text:textValue,createdAt:Date.now()});input.value='';guildStatus('Сообщение отправлено.');}catch(e){guildStatus('Не удалось отправить: '+e.message,true)}
 }
-$('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',joinOnlineGuild);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код гильдии скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
+$('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',()=>joinOnlineGuild());$('u7GuildRefresh').addEventListener('click',loadGuildDirectory);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код гильдии скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
 window.addEventListener('janik:save',scheduleUpload);
 async function register(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||password.length<6){message('Введи почту и пароль минимум из 6 символов.',true);return}try{await createUserWithEmailAndPassword(auth,email,password);message('Аккаунт создан! Проверяем облачное сохранение…')}catch(e){message(friendly(e),true)}}
 async function login(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||!password){message('Введи почту и пароль.',true);return}try{await signInWithEmailAndPassword(auth,email,password)}catch(e){message(friendly(e),true)}}
@@ -1909,6 +1910,7 @@ onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('online
   cloudReady=true;
  }catch(e){message('Не удалось прочитать базу: '+e.message,true)}
  loadMyGuild();
+ await loadGuildDirectory();
 });
 </script>
 
