@@ -1811,7 +1811,72 @@ async function createOnlineGuild(){
  const gid=push(ref(db,'guilds')).key,now=Date.now(),member={name:playerName(),role:'leader',joinedAt:now};const updates={};updates['guilds/'+gid]={name,leaderUid:currentUser.uid,leaderName:playerName(),createdAt:now,memberCount:1,members:{[currentUser.uid]:member}};updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildName').value='';const snap=await get(ref(db,'guilds/'+gid));await showGuild(gid,snap.val());message('Гильдия создана! Поделись кодом приглашения.');
  }catch(e){message('Не удалось создать гильдию: '+e.message,true)}
 }
+
 async function joinOnlineGuild(){
+  if(!currentUser){
+    message('Сначала войди в аккаунт.',true);
+    return;
+  }
+
+  const gid=String($('u7GuildJoinCode').value||'').trim();
+
+  if(!gid){
+    message('Введи код гильдии.',true);
+    return;
+  }
+
+  try{
+    const mine=await get(ref(db,'guildMembers/'+currentUser.uid));
+
+    if(mine.exists()&&Object.keys(mine.val()||{}).length){
+      message('Ты уже состоишь в гильдии.',true);
+      return;
+    }
+
+    const snap=await get(ref(db,'guilds/'+gid));
+
+    if(!snap.exists()){
+      message('Гильдия с таким кодом не найдена.',true);
+      return;
+    }
+
+    const g=snap.val();
+    const now=Date.now();
+
+    const member={
+      name:playerName(),
+      role:'member',
+      joinedAt:now
+    };
+
+    const updates={};
+
+    updates['guilds/'+gid+'/members/'+currentUser.uid]=member;
+    updates['guildMembers/'+currentUser.uid+'/'+gid]=true;
+
+    await update(ref(db),updates);
+
+    try{
+      await update(ref(db),{
+        ['guilds/'+gid+'/memberCount']:Object.keys(g.members||{}).length+1
+      });
+    }catch(countError){
+      console.warn('Не удалось обновить счётчик:',countError);
+    }
+
+    $('u7GuildJoinCode').value='';
+
+    const fresh=await get(ref(db,'guilds/'+gid));
+
+    await showGuild(gid,fresh.val());
+
+    message('Ты вступил в гильдию «'+g.name+'»!');
+
+  }catch(e){
+    message('Не удалось вступить: '+e.message,true);
+  }
+}
+
  if(!currentUser){message('Сначала войди в аккаунт.',true);return}
  const gid=String($('u7GuildJoinCode').value||'').trim();if(!gid){message('Введи код гильдии.',true);return}
  try{const mine=await get(ref(db,'guildMembers/'+currentUser.uid));if(mine.exists()&&Object.keys(mine.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
