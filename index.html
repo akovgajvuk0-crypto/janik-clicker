@@ -468,6 +468,7 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
 <button class="menu-btn" data-page="features"><span class="menu-icon">✨</span><span><span class="menu-label">Механики</span><span class="menu-sub">Золото, задания, престиж</span></span></button>
 <button class="menu-btn" data-page="adventure"><span class="menu-icon">🌌</span><span><span class="menu-label">Приключения</span><span class="menu-sub">Боссы, миры, питомцы</span></span></button>
 <button class="menu-btn" data-page="leaderboard"><span class="menu-icon">🏆</span><span><span class="menu-label">Таблица лидеров</span><span class="menu-sub">Лучшие игроки онлайн</span></span></button>
+<button class="menu-btn" data-page="profile"><span class="menu-icon">👤</span><span><span class="menu-label">Мой профиль</span><span class="menu-sub">Ник и аватар</span></span></button>
 <button class="menu-btn" data-page="settings"><span class="menu-icon settings-menu-icon">⚙️</span><span><span class="menu-label">Настройки</span><span class="menu-sub">Графика и эффекты</span></span></button>
 <button class="menu-btn" data-page="pets"><span class="menu-icon">🐾</span><span><span class="menu-label">Команда питомцев</span><span class="menu-sub">3 активных помощника</span></span></button>
 <button class="menu-btn" data-page="base"><span class="menu-icon">🏡</span><span><span class="menu-label">База Жаника</span><span class="menu-sub">Постройки и усиления</span></span></button>
@@ -500,6 +501,26 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
 </div>
 <p id="v3Message" style="font-size:12px;color:var(--green);margin:10px 0 0">Новая система прогресса готова.</p>
 </div>
+</section>
+<section class="panel menu-page" id="profilePage" style="margin-top:13px">
+<h2 style="margin:0 0 6px">👤 Мой профиль</h2>
+<p style="font-size:12px;color:var(--muted);margin:0 0 12px">Твой ник и аватар будут видны в таблице лидеров и сообщениях гильдейского чата.</p>
+<div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#11182b22">
+ <div id="profilePreview" style="width:68px;height:68px;flex:0 0 68px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#273d75,#773c91);border:2px solid #8edfff;font-size:38px;overflow:hidden">🐱</div>
+ <div style="min-width:0"><strong id="profilePreviewName">Игрок</strong><div style="font-size:12px;color:var(--muted);margin-top:3px">Предпросмотр профиля</div></div>
+</div>
+<label for="profileNick" style="display:block;margin:13px 0 5px;font-size:13px">Никнейм (до 20 символов)</label>
+<input id="profileNick" maxlength="20" placeholder="Введи свой ник" style="box-sizing:border-box;width:100%;padding:12px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff">
+<h3 style="font-size:14px;margin:14px 0 8px">🐾 Готовые кото-аватары</h3>
+<div id="profilePresets" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+ <button class="btn" id="profileCamera" type="button">📷 Сфотографировать</button>
+ <button class="btn" id="profileGallery" type="button">🖼️ Выбрать из галереи</button>
+</div>
+<input id="profileCameraInput" type="file" accept="image/*" capture="environment" hidden>
+<input id="profileGalleryInput" type="file" accept="image/*" hidden>
+<button class="btn primary" id="profileSave" type="button" style="width:100%;margin-top:12px">💾 Сохранить профиль</button>
+<p id="profileStatus" style="font-size:12px;color:var(--muted);margin:8px 0 0">Войди в аккаунт, чтобы настроить профиль.</p>
 </section>
 <section class="panel menu-page" id="leaderboardPage" style="margin-top:13px">
 <h2 style="margin:0 0 6px">🏆 Таблица лидеров</h2>
@@ -1008,12 +1029,13 @@ function showMenuPage(page){
   $('featuresPage').classList.toggle('menu-visible',page==='features');
   $('adventurePanel').classList.toggle('menu-visible',page==='adventure');
   $('leaderboardPage').classList.toggle('menu-visible',page==='leaderboard');
+  $('profilePage').classList.toggle('menu-visible',page==='profile');
   if(page==='leaderboard'&&typeof refreshLeaderboard==='function')setTimeout(refreshLeaderboard,0);
   $('shopPage').classList.toggle('menu-visible',page==='shop');
   $('settingsPage').classList.toggle('menu-visible',page==='settings');
   $('petsPage').classList.toggle('menu-visible',page==='pets');$('basePage').classList.toggle('menu-visible',page==='base');$('offlinePage').classList.toggle('menu-visible',page==='offline');
   $('ultra7Page')?.classList.toggle('menu-visible',page==='ultra7');
-  const labels={home:'Главная',shop:'Магазин',features:'Особые механики',adventure:'Приключения',leaderboard:'Таблица лидеров',settings:'Настройки графики',pets:'Команда питомцев',base:'База Жаника',offline:'Оффлайн-центр',ultra7:'ULTRA 7.0 — MEGA UPDATE'};
+  const labels={home:'Главная',shop:'Магазин',features:'Особые механики',adventure:'Приключения',leaderboard:'Таблица лидеров',profile:'Мой профиль',settings:'Настройки графики',pets:'Команда питомцев',base:'База Жаника',offline:'Оффлайн-центр',ultra7:'ULTRA 7.0 — MEGA UPDATE'};
   document.title='Janik Clicker — '+(labels[page]||'Меню');
   if(page==='shop' && typeof renderShop==='function') renderShop();
 }
@@ -1805,7 +1827,7 @@ refresh();
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
 import { getDatabase, ref, get, set, update, push, onChildAdded, query, orderByChild, limitToLast, runTransaction } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyD43sMaVlzgABfIDUrbo0vBHpjB15ah6pQ",authDomain:"janik-clicker-online.firebaseapp.com",databaseURL:"https://janik-clicker-online-default-rtdb.europe-west1.firebasedatabase.app",projectId:"janik-clicker-online",storageBucket:"janik-clicker-online.firebasestorage.app",messagingSenderId:"249823838375",appId:"1:249823838375:web:c146b8d19a37962e2e1b82"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
@@ -1822,13 +1844,23 @@ let activeGuildId=null,stopGuildChat=null;
 const guildPanel=$('guildOnlinePanel');
 const guildStatus=(t,error=false)=>{const el=$('guildChatStatus');if(el){el.textContent=t;el.style.color=error?'#ff8d9d':'var(--muted)'}};
 const playerName=()=>String(currentUser?.displayName||currentUser?.email?.split('@')[0]||'Игрок').replace(/[<>]/g,'').slice(0,24);
+const CAT_AVATARS=['🐱','😺','😸','😻','😽','🙀','😿','😹','🐈','🐈‍⬛','🐾','🦁','🐯','😼','🐱‍👤','😺'];
+let profileData={name:'',avatar:'🐱'};
+function safeProfileName(v){return String(v||'').replace(/[<>]/g,'').trim().slice(0,20)}
+function paintProfile(){const name=safeProfileName($('profileNick')?.value)||profileData.name||playerName();const preview=$('profilePreview');if(preview){preview.replaceChildren();if(profileData.avatar&&profileData.avatar.startsWith('data:image/')){const img=document.createElement('img');img.src=profileData.avatar;img.alt='Аватар';img.style.cssText='width:100%;height:100%;object-fit:cover';preview.append(img)}else preview.textContent=profileData.avatar||'🐱'}const label=$('profilePreviewName');if(label)label.textContent=name;document.querySelectorAll('[data-cat-avatar]').forEach(b=>{b.style.outline=b.dataset.catAvatar===profileData.avatar?'2px solid #8edfff':'none';b.style.background=b.dataset.catAvatar===profileData.avatar?'#29466b':'#171f38'})}
+function setupProfile(){const grid=$('profilePresets');if(!grid||grid.dataset.ready)return;grid.dataset.ready='1';CAT_AVATARS.forEach((a,i)=>{const b=document.createElement('button');b.type='button';b.textContent=a;b.dataset.catAvatar=a;b.title='Кото-аватар '+(i+1);b.style.cssText='min-width:0;aspect-ratio:1;border:1px solid #46527f;border-radius:12px;background:#171f38;color:white;font-size:27px;cursor:pointer';b.addEventListener('click',()=>{profileData.avatar=a;paintProfile()});grid.append(b)});$('profileNick').addEventListener('input',paintProfile);$('profileCamera').addEventListener('click',()=>$('profileCameraInput').click());$('profileGallery').addEventListener('click',()=>$('profileGalleryInput').click());$('profileCameraInput').addEventListener('change',e=>readProfileImage(e.target));$('profileGalleryInput').addEventListener('change',e=>readProfileImage(e.target));$('profileSave').addEventListener('click',saveProfile);}
+function readProfileImage(input){const file=input.files?.[0];input.value='';if(!file)return;if(!file.type.startsWith('image/')){$('profileStatus').textContent='Выбери файл изображения.';return}if(file.size>12*1024*1024){$('profileStatus').textContent='Файл слишком большой. Максимум 12 МБ.';return}const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=128;c.height=128;const side=Math.min(im.width,im.height),sx=(im.width-side)/2,sy=(im.height-side)/2;ctx.drawImage(im,sx,sy,side,side,0,0,128,128);profileData.avatar=c.toDataURL('image/jpeg',.78);paintProfile();$('profileStatus').textContent='Фото готово. Нажми «Сохранить профиль».'};im.onerror=()=>{$('profileStatus').textContent='Не удалось открыть это изображение.'};im.src=reader.result};reader.readAsDataURL(file)}
+async function loadProfile(){setupProfile();if(!currentUser)return;try{const snap=await get(ref(db,'users/'+currentUser.uid+'/profile'));const saved=snap.val()||{};profileData={name:safeProfileName(saved.name)||safeProfileName(currentUser.displayName)||safeProfileName(currentUser.email?.split('@')[0])||'Игрок',avatar:typeof saved.avatar==='string'&&saved.avatar.length<100000?saved.avatar.trim(): '🐱'};if(!profileData.avatar)profileData.avatar='🐱';$('profileNick').value=profileData.name;paintProfile();$('profileStatus').textContent='Профиль загружен.'}catch(e){$('profileStatus').textContent='Не удалось загрузить профиль: '+e.message}}
+async function saveProfile(){if(!currentUser){$('profileStatus').textContent='Сначала войди в аккаунт.';return}const name=safeProfileName($('profileNick').value);if(name.length<2){$('profileStatus').textContent='Ник должен содержать минимум 2 символа.';return}const btn=$('profileSave');btn.disabled=true;try{profileData.name=name;await set(ref(db,'users/'+currentUser.uid+'/profile'),{name,avatar:profileData.avatar||'🐱',updatedAt:Date.now()});await updateProfile(currentUser,{displayName:name});paintProfile();await syncLeaderboard();$('profileStatus').textContent='✅ Профиль сохранён! Ник и аватар появятся в рейтинге и новых сообщениях чата.';if(typeof loadMyGuild==='function')loadMyGuild()}catch(e){$('profileStatus').textContent='Ошибка сохранения: '+e.message}finally{btn.disabled=false}}
+function avatarNode(value,size=28){const wrap=document.createElement('span');wrap.style.cssText='width:'+size+'px;height:'+size+'px;flex:0 0 '+size+'px;border-radius:50%;display:inline-grid;place-items:center;overflow:hidden;background:#29365f;border:1px solid #7185bd;font-size:'+(size*.62)+'px;vertical-align:middle';if(typeof value==='string'&&value.startsWith('data:image/')){const im=document.createElement('img');im.src=value;im.alt='';im.style.cssText='width:100%;height:100%;object-fit:cover';wrap.append(im)}else wrap.textContent=value||'🐱';return wrap}
+
 let leaderboardSort='paws';
 const leaderboardNames={paws:'🐾 Обычные лапки',gold:'💛 Золотые лапки',prestige:'👑 Перерождения'};
 function leaderboardStatus(t,error=false){const el=$('leaderboardStatus');if(el){el.textContent=t;el.style.color=error?'#ff8d9d':'var(--muted)'}}
-function renderLeaderboard(data){const body=$('leaderboardRows');if(!body)return;body.replaceChildren();const entries=Object.values(data||{}).filter(x=>x&&typeof x==='object').sort((a,b)=>(Number(b[leaderboardSort])||0)-(Number(a[leaderboardSort])||0)).slice(0,100);$('lbMetricHeading').textContent=leaderboardNames[leaderboardSort];if(!entries.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=3;td.textContent='Пока нет игроков. Будь первым!';tr.append(td);body.append(tr);return}entries.forEach((item,i)=>{const tr=document.createElement('tr');if(currentUser&&item.uid===currentUser.uid)tr.className='me';const rank=document.createElement('td');rank.textContent=['🥇','🥈','🥉'][i]||String(i+1);const name=document.createElement('td');name.textContent=String(item.name||'Игрок').slice(0,24)+(currentUser&&item.uid===currentUser.uid?' · ты':'');const score=document.createElement('td');const value=Number(item[leaderboardSort])||0;score.textContent=fmtLeaderboard(value);tr.append(rank,name,score);body.append(tr)})}
+function renderLeaderboard(data){const body=$('leaderboardRows');if(!body)return;body.replaceChildren();const entries=Object.values(data||{}).filter(x=>x&&typeof x==='object').sort((a,b)=>(Number(b[leaderboardSort])||0)-(Number(a[leaderboardSort])||0)).slice(0,100);$('lbMetricHeading').textContent=leaderboardNames[leaderboardSort];if(!entries.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=3;td.textContent='Пока нет игроков. Будь первым!';tr.append(td);body.append(tr);return}entries.forEach((item,i)=>{const tr=document.createElement('tr');if(currentUser&&item.uid===currentUser.uid)tr.className='me';const rank=document.createElement('td');rank.textContent=['🥇','🥈','🥉'][i]||String(i+1);const name=document.createElement('td');name.style.cssText='display:flex;align-items:center;gap:7px';name.append(avatarNode(item.avatar,28));const label=document.createElement('span');label.textContent=String(item.name||'Игрок').slice(0,24)+(currentUser&&item.uid===currentUser.uid?' · ты':'');name.append(label);const score=document.createElement('td');const value=Number(item[leaderboardSort])||0;score.textContent=fmtLeaderboard(value);tr.append(rank,name,score);body.append(tr)})}
 function fmtLeaderboard(n){if(!Number.isFinite(n))return'0';if(typeof Intl!=='undefined')return new Intl.NumberFormat('ru-RU',{notation:n>=1e9?'compact':'standard',maximumFractionDigits:2}).format(n);return String(Math.floor(n))}
 async function refreshLeaderboard(){if(!currentUser){leaderboardStatus('Сначала войди в аккаунт.',true);return}leaderboardStatus('Загружаем рейтинг…');try{const snap=await get(ref(db,'leaderboard'));renderLeaderboard(snap.val()||{});leaderboardStatus('Показаны до 100 лучших игроков. Рейтинг обновляется при сохранении прогресса.')}catch(e){leaderboardStatus('Ошибка загрузки рейтинга: '+e.message,true)}}
-async function syncLeaderboard(){if(!currentUser)return;const game=localGame();if(!game)return;const record={uid:currentUser.uid,name:playerName(),paws:Math.max(0,Number(game.paws)||0),gold:Math.max(0,Number(game.gold)||0),prestige:Math.max(0,Number(game.prestige)||0),updatedAt:Date.now()};try{await set(ref(db,'leaderboard/'+currentUser.uid),record)}catch(e){leaderboardStatus('Не удалось обновить рейтинг: '+e.message,true)}}
+async function syncLeaderboard(){if(!currentUser)return;const game=localGame();if(!game)return;const record={uid:currentUser.uid,name:profileData.name||playerName(),avatar:profileData.avatar||'🐱',paws:Math.max(0,Number(game.paws)||0),gold:Math.max(0,Number(game.gold)||0),prestige:Math.max(0,Number(game.prestige)||0),updatedAt:Date.now()};try{await set(ref(db,'leaderboard/'+currentUser.uid),record)}catch(e){leaderboardStatus('Не удалось обновить рейтинг: '+e.message,true)}}
 $('leaderboardRefresh')?.addEventListener('click',refreshLeaderboard);
 document.querySelectorAll('[data-lb-sort]').forEach(b=>b.addEventListener('click',()=>{leaderboardSort=b.dataset.lbSort;document.querySelectorAll('[data-lb-sort]').forEach(x=>x.classList.toggle('active',x===b));refreshLeaderboard()}));
 document.querySelector('.menu-btn[data-page="leaderboard"]')?.addEventListener('click',()=>setTimeout(refreshLeaderboard,0));
@@ -1870,7 +1902,7 @@ async function claimLeaderboardReward(){
 $('claimLeaderboardReward')?.addEventListener('click',claimLeaderboardReward);
 
 function clearGuildChat(){if(stopGuildChat){stopGuildChat();stopGuildChat=null}activeGuildId=null;if(guildPanel)guildPanel.hidden=true;}
-function addGuildMessage(m){const box=$('guildChatMessages');if(!box)return;const empty=box.querySelector('[data-empty]');if(empty)empty.remove();const row=document.createElement('div');row.style.cssText='padding:7px 9px;border:1px solid #34416c;border-radius:10px;background:#11182b;max-width:100%;overflow-wrap:anywhere';const head=document.createElement('div');head.style.cssText='font-size:11px;color:#8edfff;margin-bottom:3px';head.textContent=(m.name||'Игрок')+' · '+new Date(Number(m.createdAt)||Date.now()).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});const body=document.createElement('div');body.style.cssText='font-size:13px;white-space:pre-wrap';body.textContent=String(m.text||'');row.append(head,body);box.append(row);while(box.children.length>80)box.firstElementChild.remove();box.scrollTop=box.scrollHeight;}
+function addGuildMessage(m){const box=$('guildChatMessages');if(!box)return;const empty=box.querySelector('[data-empty]');if(empty)empty.remove();const row=document.createElement('div');row.style.cssText='padding:7px 9px;border:1px solid #34416c;border-radius:10px;background:#11182b;max-width:100%;overflow-wrap:anywhere';const head=document.createElement('div');head.style.cssText='display:flex;align-items:center;gap:7px;font-size:11px;color:#8edfff;margin-bottom:5px';head.append(avatarNode(m.avatar,25));const who=document.createElement('span');who.textContent=(m.name||'Игрок')+' · '+new Date(Number(m.createdAt)||Date.now()).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});head.append(who);const body=document.createElement('div');body.style.cssText='font-size:13px;white-space:pre-wrap';body.textContent=String(m.text||'');row.append(head,body);box.append(row);while(box.children.length>80)box.firstElementChild.remove();box.scrollTop=box.scrollHeight;}
 async function showGuild(gid,guild){
  clearGuildChat();activeGuildId=gid;guildPanel.hidden=false;$('guildInviteCode').textContent=gid;$('u7GuildInfo').textContent='🛡️ '+guild.name+' · '+(guild.memberCount||1)+' участник(ов)';
  $('guildChatMessages').replaceChildren();const membersSnap=await get(ref(db,'guilds/'+gid+'/members'));const members=membersSnap.val()||{};const names=Object.values(members).map(m=>(m.name||'Игрок')+(m.role==='leader'?' 👑':''));$('guildMembers').textContent='👥 Участники ('+names.length+'): '+names.join(', ');
@@ -1902,7 +1934,7 @@ async function joinOnlineGuild(){
 async function sendGuildMessage(){
  if(!currentUser||!activeGuildId){guildStatus('Сначала вступи в гильдию.',true);return}
  const input=$('guildChatInput'),textValue=String(input.value||'').trim();if(!textValue)return;if(textValue.length>300){guildStatus('Сообщение слишком длинное.',true);return}
- try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:playerName(),text:textValue,createdAt:Date.now()});input.value='';guildStatus('Сообщение отправлено.');}catch(e){guildStatus('Не удалось отправить: '+e.message,true)}
+ try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:profileData.name||playerName(),avatar:profileData.avatar||'🐱',text:textValue,createdAt:Date.now()});input.value='';guildStatus('Сообщение отправлено.');}catch(e){guildStatus('Не удалось отправить: '+e.message,true)}
 }
 $('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',joinOnlineGuild);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код гильдии скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
 window.addEventListener('janik:save',scheduleUpload);
@@ -1913,9 +1945,10 @@ $('onlineRegister').addEventListener('click',register);$('onlineLogin').addEvent
 $('onlineLogout').addEventListener('click',async()=>{try{await signOut(auth)}catch(e){message(friendly(e),true)}});
 $('onlineAccountLogout').addEventListener('click',async()=>{try{await signOut(auth)}catch(e){message(friendly(e),true)}});
 $('onlineSync').addEventListener('click',()=>uploadGame(true));
+setupProfile();
 onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('onlinePanel').hidden=!!user;$('onlineAccountLogout').hidden=!user;$('onlineLogout').hidden=!user;$('onlineSync').hidden=!user;$('onlineEmail').disabled=!!user;$('onlinePassword').disabled=!!user;$('onlineRegister').hidden=!!user;$('onlineLogin').hidden=!!user;
- if(!user){clearGuildChat();status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
- status('Выполнен вход: '+(user.email||'игрок'));message('Проверяем облачное сохранение…');
+ if(!user){clearGuildChat();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
+ status('Выполнен вход: '+(user.email||'игрок'));message('Проверяем облачное сохранение…');await loadProfile();
  try{const snap=await get(ref(db,'users/'+user.uid+'/game'));if(snap.exists()&&snap.val()?.data){const cloud=snap.val().data,local=localGame();const cloudTime=Number(snap.val().updatedAt)||0,localTime=Number(local?.lastSeen)||0;
    if(!local){localStorage.setItem(KEY,JSON.stringify(cloud));location.reload();return}
    if(cloudTime>localTime&&confirm('Найдено более новое облачное сохранение. Загрузить его вместо сохранения на этом устройстве?')){localStorage.setItem(KEY,JSON.stringify(cloud));location.reload();return}
