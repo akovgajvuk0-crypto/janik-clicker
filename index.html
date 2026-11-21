@@ -505,7 +505,7 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
 </section>
 <section class="panel menu-page" id="profilePage" style="margin-top:13px">
 <h2 style="margin:0 0 6px">👤 Мой профиль</h2>
-<p style="font-size:12px;color:var(--muted);margin:0 0 12px">Твой ник и аватар будут видны в таблице лидеров и сообщениях гильдейского чата.</p>
+<p style="font-size:12px;color:var(--muted);margin:0 0 12px">Твой ник и аватар будут видны в таблице лидеров и сообщениях клубного чата.</p>
 <div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#11182b22">
  <div id="profilePreview" style="width:68px;height:68px;flex:0 0 68px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#273d75,#773c91);border:2px solid #8edfff;font-size:38px;overflow:hidden">🐱</div>
  <div style="min-width:0"><strong id="profilePreviewName">Игрок</strong><div style="font-size:12px;color:var(--muted);margin-top:3px">Предпросмотр профиля</div></div>
@@ -709,31 +709,40 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
 </div>
 
 <div class="panel" style="margin-top:12px;padding:12px">
- <h3 style="margin:0 0 6px">🛡️ Гильдия</h3>
- <p style="font-size:12px;color:var(--muted)">Создавай настоящую онлайн-гильдию или вступай к друзьям по коду. Нужен вход в аккаунт.</p>
+ <h3 style="margin:0 0 6px">🛡️ Клуб</h3>
+ <p style="font-size:12px;color:var(--muted)">Создавай настоящий онлайн-клуб или вступай к друзьям по коду. Нужен вход в аккаунт.</p>
  <div class="actions">
-  <input id="u7GuildName" class="search" maxlength="18" placeholder="Название новой гильдии" style="min-width:0;flex:1">
+  <input id="u7GuildName" class="search" maxlength="18" placeholder="Название нового клуба" style="min-width:0;flex:1">
   <button class="btn" id="u7GuildCreate">Создать</button>
  </div>
  <div class="actions" style="margin-top:8px">
-  <input id="u7GuildJoinCode" class="search" maxlength="24" placeholder="Код гильдии" style="min-width:0;flex:1">
+  <input id="u7GuildJoinCode" class="search" maxlength="24" placeholder="Код клуба" style="min-width:0;flex:1">
   <button class="btn" id="u7GuildJoin">Вступить</button>
  </div>
- <p id="u7GuildInfo" style="font-size:12px;color:var(--muted)">Войди в аккаунт, чтобы создать гильдию или вступить по коду.</p>
+ <p id="u7GuildInfo" style="font-size:12px;color:var(--muted)">Войди в аккаунт, чтобы создать клуб или вступить по коду.</p>
+ <div class="panel" id="guildDirectoryPanel" style="margin-top:10px;padding:12px">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+   <h4 style="margin:0">📋 Список клубов</h4>
+   <button class="btn" id="guildRefreshList" type="button">↻ Обновить</button>
+  </div>
+  <div id="guildDirectoryStatus" style="font-size:12px;color:var(--muted);margin:8px 0">Войди в аккаунт, чтобы увидеть клубы.</div>
+  <div id="guildDirectoryList" style="display:grid;gap:8px"></div>
+ </div>
  <div id="guildOnlinePanel" hidden style="margin-top:10px">
   <div class="stat" style="margin-bottom:9px"><span>🔑 Код для приглашения</span><strong id="guildInviteCode" style="font-size:14px;user-select:text;overflow-wrap:anywhere">—</strong><button class="btn" id="guildCopyCode" style="margin-top:7px">📋 Скопировать код</button></div>
   <p id="guildMembers" style="font-size:12px;color:var(--muted);margin:7px 0">Участники: загружаются…</p>
+  <button class="btn danger" id="guildLeaveBtn" type="button" style="width:100%;margin:6px 0 10px">🚪 Выйти из клуба</button>
   <div class="panel" style="padding:10px;background:#090f20;margin-top:8px">
-   <h4 style="margin:0 0 8px">💬 Чат гильдии</h4>
+   <h4 style="margin:0 0 8px">💬 Чат клуба</h4>
    <div id="guildChatMessages" role="log" aria-live="polite" style="height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:7px;padding:5px"></div>
    <div class="actions" style="margin-top:8px">
     <input id="guildChatInput" class="search" maxlength="300" placeholder="Напиши сообщение…" style="min-width:0;flex:1">
     <button class="btn primary" id="guildChatSend">Отправить</button>
    </div>
-   <p id="guildChatStatus" style="font-size:11px;color:var(--muted);margin:6px 0 0">Сообщения видны участникам этой гильдии.</p>
+   <p id="guildChatStatus" style="font-size:11px;color:var(--muted);margin:6px 0 0">Сообщения видны участникам этого клуба.</p>
   </div>
  </div>
- <button class="btn" id="u7GuildDonate" hidden>Внести 500 000 лапок · +гильдейский опыт</button>
+ <button class="btn" id="u7GuildDonate" hidden>Внести 500 000 лапок · +клубный опыт</button>
 </div>
 
 <div class="panel" style="margin-top:12px;padding:12px">
@@ -1769,7 +1778,7 @@ function refresh(){
   const opened=i<u7.planets,price=Math.floor(1e6*Math.pow(5,i));
   return `<div class="stat"><span>${opened?'✅':'🔒'} Планета ${i+1}</span><strong style="font-size:13px">${name}</strong><button class="btn" data-u7planet="${i}" ${opened||i!==u7.planets?'disabled':''}>${opened?'Открыта': 'Открыть · '+fmt(price)}</button></div>`;
  }).join('');
- $('u7GuildInfo').textContent=u7.guildName?'🏰 '+u7.guildName+' · уровень '+u7.guildLevel+' · опыт '+u7.guildXp+'/1000':'Гильдия пока не создана.';
+ $('u7GuildInfo').textContent=u7.guildName?'🏰 '+u7.guildName+' · уровень '+u7.guildLevel+' · опыт '+u7.guildXp+'/1000':'Клуб пока не создан.';
  $('u7CraftInfo').textContent='Материалы: '+u7.shards+' кристаллов · '+u7.dust+' звёздной пыли · '+u7.essence+' эссенции. Амулетов: '+u7.craftedCharm+' · ядер: '+u7.craftedCore;
  $('u7ArenaInfo').textContent='Побед: '+u7.arenaWins+' · Рейтинг: '+u7.arenaRating;
  const lvl=passLevel(),claimed=u7.passClaimed.length;
@@ -1808,13 +1817,13 @@ $('u7MegaChest')?.addEventListener('click',()=>{
  $('u7ChestResult').textContent='🎉 +'+pretty(pawReward)+' лапок · +'+shards+' кристаллов · звёздная пыль · шанс эссенции';
  persistU7();if(typeof save==='function')save();refresh();if(typeof playTone==='function')playTone('reward');
 });
-// Создание онлайн-гильдии обрабатывается Firebase-модулем ниже.
+// Создание онлайн-клуба обрабатывается Firebase-модулем ниже.
 $('u7GuildDonate')?.addEventListener('click',()=>{
- if(!u7.guildName){tell('Сначала создай гильдию.');return}
+ if(!u7.guildName){tell('Сначала создай клуб.');return}
  if(!spend(500000))return;
  u7.guildXp+=250;
  while(u7.guildXp>=1000){u7.guildXp-=1000;u7.guildLevel++}
- persistU7();if(typeof save==='function')save();refresh();tell('🛡️ Вклад внесён! Опыт гильдии увеличен.');
+ persistU7();if(typeof save==='function')save();refresh();tell('🛡️ Вклад внесён! Опыт клуба увеличен.');
 });
 function craft(type){
  const recipe=type==='charm'?{shards:3,dust:2,essence:0}:{shards:5,dust:0,essence:3};
@@ -1945,36 +1954,122 @@ async function showGuild(gid,guild){
  clearGuildChat();activeGuildId=gid;guildPanel.hidden=false;$('guildInviteCode').textContent=gid;$('u7GuildInfo').textContent='🛡️ '+guild.name+' · '+(guild.memberCount||1)+' участник(ов)';
  $('guildChatMessages').replaceChildren();const membersSnap=await get(ref(db,'guilds/'+gid+'/members'));const members=membersSnap.val()||{};const names=Object.values(members).map(m=>(m.name||'Игрок')+(m.role==='leader'?' 👑':''));$('guildMembers').textContent='👥 Участники ('+names.length+'): '+names.join(', ');
  const q=query(ref(db,'guildChats/'+gid),orderByChild('createdAt'),limitToLast(60));stopGuildChat=onChildAdded(q,snap=>addGuildMessage(snap.val()||{}),err=>guildStatus('Не удалось загрузить чат: '+err.message,true));
- guildStatus('Ты в гильдии «'+guild.name+'». Пиши сообщение!');
+ guildStatus('Ты в клубе «'+guild.name+'». Пиши сообщение!');
 }
 async function loadMyGuild(){
  clearGuildChat();if(!currentUser)return;
- try{const memberships=await get(ref(db,'guildMembers/'+currentUser.uid));if(!memberships.exists()){guildPanel.hidden=true;$('u7GuildInfo').textContent='Ты пока не состоишь в гильдии. Создай свою или введи код приглашения.';return}
+ try{const memberships=await get(ref(db,'guildMembers/'+currentUser.uid));if(!memberships.exists()){guildPanel.hidden=true;$('u7GuildInfo').textContent='Ты пока не состоишь в клубе. Создай свою или введи код приглашения.';return}
  const ids=Object.keys(memberships.val()||{});for(const gid of ids){const snap=await get(ref(db,'guilds/'+gid));if(snap.exists()){await showGuild(gid,snap.val());return}}
- guildPanel.hidden=true;$('u7GuildInfo').textContent='Гильдия не найдена. Возможно, её удалили.';
- }catch(e){guildPanel.hidden=true;$('u7GuildInfo').textContent='Ошибка доступа к гильдиям: '+e.message;}
+ guildPanel.hidden=true;$('u7GuildInfo').textContent='Клуб не найден. Возможно, его удалили.';
+ }catch(e){guildPanel.hidden=true;$('u7GuildInfo').textContent='Ошибка доступа к клубам: '+e.message;}
 }
+
+async function loadGuildDirectory(){
+ const statusEl=$('guildDirectoryStatus'),list=$('guildDirectoryList');
+ if(!statusEl||!list)return;
+ list.replaceChildren();
+ if(!currentUser){statusEl.textContent='Войди в аккаунт, чтобы увидеть клубы.';return}
+ statusEl.textContent='Загружаем список клубов…';
+ try{
+  const [allSnap,mineSnap]=await Promise.all([get(ref(db,'guilds')),get(ref(db,'guildMembers/'+currentUser.uid))]);
+  const all=allSnap.val()||{},mine=mineSnap.val()||{};
+  const entries=Object.entries(all).filter(([id,g])=>g&&g.name).sort((a,b)=>(Number(b[1].createdAt)||0)-(Number(a[1].createdAt)||0));
+  if(!entries.length){statusEl.textContent='Пока нет клубов. Создай первый!';return}
+  statusEl.textContent='Найдено клубов: '+entries.length;
+  for(const [id,g] of entries){
+   const members=g.members||{},count=Object.keys(members).length||Number(g.memberCount)||0;
+   const row=document.createElement('div');
+   row.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px;border:1px solid var(--line);border-radius:12px;background:rgba(20,28,52,.65)';
+   const info=document.createElement('div');info.style.cssText='min-width:0;flex:1';
+   const title=document.createElement('b');title.textContent='🛡️ '+String(g.name).slice(0,30);title.style.cssText='display:block;overflow-wrap:anywhere;font-size:13px';
+   const meta=document.createElement('small');meta.textContent='👥 '+count+' участник(ов)';meta.style.cssText='display:block;color:var(--muted);margin-top:4px';
+   info.append(title,meta);
+   const btn=document.createElement('button');btn.type='button';btn.className='btn primary';
+   const alreadyIn=!!mine[id]||id===activeGuildId;
+   btn.textContent=alreadyIn?'Ты в клубе':'Вступить';btn.disabled=alreadyIn;
+   btn.style.cssText='flex-shrink:0;padding:9px 10px;font-size:12px';
+   btn.addEventListener('click',()=>joinGuildById(id));
+   row.append(info,btn);list.append(row);
+  }
+ }catch(e){statusEl.textContent='Не удалось загрузить клубы: '+e.message}
+}
+async function joinGuildById(gid){
+ if(!currentUser){message('Сначала войди в аккаунт.',true);return}
+ try{
+  const mine=await get(ref(db,'guildMembers/'+currentUser.uid));
+  if(mine.exists()&&Object.keys(mine.val()||{}).length){message('Сначала выйди из своего клуба.',true);return}
+  const snap=await get(ref(db,'guilds/'+gid));
+  if(!snap.exists()){message('Этот клуб уже не существует.',true);await loadGuildDirectory();return}
+  const g=snap.val(),members=g.members||{};
+  if(members[currentUser.uid]){await showGuild(gid,g);return}
+  const now=Date.now(),member={name:profileData.name||playerName(),role:'member',joinedAt:now};
+  const updates={};
+  updates['guilds/'+gid+'/members/'+currentUser.uid]=member;
+  updates['guilds/'+gid+'/memberCount']=Object.keys(members).length+1;
+  updates['guildMembers/'+currentUser.uid+'/'+gid]=true;
+  await update(ref(db),updates);
+  const fresh=await get(ref(db,'guilds/'+gid));
+  await showGuild(gid,fresh.val()||g);
+  await loadGuildDirectory();
+  message('Ты вступил в клуб «'+g.name+'»!');
+ }catch(e){message('Не удалось вступить в клуб: '+e.message,true)}
+}
+async function leaveOnlineGuild(){
+ if(!currentUser||!activeGuildId){message('Ты не состоишь в клубе.',true);return}
+ if(!confirm('Точно выйти из клуба?'))return;
+ const gid=activeGuildId;
+ try{
+  const snap=await get(ref(db,'guilds/'+gid));
+  if(!snap.exists()){
+   const cleanup={};cleanup['guildMembers/'+currentUser.uid+'/'+gid]=null;
+   await update(ref(db),cleanup);
+  }else{
+   const g=snap.val(),members={...(g.members||{})};
+   delete members[currentUser.uid];
+   const remaining=Object.entries(members);
+   const updates={};
+   updates['guilds/'+gid+'/members/'+currentUser.uid]=null;
+   updates['guildMembers/'+currentUser.uid+'/'+gid]=null;
+   updates['guilds/'+gid+'/memberCount']=remaining.length;
+   if(g.leaderUid===currentUser.uid){
+    if(remaining.length){
+     const [nextUid,nextMember]=remaining.sort((a,b)=>(Number(a[1].joinedAt)||0)-(Number(b[1].joinedAt)||0))[0];
+     updates['guilds/'+gid+'/leaderUid']=nextUid;
+     updates['guilds/'+gid+'/leaderName']=nextMember.name||'Игрок';
+     updates['guilds/'+gid+'/members/'+nextUid+'/role']='leader';
+    }else{
+     updates['guilds/'+gid]=null;
+     updates['guildChats/'+gid]=null;
+    }
+   }
+   await update(ref(db),updates);
+  }
+  clearGuildChat();activeGuildId=null;guildPanel.hidden=true;
+  $('u7GuildInfo').textContent='Ты вышел из клуба. Теперь можешь вступить в другой или создать свой.';
+  await loadGuildDirectory();
+  message('Ты вышел из клуба.');
+ }catch(e){message('Не удалось выйти из клуба: '+e.message,true)}
+}
+
 async function createOnlineGuild(){
  if(!currentUser){message('Сначала войди в аккаунт.',true);return}
  const name=String($('u7GuildName').value||'').trim().replace(/[<>]/g,'').slice(0,18);if(name.length<3){message('Название должно содержать минимум 3 символа.',true);return}
- try{const existing=await get(ref(db,'guildMembers/'+currentUser.uid));if(existing.exists()&&Object.keys(existing.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
- const gid=push(ref(db,'guilds')).key,now=Date.now(),member={name:playerName(),role:'leader',joinedAt:now};const updates={};updates['guilds/'+gid]={name,leaderUid:currentUser.uid,leaderName:playerName(),createdAt:now,memberCount:1,members:{[currentUser.uid]:member}};updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildName').value='';const snap=await get(ref(db,'guilds/'+gid));await showGuild(gid,snap.val());message('Гильдия создана! Поделись кодом приглашения.');
- }catch(e){message('Не удалось создать гильдию: '+e.message,true)}
+ try{const existing=await get(ref(db,'guildMembers/'+currentUser.uid));if(existing.exists()&&Object.keys(existing.val()||{}).length){message('Ты уже состоишь в клубе.',true);return}
+ const gid=push(ref(db,'guilds')).key,now=Date.now(),member={name:playerName(),role:'leader',joinedAt:now};const updates={};updates['guilds/'+gid]={name,leaderUid:currentUser.uid,leaderName:playerName(),createdAt:now,memberCount:1,members:{[currentUser.uid]:member}};updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildName').value='';const snap=await get(ref(db,'guilds/'+gid));await showGuild(gid,snap.val());await loadGuildDirectory();message('Клуб создан! Поделись кодом приглашения.');
+ }catch(e){message('Не удалось создать клуб: '+e.message,true)}
 }
 async function joinOnlineGuild(){
- if(!currentUser){message('Сначала войди в аккаунт.',true);return}
- const gid=String($('u7GuildJoinCode').value||'').trim();if(!gid){message('Введи код гильдии.',true);return}
- try{const mine=await get(ref(db,'guildMembers/'+currentUser.uid));if(mine.exists()&&Object.keys(mine.val()||{}).length){message('Ты уже состоишь в гильдии.',true);return}
- const snap=await get(ref(db,'guilds/'+gid));if(!snap.exists()){message('Гильдия с таким кодом не найдена.',true);return}
- const g=snap.val(),now=Date.now(),member={name:playerName(),role:'member',joinedAt:now};const updates={};updates['guilds/'+gid+'/members/'+currentUser.uid]=member;updates['guilds/'+gid+'/memberCount']=Object.keys(g.members||{}).length+1;updates['guildMembers/'+currentUser.uid+'/'+gid]=true;await update(ref(db),updates);$('u7GuildJoinCode').value='';const fresh=await get(ref(db,'guilds/'+gid));await showGuild(gid,fresh.val());message('Ты вступил в гильдию «'+g.name+'»!');
- }catch(e){message('Не удалось вступить: '+e.message,true)}
+ const gid=String($('u7GuildJoinCode').value||'').trim();
+ if(!gid){message('Введи код клуба.',true);return}
+ await joinGuildById(gid);
+ $('u7GuildJoinCode').value='';
 }
 async function sendGuildMessage(){
- if(!currentUser||!activeGuildId){guildStatus('Сначала вступи в гильдию.',true);return}
+ if(!currentUser||!activeGuildId){guildStatus('Сначала вступи в клуб.',true);return}
  const input=$('guildChatInput'),textValue=String(input.value||'').trim();if(!textValue)return;if(textValue.length>300){guildStatus('Сообщение слишком длинное.',true);return}
  try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:profileData.name||playerName(),avatar:profileData.avatar||'🐱',text:textValue,createdAt:Date.now()});input.value='';guildStatus('Сообщение отправлено.');}catch(e){guildStatus('Не удалось отправить: '+e.message,true)}
 }
-$('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',joinOnlineGuild);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код гильдии скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
+$('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',joinOnlineGuild);$('guildLeaveBtn').addEventListener('click',leaveOnlineGuild);$('guildRefreshList').addEventListener('click',loadGuildDirectory);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код клуба скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
 window.addEventListener('janik:save',scheduleUpload);
 async function register(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||password.length<6){message('Введи почту и пароль минимум из 6 символов.',true);return}try{await createUserWithEmailAndPassword(auth,email,password);message('Аккаунт создан! Проверяем облачное сохранение…')}catch(e){message(friendly(e),true)}}
 async function login(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||!password){message('Введи почту и пароль.',true);return}try{await signInWithEmailAndPassword(auth,email,password)}catch(e){message(friendly(e),true)}}
@@ -1985,7 +2080,7 @@ $('onlineAccountLogout').addEventListener('click',async()=>{try{await signOut(au
 $('onlineSync').addEventListener('click',()=>uploadGame(true));
 setupProfile();
 onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('onlinePanel').hidden=!!user;$('onlineAccountLogout').hidden=!user;$('onlineLogout').hidden=!user;$('onlineSync').hidden=!user;$('onlineEmail').disabled=!!user;$('onlinePassword').disabled=!!user;$('onlineRegister').hidden=!!user;$('onlineLogin').hidden=!!user;
- if(!user){staffRole='';refreshAdminVisibility();clearGuildChat();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
+ if(!user){staffRole='';refreshAdminVisibility();clearGuildChat();activeGuildId=null;guildPanel.hidden=true;loadGuildDirectory();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
  status('Выполнен вход: '+(user.email||'игрок'));message('Проверяем облачное сохранение…');
  try{staffRole='';if(user.uid!==CREATOR_UID){const roleSnap=await get(ref(db,'staff/'+user.uid));staffRole=roleSnap.val()?.role==='admin'?'admin':'';}refreshAdminVisibility();const banSnap=await get(ref(db,'bans/'+user.uid));const ban=banSnap.val();if(user.uid!==CREATOR_UID&&ban&&(ban.permanent===true||Number(ban.until)>Date.now())){const until=ban.permanent?'навсегда':'до '+new Date(Number(ban.until)).toLocaleString('ru-RU');message('⛔ Аккаунт заблокирован '+until+'.',true);status('Аккаунт заблокирован');await signOut(auth);return}}catch(e){message('Не удалось проверить права/бан: '+e.message,true);return}
  await loadProfile();
@@ -1996,7 +2091,7 @@ onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('online
   }else{await uploadGame(false);message('Первое сохранение отправлено в облако!')}
   cloudReady=true;
  }catch(e){message('Не удалось прочитать базу: '+e.message,true)}
- loadMyGuild();
+ loadMyGuild();loadGuildDirectory();
 });
 </script>
 
