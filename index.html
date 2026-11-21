@@ -512,6 +512,14 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
 <div class="actions"><button class="btn primary" id="leaderboardRefresh" type="button">🔄 Обновить рейтинг</button></div>
 <div class="leaderboard-wrap"><table class="leaderboard-table"><thead><tr><th>Место</th><th>Игрок</th><th id="lbMetricHeading">🐾 Лапки</th></tr></thead><tbody id="leaderboardRows"><tr><td colspan="3">Войди в аккаунт, чтобы загрузить рейтинг.</td></tr></tbody></table></div>
 <p class="leaderboard-status" id="leaderboardStatus">Рейтинг загружается из Firebase.</p>
+<div class="leaderboard-rewards" style="margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#11182b22">
+  <h3 style="margin:0 0 7px;font-size:15px">🎁 Ежедневные награды рейтинга</h3>
+  <p style="margin:0 0 8px;color:var(--muted);font-size:12px">Займи место в выбранном рейтинге и забери золотые лапки. Награду можно получить один раз в день отдельно для каждого рейтинга.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <button class="btn primary" id="claimLeaderboardReward" type="button">🎁 Забрать награду</button>
+    <span id="leaderboardRewardInfo" style="font-size:12px;color:var(--muted)">🥇 Топ-1: +1000 золота · 🥈 Топ-3: +500 · 🏅 Топ-10: +200</span>
+  </div>
+</div>
 </section>
 <section class="panel adventure menu-page" id="adventurePanel">
 <h2 style="margin:0 0 8px">🌌 Приключения Жаника</h2>
@@ -1798,7 +1806,7 @@ refresh();
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-import { getDatabase, ref, get, set, update, push, onChildAdded, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js";
+import { getDatabase, ref, get, set, update, push, onChildAdded, query, orderByChild, limitToLast, runTransaction } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyD43sMaVlzgABfIDUrbo0vBHpjB15ah6pQ",authDomain:"janik-clicker-online.firebaseapp.com",databaseURL:"https://janik-clicker-online-default-rtdb.europe-west1.firebasedatabase.app",projectId:"janik-clicker-online",storageBucket:"janik-clicker-online.firebasestorage.app",messagingSenderId:"249823838375",appId:"1:249823838375:web:c146b8d19a37962e2e1b82"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
 const $=id=>document.getElementById(id), KEY='janik_clicker_ultra_lite_300_v1';
@@ -1824,6 +1832,42 @@ async function syncLeaderboard(){if(!currentUser)return;const game=localGame();i
 $('leaderboardRefresh')?.addEventListener('click',refreshLeaderboard);
 document.querySelectorAll('[data-lb-sort]').forEach(b=>b.addEventListener('click',()=>{leaderboardSort=b.dataset.lbSort;document.querySelectorAll('[data-lb-sort]').forEach(x=>x.classList.toggle('active',x===b));refreshLeaderboard()}));
 document.querySelector('.menu-btn[data-page="leaderboard"]')?.addEventListener('click',()=>setTimeout(refreshLeaderboard,0));
+
+const rewardAmounts={1:1000,3:500,10:200};
+function localDayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function currentRank(data,uid,metric){
+ const entries=Object.values(data||{}).filter(x=>x&&typeof x==='object')
+  .sort((a,b)=>(Number(b[metric])||0)-(Number(a[metric])||0));
+ const index=entries.findIndex(x=>x.uid===uid);
+ return index<0?null:{place:index+1,entries:entries.length};
+}
+function rewardForPlace(place){if(place===1)return 1000;if(place<=3)return 500;if(place<=10)return 200;return 0}
+async function claimLeaderboardReward(){
+ const button=$('claimLeaderboardReward'),info=$('leaderboardRewardInfo');
+ if(!currentUser){info.textContent='Сначала войди в аккаунт.';return}
+ button.disabled=true;info.textContent='Проверяем твоё место в рейтинге…';
+ try{
+  const [boardSnap,game]=await Promise.all([get(ref(db,'leaderboard')),Promise.resolve(localGame())]);
+  if(!game){info.textContent='Не найдено сохранение игры.';return}
+  const rank=currentRank(boardSnap.val()||{},currentUser.uid,leaderboardSort);
+  if(!rank){info.textContent='Тебя пока нет в рейтинге. Сохрани прогресс и обнови рейтинг.';return}
+  const reward=rewardForPlace(rank.place);
+  if(!reward){info.textContent='Сейчас ты на '+rank.place+' месте. Награды получают только игроки из топ-10.';return}
+  const day=localDayKey(),claimRef=ref(db,'users/'+currentUser.uid+'/leaderboardRewards/'+day+'/'+leaderboardSort);
+  const result=await runTransaction(claimRef,current=>current===null?{claimed:true,place:rank.place,reward,claimedAt:Date.now()}:undefined);
+  if(!result.committed){info.textContent='Награда за этот рейтинг сегодня уже получена. Возвращайся завтра!';return}
+  game.gold=Math.max(0,Number(game.gold)||0)+reward;
+  game.lastSeen=Date.now();
+  localStorage.setItem(KEY,JSON.stringify(game));
+  const goldEl=$('gold');if(goldEl)goldEl.textContent=fmtLeaderboard(game.gold);
+  window.dispatchEvent(new CustomEvent('janik:save',{detail:game}));
+  await uploadGame(false);
+  await syncLeaderboard();
+  info.textContent='🏆 '+rank.place+' место! Получено +'+reward.toLocaleString('ru-RU')+' золотых лапок. Награда за этот рейтинг уже забрана сегодня.';
+ }catch(e){info.textContent='Не удалось забрать награду: '+e.message}
+ finally{button.disabled=false}
+}
+$('claimLeaderboardReward')?.addEventListener('click',claimLeaderboardReward);
 
 function clearGuildChat(){if(stopGuildChat){stopGuildChat();stopGuildChat=null}activeGuildId=null;if(guildPanel)guildPanel.hidden=true;}
 function addGuildMessage(m){const box=$('guildChatMessages');if(!box)return;const empty=box.querySelector('[data-empty]');if(empty)empty.remove();const row=document.createElement('div');row.style.cssText='padding:7px 9px;border:1px solid #34416c;border-radius:10px;background:#11182b;max-width:100%;overflow-wrap:anywhere';const head=document.createElement('div');head.style.cssText='font-size:11px;color:#8edfff;margin-bottom:3px';head.textContent=(m.name||'Игрок')+' · '+new Date(Number(m.createdAt)||Date.now()).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});const body=document.createElement('div');body.style.cssText='font-size:13px;white-space:pre-wrap';body.textContent=String(m.text||'');row.append(head,body);box.append(row);while(box.children.length>80)box.firstElementChild.remove();box.scrollTop=box.scrollHeight;}
