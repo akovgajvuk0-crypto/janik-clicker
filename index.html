@@ -725,6 +725,34 @@ body.menu-collapsed .menu-toggle{left:36px}
 .jc-frame-card .jc-frame-lock{font-size:11px!important}
 @media(prefers-reduced-motion:reduce){#profilePreview.jc-frame::before{animation:none!important}}
 </style>
+
+<style id="janik-frame-animations-2026">
+/* Individual lightweight frame animations: transform/opacity only where possible. */
+@keyframes jcBronzeTurn{to{transform:rotate(360deg)}}
+@keyframes jcIceShimmer{0%,100%{opacity:.72;filter:drop-shadow(0 0 6px #55dfff)}50%{opacity:1;filter:drop-shadow(0 0 16px #b8f7ff)}}
+@keyframes jcPurpleOrbit{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.035)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes jcGalaxyTwinkle{0%,100%{opacity:.68;filter:drop-shadow(0 0 7px #7765ff)}50%{opacity:1;filter:drop-shadow(0 0 17px #c48cff)}}
+@keyframes jcGoldSweep{0%,100%{opacity:.82;transform:rotate(0deg)}50%{opacity:1;transform:rotate(180deg)}}
+@keyframes jcCreatorRoyal{0%{transform:rotate(0deg) scale(1);filter:drop-shadow(0 0 8px #ffb300)}50%{transform:rotate(180deg) scale(1.045);filter:drop-shadow(0 0 20px #ffe36a)}100%{transform:rotate(360deg) scale(1);filter:drop-shadow(0 0 8px #ffb300)}}
+@keyframes jcCreatorSpark{0%,100%{opacity:.7;transform:scale(.96) rotate(-5deg)}50%{opacity:1;transform:scale(1.08) rotate(5deg)}}
+.jc-frame--default::before{animation:jcRingSpin 8s linear infinite!important}
+.jc-frame--bronze::before{animation:jcBronzeTurn 9s linear infinite!important}
+.jc-frame--bronze::after{content:"✦ · ✧ · ✦"!important;color:#ffd09a!important;animation:jcSparkOrbit 4.5s ease-in-out infinite!important}
+.jc-frame--ice::before{animation:jcRingSpin 5s linear infinite,jcIceShimmer 2.8s ease-in-out infinite!important}
+.jc-frame--ice::after{animation:jcSparkOrbit 3s ease-in-out infinite!important}
+.jc-frame--purple::before{animation:jcPurpleOrbit 7s linear infinite!important}
+.jc-frame--purple::after{animation:jcSparkOrbit 2.8s ease-in-out infinite!important}
+.jc-frame--galaxy::before{animation:jcRingSpin 13s linear infinite,jcGalaxyTwinkle 3.4s ease-in-out infinite!important}
+.jc-frame--galaxy::after{content:"✦ · ✧ · ✦"!important;animation:jcSparkOrbit 5s ease-in-out infinite!important}
+.jc-frame--gold::before{animation:jcRingSpin 8s linear infinite,jcGoldSweep 3.2s ease-in-out infinite!important}
+.jc-frame--gold::after{animation:jcSparkOrbit 2.5s ease-in-out infinite!important}
+.jc-frame--creator::before{animation:jcCreatorRoyal 4s linear infinite!important}
+.jc-frame--creator::after{animation:jcCreatorSpark 1.8s ease-in-out infinite!important}
+.jc-frame-card .jc-frame-swatch{transform:translateZ(0)}
+@media(prefers-reduced-motion:reduce){
+ .jc-frame::before,.jc-frame::after,.jc-frame--default::before,.jc-frame--bronze::before,.jc-frame--ice::before,.jc-frame--purple::before,.jc-frame--galaxy::before,.jc-frame--gold::before,.jc-frame--creator::before{animation:none!important}
+}
+</style>
 </head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><button id="menuToggle" class="menu-toggle" type="button" aria-label="Открыть меню" aria-controls="mainMenu" aria-expanded="false">☰</button><button id="menuBackdrop" class="menu-backdrop" type="button" aria-label="Закрыть меню" tabindex="-1"></button><nav class="menu-panel" id="mainMenu" aria-label="Главное меню"><div class="menu-sidebar-title"><span>🐾</span><b>JANIK MENU</b></div>
 <button class="menu-btn active" data-page="home"><span class="menu-icon">🐱</span><span><span class="menu-label">Главная</span><span class="menu-sub">Кликер и бонусы</span></span></button>
 <button class="menu-btn" data-page="shop"><span class="menu-icon">🛒</span><span><span class="menu-label">Магазин</span><span class="menu-sub">375 улучшений</span></span></button>
