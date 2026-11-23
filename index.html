@@ -473,8 +473,8 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
  position:fixed;z-index:1200;left:0;top:0;bottom:0;width:224px;height:100dvh;margin:0;padding:64px 12px 18px;
  display:flex;flex-direction:column;align-items:stretch;gap:8px;overflow-y:auto;overscroll-behavior:contain;
  border:0;border-right:1px solid #344166;border-radius:0 20px 20px 0;
- background:linear-gradient(180deg,rgba(14,20,41,.98),rgba(7,10,24,.985));
- box-shadow:12px 0 38px #0005;backdrop-filter:blur(18px);
+ background:linear-gradient(180deg,#0e1429,#070a18);
+ box-shadow:6px 0 18px #0004;
  transition:width .22s ease,transform .24s ease;
 }
 .menu-sidebar-title{position:absolute;top:17px;left:17px;display:flex;align-items:center;gap:9px;color:#dceaff;font-size:13px;letter-spacing:.12em;white-space:nowrap}
@@ -497,12 +497,12 @@ body.menu-collapsed #mainMenu .menu-icon{width:42px;min-width:42px;font-size:25p
 body.menu-collapsed .menu-toggle{left:36px}
 @media(max-width:760px){
  .app{width:100%;max-width:760px;margin:0 auto;padding:62px 10px calc(84px + env(safe-area-inset-bottom,0px))}
- #mainMenu.menu-panel{width:min(286px,84vw);padding:64px 12px 18px;transform:translateX(-110%);visibility:hidden;box-shadow:18px 0 48px #0008}
- body.menu-drawer-open #mainMenu.menu-panel{transform:translateX(0);visibility:visible}
+ #mainMenu.menu-panel{width:min(286px,84vw);padding:64px 12px 18px;transform:translate3d(-100%,0,0);visibility:hidden;box-shadow:8px 0 20px #0006;will-change:transform;backface-visibility:hidden}
+ body.menu-drawer-open #mainMenu.menu-panel{transform:translate3d(0,0,0);visibility:visible}
  #mainMenu .menu-btn{min-height:54px}
  .menu-toggle{left:12px;top:12px}
  body.menu-drawer-open .menu-toggle{left:min(244px,72vw)}
- .menu-backdrop{display:block;position:fixed;z-index:1100;inset:0;width:100%;height:100%;min-height:100%;padding:0;border:0;border-radius:0;background:#020511a8;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s,visibility .2s}
+ .menu-backdrop{display:block;position:fixed;z-index:1100;inset:0;width:100%;height:100%;min-height:100%;padding:0;border:0;border-radius:0;background:#02051199;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,visibility .18s}
  body.menu-drawer-open .menu-backdrop{opacity:1;visibility:visible;pointer-events:auto}
  body.menu-collapsed #mainMenu.menu-panel{width:min(286px,84vw);padding:64px 12px 18px}
  body.menu-collapsed #mainMenu .menu-btn{justify-content:flex-start;padding:9px 11px}
@@ -512,6 +512,108 @@ body.menu-collapsed .menu-toggle{left:36px}
 }
 @media(min-width:761px) and (max-width:980px){.app{width:calc(100% - 248px);margin-left:228px;margin-right:20px}}
 @media(prefers-reduced-motion:reduce){#mainMenu.menu-panel,.menu-toggle,.menu-backdrop{transition:none!important}}
+</style>
+
+<style id="freefire-menu-motion-upgrade">
+/* Лёгкая анимация для Android: двигаем только панель, без blur и анимации каждого пункта. */
+#mainMenu.menu-panel{transition:width .22s ease,transform .24s cubic-bezier(.2,.75,.25,1);}
+#mainMenu .menu-btn{transition:background .16s ease;}
+.menu-toggle{transition:left .22s ease,transform .18s ease;}
+@media(max-width:760px){
+ #mainMenu.menu-panel{transition:transform .24s cubic-bezier(.2,.75,.25,1),visibility .24s;}
+ body.menu-drawer-open .menu-toggle{transform:rotate(90deg);}
+ .menu-backdrop{transition:opacity .18s ease,visibility .18s;}
+}
+@media(prefers-reduced-motion:reduce){#mainMenu.menu-panel,.menu-toggle,.menu-backdrop,#mainMenu .menu-btn{transition:none!important;animation:none!important}}
+</style>
+
+<style id="janik-menu-ultra-performance">
+/* Android low-GPU menu mode: only the drawer itself moves. */
+@media(max-width:760px){
+  #mainMenu.menu-panel{
+    transform:translate3d(-102%,0,0) !important;
+    transition:transform .18s ease-out !important;
+    will-change:transform;
+    backface-visibility:hidden;
+    box-shadow:4px 0 10px #0003 !important;
+    contain:layout paint style;
+  }
+  body.menu-drawer-open #mainMenu.menu-panel{transform:translate3d(0,0,0) !important}
+  /* Transparent hit-area: no full-screen dim/blur repaint on every frame. */
+  .menu-backdrop{
+    background:transparent !important;
+    opacity:1 !important;
+    transition:none !important;
+  }
+  body.menu-drawer-open .menu-backdrop{opacity:1 !important}
+  .menu-toggle{transition:transform .12s ease !important;box-shadow:none !important}
+  body.menu-drawer-open .menu-toggle{transform:rotate(90deg)}
+  /* Pause decorative animations behind the drawer while it is open. */
+  body.menu-drawer-open .app > :not(#mainMenu){animation-play-state:paused !important}
+  #mainMenu .menu-btn{transition:none !important;box-shadow:none !important}
+}
+</style>
+
+<style id="janik-menu-zero-lag-final">
+/* Final Android optimization: keep the menu animation compositor-only. */
+@media(max-width:760px){
+  #mainMenu.menu-panel{
+    transform:translateX(-101%) !important;
+    transition:transform 130ms linear !important;
+    will-change:transform;
+    box-shadow:none !important;
+    filter:none !important;
+    contain:paint !important;
+  }
+  body.menu-drawer-open #mainMenu.menu-panel{transform:translateX(0) !important}
+  #mainMenu .menu-btn, #mainMenu .menu-icon, #mainMenu .menu-label, #mainMenu .menu-sub{
+    animation:none !important;
+    transition:none !important;
+    filter:none !important;
+    box-shadow:none !important;
+  }
+  .menu-backdrop{
+    display:block !important;
+    background:transparent !important;
+    opacity:1 !important;
+    visibility:hidden;
+    pointer-events:none;
+    transition:none !important;
+  }
+  body.menu-drawer-open .menu-backdrop{visibility:visible;pointer-events:auto}
+  .menu-toggle{left:12px !important;transition:none !important;transform:none !important;box-shadow:none !important}
+  body.menu-drawer-open .menu-toggle{left:12px !important;transform:none !important}
+  body.menu-drawer-open .app{animation-play-state:paused !important}
+}
+@media(prefers-reduced-motion:reduce){#mainMenu.menu-panel{transition:none !important}}
+</style>
+
+
+<style id="janik-menu-runtime-performance-fix">
+/* Runtime performance fix: avoid repaint-heavy decoration while the mobile drawer is active. */
+@media(max-width:760px){
+ body.menu-drawer-open .app,
+ body.menu-drawer-open .app *{animation:none!important;filter:none!important;text-shadow:none!important}
+ body.menu-drawer-open .app .panel,
+ body.menu-drawer-open .app .stat,
+ body.menu-drawer-open .app .item,
+ body.menu-drawer-open .app .arena,
+ body.menu-drawer-open .app .logo{box-shadow:none!important;backdrop-filter:none!important}
+ #mainMenu.menu-panel{transition:transform 150ms linear!important;contain:layout paint!important}
+ #mainMenu .menu-btn{transform:none!important}
+}
+</style>
+
+
+<style id="janik-deep-mobile-performance">
+/* Reduce expensive full-page repaints on Android while keeping the original palette. */
+@media (max-width:760px) {
+  .panel,.stat,.item,.menu-panel { -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+  .panel,.stat,.item { box-shadow:0 4px 12px #0002 !important; }
+  .stat strong { font-size:clamp(12px,3.2vw,18px) !important; }
+  .app { transform:translateZ(0); }
+  #mainMenu.menu-panel { transition:transform 140ms linear !important; will-change:transform; }
+}
 </style>
 </head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><button id="menuToggle" class="menu-toggle" type="button" aria-label="Открыть меню" aria-controls="mainMenu" aria-expanded="false">☰</button><button id="menuBackdrop" class="menu-backdrop" type="button" aria-label="Закрыть меню" tabindex="-1"></button><nav class="menu-panel" id="mainMenu" aria-label="Главное меню"><div class="menu-sidebar-title"><span>🐾</span><b>JANIK MENU</b></div>
 <button class="menu-btn active" data-page="home"><span class="menu-icon">🐱</span><span><span class="menu-label">Главная</span><span class="menu-sub">Кликер и бонусы</span></span></button>
@@ -1229,7 +1331,10 @@ setInterval(()=>{
     if(dt>30)toast('🌙 Пока игра была в фоне: +'+fmt(earned)+' лапок');
   }
   if(now-lastShopRefresh>=700&&$('shopPage').classList.contains('menu-visible')){lastShopRefresh=now;refreshShopButtons()}
-  if(now-lastUi>=2000){lastUi=now;if(state.secretModeUntil<=now)document.body.classList.remove('secret-mode');checkAchievements();renderStats();renderFeatures();renderAdventure();}
+  if(now-lastUi>=2000){lastUi=now;if(state.secretModeUntil<=now)document.body.classList.remove('secret-mode');
+    /* Keep simulation and autosave running, but defer expensive page rendering while the mobile drawer is moving/open. */
+    if(!document.body.classList.contains('menu-drawer-open')){checkAchievements();renderStats();renderFeatures();renderAdventure();}
+  }
   if(now-lastSave>=8000){lastSave=now;save();}
 },500);
 window.addEventListener('pagehide',()=>{state.lastSeen=Date.now();save();});
@@ -1562,17 +1667,9 @@ document.addEventListener('visibilitychange',()=>{
 (()=>{const init=()=>{const b=$('musicToggle');if(b)b.addEventListener('click',()=>musicOn?stopMusic():startMusic());syncMusicButton()};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
 
 </script>
-<script>
-// Keep stat numbers on one line: shrink the font instead of wrapping, so boxes never change height.
-(()=>{
- const els=[...document.querySelectorAll('.stat strong')];let raf=0;
- function fit(){raf=0;for(const el of els){el.style.fontSize='';if(!el.offsetParent)continue;let f=parseFloat(getComputedStyle(el).fontSize);while(el.scrollWidth>el.clientWidth+.5&&f>9){f-=.5;el.style.fontSize=f+'px'}}}
- const sched=()=>{if(!raf)raf=requestAnimationFrame(fit)};
- const mo=new MutationObserver(sched);els.forEach(e=>mo.observe(e,{childList:true,characterData:true,subtree:true}));
- addEventListener('resize',sched);
- document.querySelectorAll('.menu-btn').forEach(b=>b.addEventListener('click',()=>setTimeout(sched,0)));
- sched();
-})();
+<script id="janik-mobile-layout-optimization">
+// Avoid repeated forced layout reads on every currency/stat text mutation.
+// CSS sizing keeps stat values readable without a MutationObserver loop.
 </script>
 <script id="rpg-animation-controller">
 (()=>{
