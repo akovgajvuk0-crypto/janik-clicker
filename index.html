@@ -1962,8 +1962,24 @@ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
 const CREATOR_UID='7tkM3l6lGJcWsiANTxT7o3lYYA13';let staffRole='';
 const $=id=>document.getElementById(id), KEY='janik_clicker_ultra_lite_300_v1';
 let currentUser=null,cloudReady=false,writeTimer=null;
-function message(t,error=false){$('onlineMessage').textContent=t;$('onlineMessage').style.color=error?'#ff8d9d':'#a1a9d1'}
-function status(t){$('onlineStatus').textContent=t}
+function message(t,error=false){$('onlineMessage').textContent=t;$('onlineMessage').style.color=error?'#ff8d9d':'#a1a9d1'} function status(t){$('onlineStatus').textContent=t}
+function isActiveBan(ban){return !!(ban&&(ban.permanent===true||Number(ban.until)>Date.now()))}
+function showBanScreen(ban){
+ if(!banScreen){
+  banScreen=document.createElement('div');banScreen.id='accountBanScreen';
+  banScreen.style.cssText='position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 50% 15%,#382044,#080b16 65%);color:#fff;font-family:system-ui,sans-serif;text-align:center';
+  const card=document.createElement('div');card.style.cssText='width:min(100%,420px);padding:28px 22px;border:1px solid #ff6b8580;border-radius:22px;background:#11182bf2;box-shadow:0 20px 70px #000b';
+  const icon=document.createElement('div');icon.textContent='⛔';icon.style.cssText='font-size:54px;margin-bottom:12px';
+  const title=document.createElement('h1');title.textContent='Аккаунт заблокирован';title.style.cssText='font-size:24px;margin:0 0 12px';
+  const detail=document.createElement('p');detail.id='accountBanDetail';detail.style.cssText='font-size:15px;line-height:1.55;color:#ffc4ce;margin:0 0 16px';
+  const note=document.createElement('p');note.textContent='Доступ к игре временно закрыт. Твои ресурсы и сохранение не удалены.';note.style.cssText='font-size:13px;line-height:1.5;color:#c2cbe4;margin:0';
+  card.append(icon,title,detail,note);banScreen.append(card);document.body.append(banScreen);
+ }
+ const detail=banScreen.querySelector('#accountBanDetail');
+ detail.textContent=ban?.permanent===true?'Блокировка выдана навсегда.':('Блокировка действует до '+new Date(Number(ban?.until)||Date.now()).toLocaleString('ru-RU')+'.');
+ banScreen.style.display='flex';
+}
+function hideBanScreen(){if(banScreen)banScreen.style.display='none'}
 function localGame(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}}
 async function uploadGame(show=true){if(!currentUser)return;const game=localGame();if(!game){message('Локальное сохранение не найдено.',true);return}try{await set(ref(db,'users/'+currentUser.uid+'/game'),{data:game,updatedAt:Date.now()});if(show)message('☁️ Прогресс сохранён в облаке!');}catch(e){message('Ошибка облачного сохранения: '+e.message,true)}}
 function scheduleUpload(){if(!currentUser||!cloudReady)return;clearTimeout(writeTimer);writeTimer=setTimeout(()=>{uploadGame(false);syncLeaderboard()},1400)}
@@ -2264,9 +2280,26 @@ $('onlineAccountLogout').addEventListener('click',async()=>{try{await signOut(au
 $('onlineSync').addEventListener('click',()=>uploadGame(true));
 setupProfile();
 onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('onlinePanel').hidden=!!user;$('onlineAccountLogout').hidden=!user;$('onlineLogout').hidden=!user;$('onlineSync').hidden=!user;$('onlineEmail').disabled=!!user;$('onlinePassword').disabled=!!user;$('onlineRegister').hidden=!!user;$('onlineLogin').hidden=!!user;
- if(!user){if(stopFriendRequests){stopFriendRequests();stopFriendRequests=null}if(stopFriendships){stopFriendships();stopFriendships=null}friendshipCache={};staffRole='';refreshAdminVisibility();clearGuildChat();activeGuildId=null;guildPanel.hidden=true;loadGuildDirectory();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
+ if(!user){if(stopBanWatch){stopBanWatch();stopBanWatch=null}if(stopFriendRequests){stopFriendRequests();stopFriendRequests=null}if(stopFriendships){stopFriendships();stopFriendships=null}friendshipCache={};staffRole='';refreshAdminVisibility();clearGuildChat();activeGuildId=null;guildPanel.hidden=true;loadGuildDirectory();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
  status('Выполнен вход: '+(user.email||'игрок'));message('Проверяем облачное сохранение…');
- try{staffRole='';if(user.uid!==CREATOR_UID){const roleSnap=await get(ref(db,'staff/'+user.uid));staffRole=roleSnap.val()?.role==='admin'?'admin':'';}refreshAdminVisibility();const banSnap=await get(ref(db,'bans/'+user.uid));const ban=banSnap.val();if(user.uid!==CREATOR_UID&&ban&&(ban.permanent===true||Number(ban.until)>Date.now())){const until=ban.permanent?'навсегда':'до '+new Date(Number(ban.until)).toLocaleString('ru-RU');message('⛔ Аккаунт заблокирован '+until+'.',true);status('Аккаунт заблокирован');await signOut(auth);return}}catch(e){message('Не удалось проверить права/бан: '+e.message,true);return}
+ try{
+  staffRole='';if(user.uid!==CREATOR_UID){const roleSnap=await get(ref(db,'staff/'+user.uid));staffRole=roleSnap.val()?.role==='admin'?'admin':'';}
+  refreshAdminVisibility();
+  const banSnap=await get(ref(db,'bans/'+user.uid));const ban=banSnap.val();
+  if(user.uid!==CREATOR_UID&&isActiveBan(ban)){showBanScreen(ban);status('Аккаунт заблокирован');message('⛔ Доступ к аккаунту закрыт.',true);await signOut(auth);return}
+  hideBanScreen();
+  if(stopBanWatch){stopBanWatch();stopBanWatch=null}
+  if(user.uid!==CREATOR_UID){
+   stopBanWatch=onValue(ref(db,'bans/'+user.uid),async snap=>{
+    const liveBan=snap.val();
+    if(auth.currentUser?.uid!==user.uid)return;
+    if(isActiveBan(liveBan)){
+     showBanScreen(liveBan);status('Аккаунт заблокирован');message('⛔ Ты был заблокирован создателем игры.',true);
+     try{await signOut(auth)}catch(e){console.error('Не удалось завершить заблокированную сессию:',e)}
+    }
+   },error=>{message('Не удалось проверить статус блокировки: '+error.message,true)});
+  }
+ }catch(e){message('Не удалось проверить права/бан: '+e.message,true);return}
  await loadProfile();
  try{await syncPublicProfile();refreshFriends()}catch(e){$('friendSearchStatus').textContent='Не удалось включить систему друзей: '+e.message}
  try{const snap=await get(ref(db,'users/'+user.uid+'/game'));if(snap.exists()&&snap.val()?.data){const cloud=snap.val().data,local=localGame();const cloudTime=Number(snap.val().updatedAt)||0,localTime=Number(local?.lastSeen)||0;
