@@ -1961,7 +1961,7 @@ const firebaseConfig={apiKey:"AIzaSyD43sMaVlzgABfIDUrbo0vBHpjB15ah6pQ",authDomai
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
 const CREATOR_UID='7tkM3l6lGJcWsiANTxT7o3lYYA13';let staffRole='';
 const $=id=>document.getElementById(id), KEY='janik_clicker_ultra_lite_300_v1';
-let currentUser=null,cloudReady=false,writeTimer=null,banScreen=null,stopBanWatch=null;
+let currentUser=null,cloudReady=false,writeTimer=null,banScreen=null,stopBanWatch=null,banCleanupUid=null;
 function message(t,error=false){$('onlineMessage').textContent=t;$('onlineMessage').style.color=error?'#ff8d9d':'#a1a9d1'} function status(t){$('onlineStatus').textContent=t}
 function isActiveBan(ban){return !!(ban&&(ban.permanent===true||Number(ban.until)>Date.now()))}
 function showBanScreen(ban){
@@ -1972,7 +1972,7 @@ function showBanScreen(ban){
   const icon=document.createElement('div');icon.textContent='⛔';icon.style.cssText='font-size:54px;margin-bottom:12px';
   const title=document.createElement('h1');title.textContent='Аккаунт заблокирован';title.style.cssText='font-size:24px;margin:0 0 12px';
   const detail=document.createElement('p');detail.id='accountBanDetail';detail.style.cssText='font-size:15px;line-height:1.55;color:#ffc4ce;margin:0 0 16px';
-  const note=document.createElement('p');note.textContent='Доступ к игре временно закрыт. Твои ресурсы и сохранение не удалены.';note.style.cssText='font-size:13px;line-height:1.5;color:#c2cbe4;margin:0';
+  const note=document.createElement('p');note.id='accountBanNote';note.textContent='Доступ к игре закрыт. Игровой прогресс и ресурсы удалены за нарушение правил.';note.style.cssText='font-size:13px;line-height:1.5;color:#c2cbe4;margin:0';
   card.append(icon,title,detail,note);banScreen.append(card);document.body.append(banScreen);
  }
  const detail=banScreen.querySelector('#accountBanDetail');
@@ -1980,6 +1980,20 @@ function showBanScreen(ban){
  banScreen.style.display='flex';
 }
 function hideBanScreen(){if(banScreen)banScreen.style.display='none'}
+async function eraseBannedProgress(uid){
+ if(!uid||uid===CREATOR_UID||banCleanupUid===uid)return;
+ banCleanupUid=uid;cloudReady=false;window.__zhanikNoSave=true;
+ if(writeTimer){clearTimeout(writeTimer);writeTimer=null}
+ // Удаляем облачный прогресс, рейтинг и публичные показатели. Аккаунт, профиль и запись бана сохраняются.
+ const paths=['users/'+uid+'/game','leaderboard/'+uid,'publicProfiles/'+uid];
+ const results=await Promise.allSettled(paths.map(path=>set(ref(db,path),null)));
+ // Удаляем локальные копии сохранения и резервные ключи на этом устройстве.
+ for(const key of [KEY,OLD_KEY,GOLD_KEY,'janik_clicker_v3_extra','janik_clicker_ultra_7_addon_v1']){
+  try{localStorage.removeItem(key)}catch(e){console.warn('Не удалось очистить локальное сохранение:',e)}
+ }
+ const failed=results.filter(x=>x.status==='rejected');
+ if(failed.length){console.error('Часть облачных данных не удалось удалить. Проверьте Firebase Rules:',failed);if(banScreen?.querySelector('#accountBanNote'))banScreen.querySelector('#accountBanNote').textContent='Бан активен, но Firebase Rules не разрешили удалить часть облачных данных. Создателю нужно проверить правила базы.';}
+}
 function localGame(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}}
 async function uploadGame(show=true){if(!currentUser)return;const game=localGame();if(!game){message('Локальное сохранение не найдено.',true);return}try{await set(ref(db,'users/'+currentUser.uid+'/game'),{data:game,updatedAt:Date.now()});if(show)message('☁️ Прогресс сохранён в облаке!');}catch(e){message('Ошибка облачного сохранения: '+e.message,true)}}
 function scheduleUpload(){if(!currentUser||!cloudReady)return;clearTimeout(writeTimer);writeTimer=setTimeout(()=>{uploadGame(false);syncLeaderboard()},1400)}
@@ -2286,7 +2300,7 @@ onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('online
   staffRole='';if(user.uid!==CREATOR_UID){const roleSnap=await get(ref(db,'staff/'+user.uid));staffRole=roleSnap.val()?.role==='admin'?'admin':'';}
   refreshAdminVisibility();
   const banSnap=await get(ref(db,'bans/'+user.uid));const ban=banSnap.val();
-  if(user.uid!==CREATOR_UID&&isActiveBan(ban)){showBanScreen(ban);status('Аккаунт заблокирован');message('⛔ Доступ к аккаунту закрыт.',true);await signOut(auth);return}
+  if(user.uid!==CREATOR_UID&&isActiveBan(ban)){showBanScreen(ban);status('Аккаунт заблокирован');message('⛔ Доступ к аккаунту закрыт. Игровой прогресс удаляется.',true);await eraseBannedProgress(user.uid);await signOut(auth);return}
   hideBanScreen();
   if(stopBanWatch){stopBanWatch();stopBanWatch=null}
   if(user.uid!==CREATOR_UID){
@@ -2294,8 +2308,8 @@ onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;$('online
     const liveBan=snap.val();
     if(auth.currentUser?.uid!==user.uid)return;
     if(isActiveBan(liveBan)){
-     showBanScreen(liveBan);status('Аккаунт заблокирован');message('⛔ Ты был заблокирован создателем игры.',true);
-     try{await signOut(auth)}catch(e){console.error('Не удалось завершить заблокированную сессию:',e)}
+     showBanScreen(liveBan);status('Аккаунт заблокирован');message('⛔ Ты был заблокирован создателем игры. Игровой прогресс удаляется.',true);
+     try{await eraseBannedProgress(user.uid);await signOut(auth)}catch(e){console.error('Не удалось очистить прогресс или завершить заблокированную сессию:',e)}
     }
    },error=>{message('Не удалось проверить статус блокировки: '+error.message,true)});
   }
