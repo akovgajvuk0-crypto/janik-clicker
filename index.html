@@ -644,6 +644,54 @@ body.menu-collapsed .menu-toggle{left:36px}
 .jc-achievement .jc-ach-icon{font-size:17px;filter:drop-shadow(0 0 5px #c9a4ff)}
 @media(prefers-reduced-motion:reduce){.jc-frame,.jc-frame--ice,.jc-frame--purple,.jc-frame--galaxy,.jc-frame--gold{animation:none!important}}
 </style>
+
+<style id="janikPremiumCosmeticsV2">
+/* Real visible frame system: outer animated rings are separate from avatar image. */
+#profilePreview.jc-frame,.jc-frame{
+ position:relative!important;isolation:isolate!important;overflow:visible!important;
+ border:0!important;border-radius:50%!important;z-index:0;
+}
+#profilePreview.jc-frame>img,.jc-frame>img{position:relative;z-index:1;border-radius:50%;display:block}
+.jc-frame::before{
+ content:"";position:absolute;z-index:3;pointer-events:none;inset:-7px;border-radius:50%;
+ padding:4px;background:conic-gradient(from 0deg,#fff,#72eaff,#a76cff,#ff83db,#fff0a8,#72eaff,#fff);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+ -webkit-mask-composite:xor;mask-composite:exclude;
+ animation:jcRingSpin 5s linear infinite;
+}
+.jc-frame::after{
+ content:"✦  ·  ✧";position:absolute;z-index:4;pointer-events:none;inset:-15px;
+ display:grid;place-items:start end;padding:0 2px 0 0;border-radius:50%;
+ color:#fff;text-shadow:0 0 5px currentColor,0 0 13px currentColor;
+ font-size:15px;letter-spacing:19px;white-space:nowrap;
+ animation:jcSparkOrbit 3.5s ease-in-out infinite;
+}
+.jc-frame--default::before{background:conic-gradient(#8deaff,#ffffff,#8deaff)}
+.jc-frame--default{--jc-glow:#8deaff;filter:drop-shadow(0 0 8px #8deaff88)}
+.jc-frame--bronze::before{background:conic-gradient(#fff0bd,#9c4d20,#f6b76c,#fff0bd,#8b451d,#fff0bd)}
+.jc-frame--bronze{--jc-glow:#e8a05b;filter:drop-shadow(0 0 10px #d88b48)}
+.jc-frame--ice::before{inset:-9px;padding:5px;background:conic-gradient(from 20deg,#fff,#74efff,#2d82d4,#dffcff,#75cfff,#fff);filter:drop-shadow(0 0 8px #68eaff) drop-shadow(0 0 17px #38aaff)}
+.jc-frame--ice::after{content:"❄  ✧  ❄";color:#dffcff;letter-spacing:10px;font-size:12px;inset:-17px}
+.jc-frame--purple::before{inset:-10px;padding:5px;background:conic-gradient(#fff,#ff69e7,#7b4dff,#3beaff,#ff69e7,#fff);filter:drop-shadow(0 0 9px #d65cff) drop-shadow(0 0 18px #913cff)}
+.jc-frame--purple::after{content:"✦  ✧  ✦";color:#ffb8fa;letter-spacing:12px;inset:-17px}
+.jc-frame--galaxy::before{inset:-11px;padding:5px;background:conic-gradient(#fff,#67eaff,#6856ff,#ff79dd,#fff0a6,#67eaff,#fff);filter:drop-shadow(0 0 10px #8a70ff) drop-shadow(0 0 22px #5a58ff)}
+.jc-frame--galaxy::after{content:"✦ · ✧ · ✦";color:#e5d8ff;letter-spacing:9px;inset:-19px;font-size:13px}
+.jc-frame--gold::before{inset:-12px;padding:6px;background:conic-gradient(#fff9d7,#b87912,#fff1a8,#fff,#d79a25,#fff8cf,#9e6411,#fff9d7);filter:drop-shadow(0 0 11px #ffd45a) drop-shadow(0 0 25px #e6a52a)}
+.jc-frame--gold::after{content:"♛  ✦  ♛";color:#fff0a6;letter-spacing:10px;inset:-20px;font-size:14px}
+@keyframes jcRingSpin{to{transform:rotate(360deg)}}
+@keyframes jcSparkOrbit{0%,100%{transform:rotate(-7deg) scale(1);opacity:.75}50%{transform:rotate(7deg) scale(1.08);opacity:1}}
+.jc-frame-card{display:flex!important;align-items:center;gap:12px;text-align:left!important;min-height:104px!important;padding:12px!important;border-radius:17px!important;background:linear-gradient(145deg,#192541,#0c1224)!important}
+.jc-frame-card.is-selected{border-color:#72eaff!important;box-shadow:0 0 0 1px #72eaff66,0 0 22px #52dfff33,inset 0 0 20px #5acfff10!important}
+.jc-frame-swatch{display:inline-grid;place-items:center;position:relative;flex:0 0 54px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#405b91,#10162c 75%);font-size:29px;overflow:visible!important}
+.jc-frame-swatch::before{inset:-5px!important;padding:3px!important}
+.jc-frame-swatch::after{inset:-10px!important;font-size:9px!important;letter-spacing:6px!important}
+.jc-frame-info{display:block;min-width:0;flex:1}
+.jc-frame-card .jc-frame-name{font-size:13px!important}
+.jc-frame-card .jc-frame-rarity{font-size:9px!important}
+.jc-frame-card:disabled{opacity:.62!important;filter:saturate(.45)!important}
+#publicProfileLayer #publicProfileContent .jc-frame{margin-top:2px;margin-bottom:8px}
+@media(prefers-reduced-motion:reduce){.jc-frame::before,.jc-frame::after{animation:none!important}}
+</style>
 </head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><button id="menuToggle" class="menu-toggle" type="button" aria-label="Открыть меню" aria-controls="mainMenu" aria-expanded="false">☰</button><button id="menuBackdrop" class="menu-backdrop" type="button" aria-label="Закрыть меню" tabindex="-1"></button><nav class="menu-panel" id="mainMenu" aria-label="Главное меню"><div class="menu-sidebar-title"><span>🐾</span><b>JANIK MENU</b></div>
 <button class="menu-btn active" data-page="home"><span class="menu-icon">🐱</span><span><span class="menu-label">Главная</span><span class="menu-sub">Кликер и бонусы</span></span></button>
 <button class="menu-btn" data-page="shop"><span class="menu-icon">🛒</span><span><span class="menu-label">Магазин</span><span class="menu-sub">375 улучшений</span></span></button>
@@ -2152,14 +2200,18 @@ function renderProfileFrames(){
   const unlocked=!!frame.unlock(game),selected=profileData.frame===frame.id;
   const b=document.createElement('button');b.type='button';b.disabled=!unlocked;
   b.className='jc-frame-card'+(selected?' is-selected':'');
-  const title=document.createElement('span');title.className='jc-frame-name';title.textContent=frame.emoji+' '+frame.name;
+  const swatch=document.createElement('span');swatch.className='jc-frame-swatch jc-frame jc-frame--'+frame.id;swatch.textContent='🐱';swatch.setAttribute('aria-hidden','true');
+  const info=document.createElement('span');info.className='jc-frame-info';
+  const title=document.createElement('span');title.className='jc-frame-name';title.textContent=frame.name;
   const rarity=document.createElement('span');rarity.className='jc-frame-rarity';rarity.textContent=frame.rarity+(selected?' · ВЫБРАНА':'');
   const sub=document.createElement('span');sub.className='jc-frame-lock';sub.textContent=unlocked?(selected?'✓ Активна':'Нажми, чтобы применить'):'🔒 '+frame.requirement;
-  b.append(title,rarity,sub);b.addEventListener('click',()=>{profileData.frame=frame.id;renderProfileFrames();paintProfile()});box.append(b);
+  info.append(title,rarity,sub);b.append(swatch,info);
+  b.addEventListener('click',()=>{if(!unlocked)return;profileData.frame=frame.id;renderProfileFrames();paintProfile()});
+  box.append(b);
  });
  const hint=$('profileFrameHint');if(hint){hint.textContent='Коллекция рамок · '+PROFILE_FRAMES.filter(x=>x.unlock(game)).length+'/'+PROFILE_FRAMES.length+' открыто';hint.style.cssText='font-size:11px;color:#aebce4;margin:9px 0 0;text-align:center;letter-spacing:.3px'}
 }
-function paintProfile(){const name=safeProfileName($('profileNick')?.value)||profileData.name||playerName();const preview=$('profilePreview');if(preview){preview.replaceChildren();if(profileData.avatar&&profileData.avatar.startsWith('data:image/')){const img=document.createElement('img');img.src=profileData.avatar;img.alt='Аватар';img.style.cssText='width:100%;height:100%;object-fit:cover';preview.append(img)}else preview.textContent=profileData.avatar||'🐱'}preview.style.border=frameFor(profileData.frame).css;preview.classList.add('jc-frame','jc-frame--'+(profileData.frame||'default'));const label=$('profilePreviewName');if(label){label.replaceChildren();label.append(document.createTextNode(name));if(currentUser?.uid===CREATOR_UID){const crown=document.createElement('span');crown.textContent=' 👑';crown.title='Единственный создатель игры';crown.style.cssText='font-size:18px;filter:drop-shadow(0 0 5px #f5c542);vertical-align:middle';label.append(crown)}}document.querySelectorAll('[data-cat-avatar]').forEach(b=>{b.style.outline=b.dataset.catAvatar===profileData.avatar?'2px solid #8edfff':'none';b.style.background=b.dataset.catAvatar===profileData.avatar?'#29466b':'#171f38'})}
+function paintProfile(){const name=safeProfileName($('profileNick')?.value)||profileData.name||playerName();const preview=$('profilePreview');if(preview){preview.replaceChildren();if(profileData.avatar&&profileData.avatar.startsWith('data:image/')){const img=document.createElement('img');img.src=profileData.avatar;img.alt='Аватар';img.style.cssText='width:100%;height:100%;object-fit:cover';preview.append(img)}else preview.textContent=profileData.avatar||'🐱'}preview.style.border='0';[...preview.classList].filter(c=>c==='jc-frame'||c.startsWith('jc-frame--')).forEach(c=>preview.classList.remove(c));preview.classList.add('jc-frame','jc-frame--'+(profileData.frame||'default'));const label=$('profilePreviewName');if(label){label.replaceChildren();label.append(document.createTextNode(name));if(currentUser?.uid===CREATOR_UID){const crown=document.createElement('span');crown.textContent=' 👑';crown.title='Единственный создатель игры';crown.style.cssText='font-size:18px;filter:drop-shadow(0 0 5px #f5c542);vertical-align:middle';label.append(crown)}}document.querySelectorAll('[data-cat-avatar]').forEach(b=>{b.style.outline=b.dataset.catAvatar===profileData.avatar?'2px solid #8edfff':'none';b.style.background=b.dataset.catAvatar===profileData.avatar?'#29466b':'#171f38'})}
 function setupProfile(){const grid=$('profilePresets');if(!grid||grid.dataset.ready)return;grid.dataset.ready='1';renderProfileFrames();CAT_AVATARS.forEach((a,i)=>{const b=document.createElement('button');b.type='button';b.textContent=a;b.dataset.catAvatar=a;b.title='Кото-аватар '+(i+1);b.style.cssText='min-width:0;aspect-ratio:1;border:1px solid #46527f;border-radius:12px;background:#171f38;color:white;font-size:27px;cursor:pointer';b.addEventListener('click',()=>{profileData.avatar=a;paintProfile()});grid.append(b)});$('profileNick').addEventListener('input',paintProfile);$('profileCamera').addEventListener('click',()=>$('profileCameraInput').click());$('profileGallery').addEventListener('click',()=>$('profileGalleryInput').click());$('profileCameraInput').addEventListener('change',e=>readProfileImage(e.target));$('profileGalleryInput').addEventListener('change',e=>readProfileImage(e.target));$('profileSave').addEventListener('click',saveProfile);}
 function readProfileImage(input){const file=input.files?.[0];input.value='';if(!file)return;if(!file.type.startsWith('image/')){$('profileStatus').textContent='Выбери файл изображения.';return}if(file.size>12*1024*1024){$('profileStatus').textContent='Файл слишком большой. Максимум 12 МБ.';return}const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=128;c.height=128;const side=Math.min(im.width,im.height),sx=(im.width-side)/2,sy=(im.height-side)/2;ctx.drawImage(im,sx,sy,side,side,0,0,128,128);profileData.avatar=c.toDataURL('image/jpeg',.78);paintProfile();$('profileStatus').textContent='Фото готово. Нажми «Сохранить профиль».'};im.onerror=()=>{$('profileStatus').textContent='Не удалось открыть это изображение.'};im.src=reader.result};reader.readAsDataURL(file)}
 // Уникальные ники: отдельный индекс Firebase с атомарным резервированием.
@@ -2500,7 +2552,7 @@ async function openPublicPlayerProfile(uid){
   if(!data&&currentUser&&uid===currentUser.uid)data={uid,name:profileData.name,avatar:profileData.avatar};
   if(!data){publicProfileContent.textContent='Публичный профиль пока недоступен. Игроку нужно войти в игру.';return;}
   const online=!!data.updatedAt&&(Date.now()-Number(data.updatedAt)<120000);
-  const avatar=avatarNode(data.avatar||'🐱',104);avatar.style.margin='0 auto 12px';avatar.style.width='104px';avatar.style.height='104px';avatar.style.fontSize='64px';const publicFrame=frameFor(data.frame);avatar.style.border=publicFrame.css;avatar.classList.add('jc-frame','jc-frame--'+(data.frame||'default'));avatar.style.boxShadow='0 0 18px '+(data.frame==='gold'?'#ffd45c66':data.frame==='purple'?'#b66cff66':data.frame==='ice'?'#65d9ff66':data.frame==='bronze'?'#c8875466':'#8edfff33');
+  const avatar=avatarNode(data.avatar||'🐱',104);avatar.style.margin='0 auto 12px';avatar.style.width='104px';avatar.style.height='104px';avatar.style.fontSize='64px';const publicFrame=frameFor(data.frame);avatar.style.border='0';[...avatar.classList].filter(c=>c==='jc-frame'||c.startsWith('jc-frame--')).forEach(c=>avatar.classList.remove(c));avatar.classList.add('jc-frame','jc-frame--'+(data.frame||'default'));avatar.style.boxShadow='0 0 18px '+(data.frame==='gold'?'#ffd45c66':data.frame==='purple'?'#b66cff66':data.frame==='ice'?'#65d9ff66':data.frame==='bronze'?'#c8875466':'#8edfff33');
   const title=document.createElement('div');title.style.cssText='font-size:22px;font-weight:800;overflow-wrap:anywhere';title.textContent=data.name||'Игрок';
   const status=document.createElement('div');status.style.cssText='font-size:12px;margin-top:5px;color:'+(online?'#72f0c0':'#929bb5');status.textContent=online?'🟢 В сети':'⚪ Не в сети · '+(data.updatedAt?'был(а) '+new Date(Number(data.updatedAt)).toLocaleString('ru-RU',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'давно');
   const crown=document.createElement('div');crown.style.cssText='font-size:12px;color:#f5c542;margin-top:5px';if(uid===CREATOR_UID)crown.textContent='👑 Создатель игры';
