@@ -466,7 +466,54 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
 <style id="guild-sticker-styles">
 .guild-sticker{border:1px solid #34416c;border-radius:12px;background:linear-gradient(145deg,#192442,#21183b);padding:8px 3px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}.guild-sticker:active{transform:scale(.92)}.guild-sticker small{font-size:10px;color:#c5d4ff}.sticker-cat{display:inline-block;font-size:30px;line-height:1.25;animation:stickerBob 1s ease-in-out infinite,stickerWiggle 2.2s ease-in-out infinite;filter:drop-shadow(0 3px 7px #9a77ff66)}@keyframes stickerBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.12)}}@keyframes stickerWiggle{0%,100%{rotate:-7deg}50%{rotate:7deg}}.guild-chat-sticker{display:inline-flex;align-items:center;justify-content:center;min-width:74px;min-height:66px;margin-top:4px;padding:5px 14px;border-radius:16px;background:radial-gradient(circle,#384b86,#17172f 75%);border:1px solid #6b78d9;box-shadow:0 0 20px #8c69ff35}.guild-chat-sticker .sticker-cat{font-size:43px}.guild-chat-sticker-label{display:block;color:#c5d4ff;font-size:11px;margin-top:4px}@media(prefers-reduced-motion:reduce){.sticker-cat{animation:none!important}}
 </style>
-</head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><nav class="menu-panel" id="mainMenu" aria-label="Главное меню">
+<style id="freefire-sidebar-menu">
+/* FREE-FIRE-INSPIRED SIDEBAR NAVIGATION — preserves the existing Janik palette */
+.menu-caption{display:none!important}
+#mainMenu.menu-panel{
+ position:fixed;z-index:1200;left:0;top:0;bottom:0;width:224px;height:100dvh;margin:0;padding:64px 12px 18px;
+ display:flex;flex-direction:column;align-items:stretch;gap:8px;overflow-y:auto;overscroll-behavior:contain;
+ border:0;border-right:1px solid #344166;border-radius:0 20px 20px 0;
+ background:linear-gradient(180deg,rgba(14,20,41,.98),rgba(7,10,24,.985));
+ box-shadow:12px 0 38px #0005;backdrop-filter:blur(18px);
+ transition:width .22s ease,transform .24s ease;
+}
+.menu-sidebar-title{position:absolute;top:17px;left:17px;display:flex;align-items:center;gap:9px;color:#dceaff;font-size:13px;letter-spacing:.12em;white-space:nowrap}
+.menu-sidebar-title span{font-size:22px;filter:drop-shadow(0 0 8px #62dfff66)}
+#mainMenu .menu-btn{width:100%;min-height:58px;flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:9px 11px;border-radius:13px;text-align:left}
+#mainMenu .menu-icon{width:34px;min-width:34px;margin:0;text-align:center;font-size:23px}
+#mainMenu .menu-btn>span:last-child{min-width:0;flex:1}
+#mainMenu .menu-label{font-size:13px;white-space:nowrap}
+#mainMenu .menu-sub{font-size:10px;white-space:nowrap}
+.menu-toggle{position:fixed;z-index:1300;top:13px;left:174px;width:38px;height:38px;min-height:38px;padding:0;border:1px solid #52648d;border-radius:12px;background:linear-gradient(135deg,#1b3155,#21183e);color:#eaf8ff;font-size:20px;box-shadow:0 5px 18px #0005;transition:left .22s,transform .15s}
+.menu-toggle:active{transform:scale(.94)}
+.menu-backdrop{display:none}
+.app{width:calc(100% - 264px);max-width:1100px;margin:0 20px 0 244px;padding-top:max(16px,env(safe-area-inset-top,0px))}
+body.menu-collapsed #mainMenu.menu-panel{width:76px;padding-left:9px;padding-right:9px}
+body.menu-collapsed .menu-sidebar-title{left:25px}
+body.menu-collapsed .menu-sidebar-title b{display:none}
+body.menu-collapsed #mainMenu .menu-btn{justify-content:center;padding:9px 5px}
+body.menu-collapsed #mainMenu .menu-btn>span:last-child{display:none}
+body.menu-collapsed #mainMenu .menu-icon{width:42px;min-width:42px;font-size:25px}
+body.menu-collapsed .menu-toggle{left:36px}
+@media(max-width:760px){
+ .app{width:100%;max-width:760px;margin:0 auto;padding:62px 10px calc(84px + env(safe-area-inset-bottom,0px))}
+ #mainMenu.menu-panel{width:min(286px,84vw);padding:64px 12px 18px;transform:translateX(-110%);visibility:hidden;box-shadow:18px 0 48px #0008}
+ body.menu-drawer-open #mainMenu.menu-panel{transform:translateX(0);visibility:visible}
+ #mainMenu .menu-btn{min-height:54px}
+ .menu-toggle{left:12px;top:12px}
+ body.menu-drawer-open .menu-toggle{left:min(244px,72vw)}
+ .menu-backdrop{display:block;position:fixed;z-index:1100;inset:0;width:100%;height:100%;min-height:100%;padding:0;border:0;border-radius:0;background:#020511a8;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s,visibility .2s}
+ body.menu-drawer-open .menu-backdrop{opacity:1;visibility:visible;pointer-events:auto}
+ body.menu-collapsed #mainMenu.menu-panel{width:min(286px,84vw);padding:64px 12px 18px}
+ body.menu-collapsed #mainMenu .menu-btn{justify-content:flex-start;padding:9px 11px}
+ body.menu-collapsed #mainMenu .menu-btn>span:last-child{display:block}
+ body.menu-collapsed #mainMenu .menu-icon{width:34px;min-width:34px;font-size:23px}
+ body.menu-collapsed .menu-sidebar-title b{display:inline}
+}
+@media(min-width:761px) and (max-width:980px){.app{width:calc(100% - 248px);margin-left:228px;margin-right:20px}}
+@media(prefers-reduced-motion:reduce){#mainMenu.menu-panel,.menu-toggle,.menu-backdrop{transition:none!important}}
+</style>
+</head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><button id="menuToggle" class="menu-toggle" type="button" aria-label="Открыть меню" aria-controls="mainMenu" aria-expanded="false">☰</button><button id="menuBackdrop" class="menu-backdrop" type="button" aria-label="Закрыть меню" tabindex="-1"></button><nav class="menu-panel" id="mainMenu" aria-label="Главное меню"><div class="menu-sidebar-title"><span>🐾</span><b>JANIK MENU</b></div>
 <button class="menu-btn active" data-page="home"><span class="menu-icon">🐱</span><span><span class="menu-label">Главная</span><span class="menu-sub">Кликер и бонусы</span></span></button>
 <button class="menu-btn" data-page="shop"><span class="menu-icon">🛒</span><span><span class="menu-label">Магазин</span><span class="menu-sub">375 улучшений</span></span></button>
 <button class="menu-btn" data-page="features"><span class="menu-icon">✨</span><span><span class="menu-label">Механики</span><span class="menu-sub">Золото, задания, престиж</span></span></button>
@@ -2271,4 +2318,37 @@ document.addEventListener('click',e=>{const target=e.target.closest('[data-profi
 
 </script>
 
+<script id="freefire-sidebar-menu-controller">
+/* Collapsible Free-Fire-inspired menu controller. Existing page routing stays intact. */
+(()=>{
+ const menu=document.getElementById('mainMenu');
+ const toggle=document.getElementById('menuToggle');
+ const backdrop=document.getElementById('menuBackdrop');
+ if(!menu||!toggle||!backdrop)return;
+ const mobile=()=>window.matchMedia('(max-width: 760px)').matches;
+ let collapsed=false;
+ try{collapsed=localStorage.getItem('janik_menu_collapsed_v1')==='1'}catch(e){}
+ document.body.classList.toggle('menu-collapsed',collapsed);
+ const sync=()=>{
+  const opened=document.body.classList.contains('menu-drawer-open');
+  toggle.textContent=mobile()?(opened?'✕':'☰'):(collapsed?'☰':'‹');
+  toggle.setAttribute('aria-expanded',String(opened||(!mobile()&&!collapsed)));
+  toggle.setAttribute('aria-label',mobile()?(opened?'Закрыть меню':'Открыть меню'):(collapsed?'Развернуть меню':'Свернуть меню'));
+ };
+ const closeDrawer=()=>{document.body.classList.remove('menu-drawer-open');sync()};
+ toggle.addEventListener('click',()=>{
+  if(mobile())document.body.classList.toggle('menu-drawer-open');
+  else{
+   collapsed=!collapsed;document.body.classList.toggle('menu-collapsed',collapsed);
+   try{localStorage.setItem('janik_menu_collapsed_v1',collapsed?'1':'0')}catch(e){}
+  }
+  sync();
+ });
+ backdrop.addEventListener('click',closeDrawer);
+ menu.querySelectorAll('.menu-btn').forEach(button=>button.addEventListener('click',()=>{if(mobile())closeDrawer()}));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+ window.addEventListener('resize',()=>{if(!mobile())closeDrawer();sync()},{passive:true});
+ sync();
+})();
+</script>
 </body></html>
