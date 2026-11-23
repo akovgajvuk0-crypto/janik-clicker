@@ -463,37 +463,8 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
 @keyframes janikTapFixed{0%{transform:scale(1)}45%{transform:scale(1.055)}100%{transform:scale(1)}}
 </style>
 
-<style id="janik-guild-chat-upgrade">
-.guild-chat-row{display:flex;justify-content:flex-start;width:100%;animation:gchatIn .22s ease-out}
-.guild-chat-row.mine{justify-content:flex-end}
-.guild-chat-bubble{max-width:min(88%,420px);min-width:100px;padding:9px 11px;border:1px solid #34466f;border-radius:15px 15px 15px 5px;background:linear-gradient(145deg,#17233c,#11182b);box-shadow:0 5px 16px #0002;overflow-wrap:anywhere}
-.guild-chat-row.mine .guild-chat-bubble{border-color:#4b65a0;border-radius:15px 15px 5px 15px;background:linear-gradient(145deg,#202b50,#17213a)}
-.guild-chat-head{display:flex;align-items:center;gap:7px;margin-bottom:5px;color:#9ce7ff;font-size:11px}
-.guild-chat-name{font-weight:800;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.guild-chat-time{margin-left:auto;color:#8290ad;font-size:10px;white-space:nowrap}
-.guild-chat-text{font-size:13px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;color:#f2f5ff}
-.guild-cat-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:10px;margin-top:8px;border:1px solid #3a4b78;border-radius:14px;background:linear-gradient(145deg,#111a30,#0a1020)}
-.guild-cat-choice{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;padding:7px 3px;border:1px solid #34466f;border-radius:11px;background:#192440;color:#fff;cursor:pointer}
-.guild-cat-choice:active{transform:scale(.94)}.guild-cat-choice-face{font-size:30px;line-height:1.2;display:block}
-.guild-cat-choice small{font-size:10px;color:#bdc9e8}
-.guild-cat-sticker{display:inline-grid;place-items:center;width:88px;height:76px;font-size:58px;line-height:1;transform-origin:center;filter:drop-shadow(0 5px 8px #0005)}
-.guild-sticker-caption{font-size:10px;color:#9eadd0;margin-top:1px}
-.cat-anim-laugh{animation:catLaugh .8s ease-in-out infinite}.cat-anim-cry{animation:catCry 1.1s ease-in-out infinite}.cat-anim-love{animation:catLove .9s ease-in-out infinite}.cat-anim-angry{animation:catAngry .42s linear infinite}.cat-anim-hello{animation:catHello 1.1s ease-in-out infinite}.cat-anim-shock{animation:catShock 1s ease-in-out infinite}.cat-anim-kiss{animation:catKiss 1s ease-in-out infinite}.cat-anim-sleep{animation:catSleep 2s ease-in-out infinite}.cat-anim-cute{animation:catCute 1.2s ease-in-out infinite}.cat-anim-sly{animation:catSly .9s ease-in-out infinite}.cat-anim-dance{animation:catDance .65s ease-in-out infinite}.cat-anim-happy{animation:catHappy .8s ease-in-out infinite}
-@keyframes gchatIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-@keyframes catLaugh{0%,100%{transform:rotate(-9deg) scale(1)}50%{transform:rotate(9deg) scale(1.12) translateY(-4px)}}
-@keyframes catCry{0%,100%{transform:translateY(0)}50%{transform:translateY(5px) rotate(-5deg)}}
-@keyframes catLove{0%,100%{transform:scale(1)}50%{transform:scale(1.2) rotate(8deg)}}
-@keyframes catAngry{0%,100%{transform:translateX(-3px)}50%{transform:translateX(3px)}}
-@keyframes catHello{0%,100%{transform:rotate(0)}25%,75%{transform:rotate(17deg)}50%{transform:rotate(-12deg)}}
-@keyframes catShock{0%,100%{transform:scale(1)}50%{transform:scale(1.22) translateY(-4px)}}
-@keyframes catKiss{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.14) rotate(-12deg)}}
-@keyframes catSleep{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(4px) rotate(4deg)}}
-@keyframes catCute{0%,100%{transform:scale(1)}50%{transform:scale(1.13) rotate(-7deg)}}
-@keyframes catSly{0%,100%{transform:rotate(0)}50%{transform:rotate(10deg) translateY(-3px)}}
-@keyframes catDance{0%,100%{transform:rotate(-12deg) translateY(0)}50%{transform:rotate(12deg) translateY(-7px)}}
-@keyframes catHappy{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.12)}}
-@media(prefers-reduced-motion:reduce){.guild-chat-row,.guild-cat-sticker,.guild-cat-choice-face{animation:none!important}}
-@media(max-width:420px){.guild-cat-picker{grid-template-columns:repeat(3,minmax(0,1fr))}.guild-chat-bubble{max-width:94%}}
+<style id="guild-sticker-styles">
+.guild-sticker{border:1px solid #34416c;border-radius:12px;background:linear-gradient(145deg,#192442,#21183b);padding:8px 3px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}.guild-sticker:active{transform:scale(.92)}.guild-sticker small{font-size:10px;color:#c5d4ff}.sticker-cat{display:inline-block;font-size:30px;line-height:1.25;animation:stickerBob 1s ease-in-out infinite,stickerWiggle 2.2s ease-in-out infinite;filter:drop-shadow(0 3px 7px #9a77ff66)}@keyframes stickerBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.12)}}@keyframes stickerWiggle{0%,100%{rotate:-7deg}50%{rotate:7deg}}.guild-chat-sticker{display:inline-flex;align-items:center;justify-content:center;min-width:74px;min-height:66px;margin-top:4px;padding:5px 14px;border-radius:16px;background:radial-gradient(circle,#384b86,#17172f 75%);border:1px solid #6b78d9;box-shadow:0 0 20px #8c69ff35}.guild-chat-sticker .sticker-cat{font-size:43px}.guild-chat-sticker-label{display:block;color:#c5d4ff;font-size:11px;margin-top:4px}@media(prefers-reduced-motion:reduce){.sticker-cat{animation:none!important}}
 </style>
 </head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><nav class="menu-panel" id="mainMenu" aria-label="Главное меню">
 <button class="menu-btn active" data-page="home"><span class="menu-icon">🐱</span><span><span class="menu-label">Главная</span><span class="menu-sub">Кликер и бонусы</span></span></button>
@@ -777,12 +748,21 @@ body.battery-mode .chest-particles,body.battery-mode .chest-sparkles{display:non
   <div class="panel" style="padding:10px;background:#090f20;margin-top:8px">
    <h4 style="margin:0 0 8px">💬 Чат клуба</h4>
    <div id="guildChatMessages" role="log" aria-live="polite" style="height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:7px;padding:5px"></div>
-   <div class="actions" style="margin-top:8px;align-items:stretch">
-    <button class="btn" id="guildCatStickerToggle" type="button" aria-expanded="false" aria-controls="guildCatStickerPicker" title="Анимированные кото-эмоции">🐱</button>
-    <input id="guildChatInput" class="search" maxlength="300" placeholder="Напиши сообщение…" style="min-width:0;flex:1">
-    <button class="btn primary" id="guildChatSend" type="button">Отправить</button>
+   <div id="guildStickerPanel" hidden style="display:none;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:10px;margin:8px 0;border:1px solid #414b83;border-radius:14px;background:#0b1022">
+    <button type="button" class="guild-sticker" data-sticker="happy" aria-label="Весёлый кот"><span class="sticker-cat">😺</span><small>Привет!</small></button>
+    <button type="button" class="guild-sticker" data-sticker="love" aria-label="Кот с сердцами"><span class="sticker-cat">😻</span><small>Люблю!</small></button>
+    <button type="button" class="guild-sticker" data-sticker="laugh" aria-label="Смеющийся кот"><span class="sticker-cat">😹</span><small>Ахаха</small></button>
+    <button type="button" class="guild-sticker" data-sticker="wow" aria-label="Удивлённый кот"><span class="sticker-cat">🙀</span><small>Ого!</small></button>
+    <button type="button" class="guild-sticker" data-sticker="cry" aria-label="Плачущий кот"><span class="sticker-cat">😿</span><small>Грущу</small></button>
+    <button type="button" class="guild-sticker" data-sticker="cool" aria-label="Крутой кот"><span class="sticker-cat">😎</span><small>Круто!</small></button>
+    <button type="button" class="guild-sticker" data-sticker="sleep" aria-label="Спящий кот"><span class="sticker-cat">😴</span><small>Сплю</small></button>
+    <button type="button" class="guild-sticker" data-sticker="party" aria-label="Кот празднует"><span class="sticker-cat">🥳</span><small>Ура!</small></button>
    </div>
-   <div id="guildCatStickerPicker" class="guild-cat-picker" hidden aria-label="Анимированные кото-эмоции"></div>
+   <div class="actions" style="margin-top:8px;align-items:center">
+    <button class="btn" id="guildStickerToggle" type="button" aria-expanded="false" aria-controls="guildStickerPanel" style="flex:0 0 auto">🐱 Котики</button>
+    <input id="guildChatInput" class="search" maxlength="300" placeholder="Напиши сообщение…" style="min-width:0;flex:1;margin:0">
+    <button class="btn primary" id="guildChatSend">Отправить</button>
+   </div>
    <p id="guildChatStatus" style="font-size:11px;color:var(--muted);margin:6px 0 0">Сообщения видны участникам этого клуба.</p>
   </div>
   <div class="panel" style="padding:10px;background:#090f20;margin-top:10px">
@@ -2032,39 +2012,8 @@ async function claimLeaderboardReward(){
 $('claimLeaderboardReward')?.addEventListener('click',claimLeaderboardReward);
 
 function clearGuildChat(){if(stopGuildChat){stopGuildChat();stopGuildChat=null}if(stopGuildDuels){stopGuildDuels();stopGuildDuels=null}stopDuelTimers();activeDuelId=null;activeGuildId=null;if(guildPanel)guildPanel.hidden=true;}
-const GUILD_CAT_STICKERS=[
- ['😹','Смеюсь','laugh'],['😿','Плачу','cry'],['😻','Любовь','love'],['😾','Злюсь','angry'],
- ['😺','Привет','hello'],['🙀','Шок','shock'],['😽','Поцелуй','kiss'],['😴','Сплю','sleep'],
- ['🐱','Милота','cute'],['😼','Хитрю','sly'],['🐈','Танцую','dance'],['😸','Радость','happy']
-];
-function addGuildMessage(m){
- const box=$('guildChatMessages');if(!box)return;
- const empty=box.querySelector('[data-empty]');if(empty)empty.remove();
- const mine=!!currentUser&&m.uid===currentUser.uid;
- const row=document.createElement('article');row.className='guild-chat-row'+(mine?' mine':'');
- const bubble=document.createElement('div');bubble.className='guild-chat-bubble';
- const head=document.createElement('div');head.className='guild-chat-head';head.dataset.profileUid=m.uid||'';head.style.cursor='pointer';head.title='Открыть профиль игрока';
- head.append(avatarNode(m.avatar,27));
- const who=document.createElement('span');who.className='guild-chat-name';who.textContent=safeProfileName(m.name||'Игрок');head.append(who);
- if(m.uid===CREATOR_UID){const mark=document.createElement('span');mark.textContent='👑';mark.title='Создатель игры';head.append(mark)}
- const time=document.createElement('time');const stamp=Number(m.createdAt)||Date.now();time.dateTime=new Date(stamp).toISOString();time.textContent=new Date(stamp).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});time.className='guild-chat-time';head.append(time);
- bubble.append(head);
- const raw=String(m.text||'');const sticker=raw.match(/^\[\[CAT:([a-z]+)\]\]$/);
- if(sticker){const item=GUILD_CAT_STICKERS.find(x=>x[2]===sticker[1]);if(item){const visual=document.createElement('div');visual.className='guild-cat-sticker cat-anim-'+item[2];visual.textContent=item[0];visual.setAttribute('role','img');visual.setAttribute('aria-label','Кото-эмоция: '+item[1]);bubble.append(visual);const label=document.createElement('div');label.className='guild-sticker-caption';label.textContent=item[1];bubble.append(label)}else{const body=document.createElement('div');body.className='guild-chat-text';body.textContent=raw;bubble.append(body)}}
- else{const body=document.createElement('div');body.className='guild-chat-text';body.textContent=raw;bubble.append(body)}
- row.append(bubble);box.append(row);
- while(box.children.length>80)box.firstElementChild.remove();
- box.scrollTop=box.scrollHeight;
-}
-function buildGuildCatPicker(){
- const picker=$('guildCatStickerPicker');if(!picker||picker.dataset.ready)return;
- picker.dataset.ready='1';GUILD_CAT_STICKERS.forEach(([emoji,label,key])=>{const b=document.createElement('button');b.type='button';b.className='guild-cat-choice';b.title=label;b.setAttribute('aria-label',label);const face=document.createElement('span');face.className='guild-cat-choice-face cat-anim-'+key;face.textContent=emoji;const caption=document.createElement('small');caption.textContent=label;b.append(face,caption);b.addEventListener('click',()=>sendGuildSticker(key));picker.append(b)});
-}
-async function sendGuildSticker(key){
- if(!currentUser||!activeGuildId){guildStatus('Сначала вступи в клуб.',true);return}
- const item=GUILD_CAT_STICKERS.find(x=>x[2]===key);if(!item)return;
- const btn=$('guildCatStickerToggle');try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:profileData.name||playerName(),avatar:profileData.avatar||'🐱',text:'[[CAT:'+key+']]',createdAt:Date.now()});$('guildCatStickerPicker').hidden=true;btn?.setAttribute('aria-expanded','false');guildStatus('Кото-эмоция отправлена! '+item[0]);}catch(e){guildStatus('Не удалось отправить эмоцию: '+e.message,true)}
-}
+function addGuildMessage(m){const box=$('guildChatMessages');if(!box)return;const empty=box.querySelector('[data-empty]');if(empty)empty.remove();const row=document.createElement('div');row.style.cssText='padding:7px 9px;border:1px solid #34416c;border-radius:10px;background:#11182b;max-width:100%;overflow-wrap:anywhere';const head=document.createElement('div');head.style.cssText='display:flex;align-items:center;gap:7px;font-size:11px;color:#8edfff;margin-bottom:5px';head.dataset.profileUid=m.uid||'';head.style.cursor='pointer';head.title='Открыть профиль игрока';head.append(avatarNode(m.avatar,25));const who=document.createElement('span');who.textContent=safeProfileName(m.name||'Игрок')+' · '+new Date(Number(m.createdAt)||Date.now()).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});head.append(who);if(m.uid===CREATOR_UID){const mark=document.createElement('span');mark.textContent='👑';mark.title='Единственный создатель игры';mark.style.cssText='font-size:16px;filter:drop-shadow(0 0 4px #f5c542)';head.append(mark)}row.append(head);if(m.type==='sticker'&&m.sticker){const faces={happy:['😺','Привет!'],love:['😻','Люблю!'],laugh:['😹','Ахаха'],wow:['🙀','Ого!'],cry:['😿','Грущу'],cool:['😎','Круто!'],sleep:['😴','Сплю'],party:['🥳','Ура!']};const item=faces[m.sticker];if(item){const wrap=document.createElement('div');wrap.className='guild-chat-sticker';const face=document.createElement('span');face.className='sticker-cat';face.textContent=item[0];const label=document.createElement('span');label.className='guild-chat-sticker-label';label.textContent=item[1];wrap.append(face);row.append(wrap,label)}}else{const body=document.createElement('div');body.style.cssText='font-size:13px;white-space:pre-wrap';body.textContent=String(m.text||'');row.append(body)}box.append(row);while(box.children.length>80)box.firstElementChild.remove();box.scrollTop=box.scrollHeight;}
+
 async function showGuild(gid,guild){
  clearGuildChat();activeGuildId=gid;guildPanel.hidden=false;$('guildInviteCode').textContent=gid;$('u7GuildInfo').textContent='🛡️ '+guild.name+' · '+(guild.memberCount||1)+' участник(ов)';
  $('guildChatMessages').replaceChildren();const membersSnap=await get(ref(db,'guilds/'+gid+'/members'));const members=membersSnap.val()||{};const memberBox=$('guildMembers');memberBox.replaceChildren();const memberEntries=Object.entries(members);const memberTitle=document.createElement('strong');memberTitle.textContent='👥 Участники ('+memberEntries.length+'): ';memberBox.append(memberTitle);memberEntries.forEach(([memberUid,m])=>{const chip=document.createElement('button');chip.type='button';chip.className='btn';chip.dataset.profileUid=memberUid;chip.style.cssText='margin:3px;padding:5px 8px';chip.textContent=(m.name||'Игрок')+(m.role==='leader'?' 👑':'');memberBox.append(chip)});
@@ -2185,6 +2134,12 @@ async function sendGuildMessage(){
  try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:profileData.name||playerName(),avatar:profileData.avatar||'🐱',text:textValue,createdAt:Date.now()});input.value='';guildStatus('Сообщение отправлено.');}catch(e){guildStatus('Не удалось отправить: '+e.message,true)}
 }
 
+async function sendGuildSticker(sticker){if(!currentUser||!activeGuildId){guildStatus('Сначала вступи в клуб.',true);return}const allowed=['happy','love','laugh','wow','cry','cool','sleep','party'];if(!allowed.includes(sticker))return;try{await push(ref(db,'guildChats/'+activeGuildId),{uid:currentUser.uid,name:profileData.name||playerName(),avatar:profileData.avatar||'🐱',type:'sticker',sticker,createdAt:Date.now()});guildStatus('Котик отправлен!')}catch(e){guildStatus('Не удалось отправить котика: '+e.message,true)}}
+function closeGuildStickerPanel(){const panel=$('guildStickerPanel'),toggle=$('guildStickerToggle');if(panel){panel.hidden=true;panel.style.display='none'}if(toggle)toggle.setAttribute('aria-expanded','false')}
+$('guildStickerToggle')?.addEventListener('click',()=>{const panel=$('guildStickerPanel'),toggle=$('guildStickerToggle');if(!panel)return;const opening=panel.hidden||panel.style.display==='none';panel.hidden=!opening;panel.style.display=opening?'grid':'none';if(toggle)toggle.setAttribute('aria-expanded',String(opening))});
+$('guildStickerPanel')?.addEventListener('click',e=>{const btn=e.target.closest('[data-sticker]');if(!btn)return;const id=btn.dataset.sticker;closeGuildStickerPanel();sendGuildSticker(id)});
+document.addEventListener('click',e=>{const panel=$('guildStickerPanel'),toggle=$('guildStickerToggle');if(panel&&!panel.hidden&&!panel.contains(e.target)&&e.target!==toggle&&!toggle?.contains(e.target))closeGuildStickerPanel()});
+
 // Club click duels: one-minute head-to-head challenge.
 let stopGuildDuels=null, duelTimerHandle=null, activeDuelId=null, duelSnapshot=null;
 function duelStatus(t,error=false){const el=$('guildDuelStatus');if(el){el.textContent=t;el.style.color=error?'#ff8d9d':'var(--muted)'}}
@@ -2251,7 +2206,7 @@ async function tapGuildDuel(){
  const playerRef=ref(db,'guildDuels/'+activeGuildId+'/'+id+'/players/'+currentUser.uid+'/count');try{await runTransaction(playerRef,n=>{if(Date.now()>=(Number(d.endAt)||0))return;return (Number(n)||0)+1;});}catch(e){$('guildDuelArenaStatus').textContent='Ошибка подсчёта нажатия: '+e.message}
 }
 $('guildDuelCreate').addEventListener('click',createGuildDuel);$('guildDuelTap').addEventListener('click',tapGuildDuel);
-$('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',joinOnlineGuild);$('guildLeaveBtn').addEventListener('click',leaveOnlineGuild);$('guildRefreshList').addEventListener('click',loadGuildDirectory);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});buildGuildCatPicker();$('guildCatStickerToggle').addEventListener('click',()=>{const p=$('guildCatStickerPicker'),b=$('guildCatStickerToggle');p.hidden=!p.hidden;b.setAttribute('aria-expanded',String(!p.hidden));});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код клуба скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
+$('u7GuildCreate').addEventListener('click',createOnlineGuild);$('u7GuildJoin').addEventListener('click',joinOnlineGuild);$('guildLeaveBtn').addEventListener('click',leaveOnlineGuild);$('guildRefreshList').addEventListener('click',loadGuildDirectory);$('guildChatSend').addEventListener('click',sendGuildMessage);$('guildChatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendGuildMessage()}});$('guildCopyCode').addEventListener('click',async()=>{if(!activeGuildId)return;try{await navigator.clipboard.writeText(activeGuildId);guildStatus('Код клуба скопирован.')}catch(e){guildStatus('Код: '+activeGuildId)}});
 window.addEventListener('janik:save',scheduleUpload);
 async function register(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||password.length<6){message('Введи почту и пароль минимум из 6 символов.',true);return}try{await createUserWithEmailAndPassword(auth,email,password);message('Аккаунт создан! Проверяем облачное сохранение…')}catch(e){message(friendly(e),true)}}
 async function login(){const email=$('onlineEmail').value.trim(),password=$('onlinePassword').value;if(!email||!password){message('Введи почту и пароль.',true);return}try{await signInWithEmailAndPassword(auth,email,password)}catch(e){message(friendly(e),true)}}
