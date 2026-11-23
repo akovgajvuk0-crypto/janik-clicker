@@ -1961,7 +1961,7 @@ const firebaseConfig={apiKey:"AIzaSyD43sMaVlzgABfIDUrbo0vBHpjB15ah6pQ",authDomai
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
 const CREATOR_UID='7tkM3l6lGJcWsiANTxT7o3lYYA13';let staffRole='';
 const $=id=>document.getElementById(id), KEY='janik_clicker_ultra_lite_300_v1';
-let currentUser=null,cloudReady=false,writeTimer=null;
+let currentUser=null,cloudReady=false,writeTimer=null,banScreen=null,stopBanWatch=null;
 function message(t,error=false){$('onlineMessage').textContent=t;$('onlineMessage').style.color=error?'#ff8d9d':'#a1a9d1'} function status(t){$('onlineStatus').textContent=t}
 function isActiveBan(ban){return !!(ban&&(ban.permanent===true||Number(ban.until)>Date.now()))}
 function showBanScreen(ban){
