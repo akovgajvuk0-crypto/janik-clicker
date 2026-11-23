@@ -753,6 +753,29 @@ body.menu-collapsed .menu-toggle{left:36px}
  .jc-frame::before,.jc-frame::after,.jc-frame--default::before,.jc-frame--bronze::before,.jc-frame--ice::before,.jc-frame--purple::before,.jc-frame--galaxy::before,.jc-frame--gold::before,.jc-frame--creator::before{animation:none!important}
 }
 </style>
+
+<style id="janik-frame-animation-visible-fix">
+/* Visible motion fallback: animate the actual frame elements, not only pseudo-elements. */
+@keyframes jcFramePulseBronze{0%,100%{filter:drop-shadow(0 0 3px #b87538);box-shadow:0 0 5px #b87538}50%{filter:drop-shadow(0 0 13px #ffbf78);box-shadow:0 0 18px #ffbf78}}
+@keyframes jcFramePulseIce{0%,100%{filter:drop-shadow(0 0 4px #45dfff);box-shadow:0 0 6px #45dfff}50%{filter:drop-shadow(0 0 16px #d9fbff);box-shadow:0 0 20px #d9fbff}}
+@keyframes jcFramePulsePurple{0%,100%{filter:drop-shadow(0 0 4px #9a4dff);box-shadow:0 0 7px #9a4dff}50%{filter:drop-shadow(0 0 17px #ff65e8);box-shadow:0 0 22px #ff65e8}}
+@keyframes jcFramePulseGalaxy{0%,100%{filter:drop-shadow(0 0 5px #635bff);box-shadow:0 0 8px #635bff}50%{filter:drop-shadow(0 0 18px #70eaff);box-shadow:0 0 23px #70eaff}}
+@keyframes jcFramePulseGold{0%,100%{filter:drop-shadow(0 0 5px #d99519);box-shadow:0 0 9px #d99519}50%{filter:drop-shadow(0 0 20px #fff0a0);box-shadow:0 0 25px #ffd95c}}
+@keyframes jcFramePulseCreator{0%,100%{filter:drop-shadow(0 0 7px #ff9f00);box-shadow:0 0 10px #ff9f00;transform:scale(1)}50%{filter:drop-shadow(0 0 23px #fff08a);box-shadow:0 0 28px #ffd700;transform:scale(1.07)}}
+.jc-frame-swatch.jc-frame--bronze{animation:jcFramePulseBronze 2.4s ease-in-out infinite!important}
+.jc-frame-swatch.jc-frame--ice{animation:jcFramePulseIce 2.1s ease-in-out infinite!important}
+.jc-frame-swatch.jc-frame--purple{animation:jcFramePulsePurple 2.2s ease-in-out infinite!important}
+.jc-frame-swatch.jc-frame--galaxy{animation:jcFramePulseGalaxy 2.8s ease-in-out infinite!important}
+.jc-frame-swatch.jc-frame--gold{animation:jcFramePulseGold 2.3s ease-in-out infinite!important}
+.jc-frame-swatch.jc-frame--creator{animation:jcFramePulseCreator 1.8s ease-in-out infinite!important}
+#profilePreview.jc-frame--bronze{animation:jcFramePulseBronze 2.4s ease-in-out infinite!important}
+#profilePreview.jc-frame--ice{animation:jcFramePulseIce 2.1s ease-in-out infinite!important}
+#profilePreview.jc-frame--purple{animation:jcFramePulsePurple 2.2s ease-in-out infinite!important}
+#profilePreview.jc-frame--galaxy{animation:jcFramePulseGalaxy 2.8s ease-in-out infinite!important}
+#profilePreview.jc-frame--gold{animation:jcFramePulseGold 2.3s ease-in-out infinite!important}
+#profilePreview.jc-frame--creator{animation:jcFramePulseCreator 1.8s ease-in-out infinite!important}
+</style>
+
 </head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><button id="menuToggle" class="menu-toggle" type="button" aria-label="Открыть меню" aria-controls="mainMenu" aria-expanded="false">☰</button><button id="menuBackdrop" class="menu-backdrop" type="button" aria-label="Закрыть меню" tabindex="-1"></button><nav class="menu-panel" id="mainMenu" aria-label="Главное меню"><div class="menu-sidebar-title"><span>🐾</span><b>JANIK MENU</b></div>
 <button class="menu-btn active" data-page="home"><span class="menu-icon">🐱</span><span><span class="menu-label">Главная</span><span class="menu-sub">Кликер и бонусы</span></span></button>
 <button class="menu-btn" data-page="shop"><span class="menu-icon">🛒</span><span><span class="menu-label">Магазин</span><span class="menu-sub">375 улучшений</span></span></button>
