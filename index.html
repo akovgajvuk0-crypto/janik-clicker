@@ -635,6 +635,11 @@ body.menu-collapsed .menu-toggle{left:36px}
 .jc-frame--gold{--jc-glow:#ffe08a;border:3px solid transparent!important;background:linear-gradient(135deg,#6b4310,#f9d978,#fff2bd,#a76b17,#ffe9a1) padding-box,linear-gradient(135deg,#fff2bd,#d99a28,#fff8d5,#a96a10,#fff2bd) border-box!important;background-size:100% 100%,240% 240%!important;animation:jcFrameSweep 5s linear infinite,jcFramePulse 2s ease-in-out infinite!important;box-shadow:0 0 0 3px #ffe08a44,0 0 30px #ffc84eaa,inset 0 0 16px #fff4c2!important;}
 .jc-frame-card{position:relative;text-align:left;padding:11px;border-radius:15px;border:1px solid #46527e;background:linear-gradient(145deg,#18223d,#0c1224);color:#f5f7ff;min-height:78px;overflow:hidden;transition:transform .18s,border-color .18s,box-shadow .18s;}
 .jc-frame-card:not(:disabled):active{transform:scale(.97)}
+
+.jc-frame-card[data-frame-id="creator"]{border-color:#dba52e!important;background:linear-gradient(145deg,#3a2a13,#171a2c)!important;box-shadow:inset 0 0 24px #ffbd241c,0 0 18px #ffbd2440!important}
+.jc-frame-card[data-frame-id="creator"] .jc-frame-name{color:#ffe28a!important}
+.jc-frame-card[data-frame-id="creator"] .jc-frame-rarity{color:#ffd75e!important;font-weight:950!important}
+.jc-frame-card[data-frame-id="creator"].is-selected{border-color:#fff0a8!important;box-shadow:0 0 0 2px #ffe36a66,0 0 28px #ffb30088!important}
 .jc-frame-card.is-selected{border-color:#8edfff;box-shadow:0 0 0 1px #8edfff55,0 0 18px #5abfff44;background:linear-gradient(145deg,#243c63,#111a31)}
 .jc-frame-card:disabled{filter:grayscale(.65);opacity:.48}
 .jc-frame-card .jc-frame-name{display:block;font-weight:800;font-size:12px;line-height:1.25}
@@ -2212,13 +2217,13 @@ const CAT_AVATARS=['🐱','😺','😸','😻','😽','🙀','😿','😹','🐈
 let profileData={name:'',avatar:'🐱',frame:'default'};
 function safeProfileName(v){return String(v||'').replace(/[<>]/g,'').replace(/[👑♛♕♔♚]/gu,'').trim().slice(0,20)}
 const PROFILE_FRAMES=[
+ {id:'creator',name:'Абсолютный создатель',emoji:'👑',css:'5px solid #fff0a8',rarity:'ЭКСКЛЮЗИВ · ТОЛЬКО ТЫ',unlock:()=>currentUser?.uid===CREATOR_UID,requirement:'Только для единственного создателя игры'},
  {id:'default',name:'Стартовая',emoji:'✦',css:'2px solid #8edfff',rarity:'Обычная',unlock:()=>true,requirement:'Доступна сразу'},
  {id:'bronze',name:'Реликвия',emoji:'🥉',css:'3px solid #d99a61',rarity:'Редкая',unlock:g=>(g.achievements||[]).includes('firstClick'),requirement:'Открой достижение «Первый клик»'},
  {id:'ice',name:'Ледяная корона',emoji:'❄️',css:'3px solid #8ceaff',rarity:'Эпическая',unlock:g=>(g.achievements||[]).includes('hundred'),requirement:'Открой достижение «100 кликов»'},
  {id:'purple',name:'Плазменный разлом',emoji:'✧',css:'3px solid #d08cff',rarity:'Эпическая',unlock:g=>(g.achievements||[]).includes('rich'),requirement:'Открой достижение «Богач»'},
  {id:'galaxy',name:'Космическая бездна',emoji:'🌌',css:'3px solid #9c8bff',rarity:'Легендарная',unlock:g=>(g.achievements||[]).includes('boss1'),requirement:'Победи первого босса'},
- {id:'gold',name:'Корона создателя',emoji:'👑',css:'3px solid #ffe08a',rarity:'Мифическая',unlock:g=>(g.achievements||[]).length>=9,requirement:'Открой все 9 достижений'},
- {id:'creator',name:'Абсолютный создатель',emoji:'👑',css:'5px solid #fff0a8',rarity:'ЭКСКЛЮЗИВ СОЗДАТЕЛЯ',unlock:()=>currentUser?.uid===CREATOR_UID,requirement:'Только для единственного создателя игры'}
+ {id:'gold',name:'Корона достижений',emoji:'👑',css:'3px solid #ffe08a',rarity:'Мифическая',unlock:g=>(g.achievements||[]).length>=9,requirement:'Открой все 9 достижений'}
 ];
 function currentProfileGame(){return localGame()||{}}
 function frameFor(id){return PROFILE_FRAMES.find(x=>x.id===id)||PROFILE_FRAMES[0]}
@@ -2234,9 +2239,11 @@ function renderProfileFrames(){
   gold:{ring:'linear-gradient(135deg,#fff9d7,#b87912,#fff1a8,#ffffff,#d79a25)',glow:'0 0 0 5px #ffe08a,0 0 30px #e6a52a',bg:'radial-gradient(circle,#76500f,#251b12)'},
   creator:{ring:'conic-gradient(#fffde7,#ffd54a,#fff8b0,#ff9f1c,#fffde7,#fff,#ffca28)',glow:'0 0 0 6px #ffe36a,0 0 22px #ffb300,0 0 46px #ff8f00',bg:'radial-gradient(circle,#7b4b08,#25152d)'}
  };
- PROFILE_FRAMES.forEach(frame=>{
+ // Эксклюзивная рамка даже не показывается в коллекции чужих аккаунтов.
+ const visibleFrames=PROFILE_FRAMES.filter(frame=>frame.id!=='creator'||currentUser?.uid===CREATOR_UID);
+ visibleFrames.forEach(frame=>{
   const unlocked=!!frame.unlock(game),selected=profileData.frame===frame.id,look=frameLooks[frame.id]||frameLooks.default;
-  const b=document.createElement('button');b.type='button';b.disabled=!unlocked;b.className='jc-frame-card'+(selected?' is-selected':'');
+  const b=document.createElement('button');b.type='button';b.dataset.frameId=frame.id;b.disabled=!unlocked;b.className='jc-frame-card'+(selected?' is-selected':'');
   const swatch=document.createElement('span');swatch.className='jc-frame-swatch jc-frame jc-frame--'+frame.id;swatch.textContent=frame.id==='creator'?'👑':frame.id==='gold'?'👑':frame.id==='ice'?'❄️':frame.id==='galaxy'?'🌌':'🐱';swatch.setAttribute('aria-hidden','true');
   swatch.style.cssText='display:grid!important;place-items:center!important;flex:0 0 66px!important;width:66px!important;height:66px!important;box-sizing:border-box!important;border:5px solid transparent!important;border-radius:50%!important;background:'+look.ring+' padding-box!important;box-shadow:'+look.glow+'!important;font-size:30px!important;line-height:1!important;overflow:visible!important;';
   const info=document.createElement('span');info.className='jc-frame-info';
@@ -2247,7 +2254,7 @@ function renderProfileFrames(){
   b.addEventListener('click',()=>{if(!unlocked)return;profileData.frame=frame.id;renderProfileFrames();paintProfile()});
   box.append(b);
  });
- const hint=$('profileFrameHint');if(hint){hint.textContent='Коллекция рамок · '+PROFILE_FRAMES.filter(x=>x.unlock(game)).length+'/'+PROFILE_FRAMES.length+' открыто';hint.style.cssText='font-size:11px;color:#aebce4;margin:9px 0 0;text-align:center;letter-spacing:.3px'}
+ const hint=$('profileFrameHint');if(hint){hint.textContent='Коллекция рамок · '+visibleFrames.filter(x=>x.unlock(game)).length+'/'+visibleFrames.length+' открыто';if(currentUser?.uid===CREATOR_UID)hint.textContent+=' · 👑 эксклюзив создателя';hint.style.cssText='font-size:11px;color:#aebce4;margin:9px 0 0;text-align:center;letter-spacing:.3px'}
 }
 function paintProfile(){const name=safeProfileName($('profileNick')?.value)||profileData.name||playerName();const preview=$('profilePreview');if(preview){preview.replaceChildren();if(profileData.avatar&&profileData.avatar.startsWith('data:image/')){const img=document.createElement('img');img.src=profileData.avatar;img.alt='Аватар';img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%!important;clip-path:circle(50%);display:block';preview.append(img)}else preview.textContent=profileData.avatar||'🐱'}preview.style.border='0';[...preview.classList].filter(c=>c==='jc-frame'||c.startsWith('jc-frame--')).forEach(c=>preview.classList.remove(c));preview.classList.add('jc-frame','jc-frame--'+(profileData.frame||'default'));const label=$('profilePreviewName');if(label){label.replaceChildren();label.append(document.createTextNode(name));if(currentUser?.uid===CREATOR_UID){const crown=document.createElement('span');crown.textContent=' 👑';crown.title='Единственный создатель игры';crown.style.cssText='font-size:18px;filter:drop-shadow(0 0 5px #f5c542);vertical-align:middle';label.append(crown)}}document.querySelectorAll('[data-cat-avatar]').forEach(b=>{b.style.outline=b.dataset.catAvatar===profileData.avatar?'2px solid #8edfff':'none';b.style.background=b.dataset.catAvatar===profileData.avatar?'#29466b':'#171f38'})}
 function setupProfile(){const grid=$('profilePresets');if(!grid||grid.dataset.ready)return;grid.dataset.ready='1';renderProfileFrames();CAT_AVATARS.forEach((a,i)=>{const b=document.createElement('button');b.type='button';b.textContent=a;b.dataset.catAvatar=a;b.title='Кото-аватар '+(i+1);b.style.cssText='min-width:0;aspect-ratio:1;border:1px solid #46527f;border-radius:12px;background:#171f38;color:white;font-size:27px;cursor:pointer';b.addEventListener('click',()=>{profileData.avatar=a;paintProfile()});grid.append(b)});$('profileNick').addEventListener('input',paintProfile);$('profileCamera').addEventListener('click',()=>$('profileCameraInput').click());$('profileGallery').addEventListener('click',()=>$('profileGalleryInput').click());$('profileCameraInput').addEventListener('change',e=>readProfileImage(e.target));$('profileGalleryInput').addEventListener('change',e=>readProfileImage(e.target));$('profileSave').addEventListener('click',saveProfile);}
