@@ -2449,10 +2449,9 @@ async function openPublicPlayerProfile(uid){
   stats.append(stat('🐾 Лапки',data.paws),stat('💛 Золотые лапки',data.gold),stat('👑 Перерождения',data.prestige),stat('🗓️ В игре с',data.createdAt?new Date(data.createdAt).toLocaleDateString('ru-RU'):'—'));
   publicProfileContent.replaceChildren(avatar,title,crown,stats);
   if(currentUser&&uid!==currentUser.uid){
-   const pair=[currentUser.uid,uid].sort().join('__');const [friendSnap,requestSnap]=await Promise.all([get(ref(db,'friendships/'+pair)),get(ref(db,'friendRequests/'+uid+'/'+currentUser.uid))]);
+   const pair=[currentUser.uid,uid].sort().join('__');const friendSnap=await get(ref(db,'friendships/'+pair));
    const action=document.createElement('button');action.type='button';action.className='btn primary';action.style.width='100%';
    if(friendSnap.exists()){action.textContent='💙 Вы уже друзья';action.disabled=true;}
-   else if(requestSnap.exists()){action.textContent='⌛ Заявка уже отправлена';action.disabled=true;}
    else {action.textContent='➕ Добавить в друзья';action.addEventListener('click',async()=>{action.disabled=true;try{await set(ref(db,'friendRequests/'+uid+'/'+currentUser.uid),{fromUid:currentUser.uid,fromName:profileData.name,fromAvatar:profileData.avatar||'🐱',createdAt:Date.now()});action.textContent='✅ Заявка отправлена';}catch(e){action.disabled=false;action.textContent='Ошибка: '+e.message}})}
    publicProfileActions.append(action);
   }
