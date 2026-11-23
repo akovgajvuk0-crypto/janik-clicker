@@ -1391,7 +1391,6 @@ $('towerBtn').addEventListener('click',towerFight);$('gearWeapon').addEventListe
 $('bossAttackBtn').addEventListener('click',attackBoss);$('worldBtn').addEventListener('click',openWorld);$('evolveBtn').addEventListener('click',evolvePet);$('miniBtn').addEventListener('click',startMiniGame);$('chestBtn').addEventListener('click',openGoldChest);$('secretBtn').addEventListener('click',secretShop);$('collectionBtn').addEventListener('click',showCollection);$('duelBtn').addEventListener('click',localDuel);
 
 function showMenuPage(page){
-  if(page==='profile') playCreatorEntranceVoice();
   document.querySelectorAll('.menu-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
   const home=$('homePage'); home.classList.toggle('menu-hidden',page!=='home');
    $('recordsPanel').classList.toggle('menu-hidden',page!=='home');$('tutorialPanel').classList.toggle('menu-hidden',page!=='home');
@@ -2656,21 +2655,22 @@ async function openPublicPlayerProfile(uid){
 }
 document.addEventListener('click',e=>{const target=e.target.closest('[data-profile-uid]');if(target&&target.dataset.profileUid){e.preventDefault();e.stopPropagation();openPublicPlayerProfile(target.dataset.profileUid)}});
 
-
-/* Creator-only entrance voice. Triggered from the actual page router on user tap. */
-function playCreatorEntranceVoice(){
+// Voice is attached inside the same module that owns currentUser and CREATOR_UID.
+document.querySelector('.menu-btn[data-page="profile"]')?.addEventListener('click',()=>{
  try{
   if(!currentUser || currentUser.uid!==CREATOR_UID) return;
   if(!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
-  window.speechSynthesis.cancel();
-  const line=new SpeechSynthesisUtterance('Owner!');
-  line.lang='en-US'; line.rate=0.68; line.pitch=0.48; line.volume=1;
-  const voices=window.speechSynthesis.getVoices();
-  const english=voices.find(v=>/^en(-|_)?(US)?$/i.test(v.lang) || /English.*(US|United States)/i.test(v.name));
+  const synth=window.speechSynthesis;
+  synth.cancel();
+  const line=new SpeechSynthesisUtterance('Owwwwneeeeeer!');
+  line.lang='en-US'; line.rate=0.72; line.pitch=0.42; line.volume=1;
+  const voices=synth.getVoices();
+  const english=voices.find(v=>/^en(-|_)?(US)?$/i.test(v.lang)) || voices.find(v=>/^en/i.test(v.lang));
   if(english) line.voice=english;
-  window.speechSynthesis.speak(line);
+  synth.speak(line);
  }catch(e){console.warn('Creator voice unavailable',e)}
-}
+});
+
 </script>
 
 <script id="freefire-sidebar-menu-controller">
