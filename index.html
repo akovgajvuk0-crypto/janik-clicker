@@ -762,8 +762,12 @@ body.menu-collapsed .menu-toggle{left:36px}
 .creator-live-meta{font-size:11px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}
 .creator-live-state{font-size:11px;font-weight:800;white-space:nowrap}
 html.light-mode .creator-live-row{background:#f4f6fb}
+#creatorEventManager input,#creatorEventManager select{font:inherit;font-size:14px;min-width:0}
+#creatorEventManager button:disabled{opacity:.45;cursor:not-allowed}
+.creator-event-history-row{padding:9px 10px;border:1px solid var(--line);border-radius:11px;background:#10172b;font-size:12px;overflow-wrap:anywhere}
+#globalEventBanner[hidden]{display:none!important}
 </style>
-</head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><button id="menuToggle" class="menu-toggle" type="button" aria-label="Открыть меню" aria-controls="mainMenu" aria-expanded="false">☰</button><button id="menuBackdrop" class="menu-backdrop" type="button" aria-label="Закрыть меню" tabindex="-1"></button><nav class="menu-panel" id="mainMenu" aria-label="Главное меню"><div class="menu-sidebar-title"><span>🐾</span><b>JANIK MENU</b></div>
+</head><body><main class="app"><header class="top"><div class="brand"><div class="logo">🐈</div><div><h1>Жаник Clicker <span style="color:#a78bfa">ULTRA</span></h1><p>ULTRA 7.0 MEGA UPDATE · ANDROID EDITION</p></div></div><div class="pills"><div class="pill" id="saveState">● автосохранение</div><button class="pill" id="onlineAccountLogout" type="button" hidden>☁️ Выйти</button><button class="pill" id="soundToggle" aria-pressed="false">🔇 Звук: выкл.</button><button class="pill" id="musicToggle" aria-pressed="false">🎵 Музыка: выкл.</button></div></header><section id="globalEventBanner" hidden aria-live="polite" style="margin:0 0 12px;padding:14px;border:1px solid #6b5cff;border-radius:16px;background:linear-gradient(110deg,#182b55,#3a205c);box-shadow:0 8px 28px #4b3aff33"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">🎉</span><div style="min-width:0;flex:1"><strong id="globalEventTitle" style="display:block;font-size:15px">Глобальное событие</strong><span id="globalEventDescription" style="display:block;color:#d7dcff;font-size:12px;margin-top:3px;overflow-wrap:anywhere"></span></div><strong id="globalEventMultiplier" style="font-size:20px;color:#ffe58a;white-space:nowrap">×2</strong></div><div id="globalEventTime" style="font-size:11px;color:#c4cafa;margin-top:8px"></div></section><section class="panel" id="onlinePanel" style="margin:0 0 12px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>☁️ Janik Online</strong><span id="onlineStatus" style="font-size:12px;color:#a1a9d1">Не выполнен вход</span></div><div id="authControls" style="display:grid;gap:8px;margin-top:10px"><input id="onlineEmail" type="email" autocomplete="email" placeholder="Электронная почта" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><input id="onlinePassword" type="password" autocomplete="current-password" placeholder="Пароль (минимум 6 символов)" style="padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#f5f7ff"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="onlineRegister" type="button">Регистрация</button><button class="btn" id="onlineLogin" type="button">Войти</button><button class="btn danger" id="onlineLogout" type="button" hidden>Выйти</button><button class="btn" id="onlineSync" type="button" hidden>Сохранить в облако</button></div></div><div id="onlineMessage" role="status" style="font-size:12px;color:#a1a9d1;margin-top:8px">Создай аккаунт или войди, чтобы включить облачное сохранение.</div></section><section class="stats"><div class="stat"><span>🐾 Лапки</span><strong id="paws">0</strong></div><div class="stat"><span>👆 Сила клика</span><strong id="power">1</strong></div><div class="stat"><span>🤖 В секунду</span><strong id="rate">0</strong></div></section><p class="menu-caption">МЕНЮ ИГРЫ · выбери раздел</p><button id="menuToggle" class="menu-toggle" type="button" aria-label="Открыть меню" aria-controls="mainMenu" aria-expanded="false">☰</button><button id="menuBackdrop" class="menu-backdrop" type="button" aria-label="Закрыть меню" tabindex="-1"></button><nav class="menu-panel" id="mainMenu" aria-label="Главное меню"><div class="menu-sidebar-title"><span>🐾</span><b>JANIK MENU</b></div>
 <button class="menu-btn active" data-page="home"><span class="menu-icon">🐱</span><span><span class="menu-label">Главная</span><span class="menu-sub">Кликер и бонусы</span></span></button>
 <button class="menu-btn" data-page="shop"><span class="menu-icon">🛒</span><span><span class="menu-label">Магазин</span><span class="menu-sub">375 улучшений</span></span></button>
 <button class="menu-btn" data-page="features"><span class="menu-icon">✨</span><span><span class="menu-label">Механики</span><span class="menu-sub">Золото, задания, престиж</span></span></button>
@@ -894,6 +898,23 @@ html.light-mode .creator-live-row{background:#f4f6fb}
   <div class="empty">Ожидаем данные профилей…</div>
  </div>
  <p style="font-size:11px;color:var(--muted);line-height:1.4;margin:10px 0 0">Статус «В сети» определяется по обновлению профиля за последние 2 минуты. Время активности обновляется автоматически.</p>
+</div>
+<div id="creatorEventManager" style="margin-top:14px;padding:14px;border:1px solid #7662d9aa;border-radius:16px;background:linear-gradient(145deg,#1b1d3aaa,#11182bee)">
+ <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong style="color:#c9b8ff">🎉 EVENT MANAGER · GLOBAL</strong><span id="eventManagerConnection" style="font-size:11px;color:var(--muted)">Ожидание входа…</span></div>
+ <div class="stat" style="margin-top:10px;padding:11px;border-color:#6556a8"><span>Текущее событие</span><strong id="creatorEventCurrentTitle" style="font-size:16px">Нет активного события</strong><small id="creatorEventCurrentMeta" style="display:block;color:var(--muted);margin-top:5px;line-height:1.4">Создай первое глобальное событие.</small></div>
+ <div style="display:grid;gap:8px;margin-top:12px">
+  <label style="font-size:12px">Название события<input id="eventTitleInput" maxlength="50" placeholder="Например, JANIK FEST" style="display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#fff"></label>
+  <label style="font-size:12px">Описание<input id="eventDescriptionInput" maxlength="200" placeholder="Праздник для всех игроков!" style="display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#fff"></label>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+   <label style="font-size:12px">Множитель лапок<select id="eventMultiplierInput" style="display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:11px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#fff"><option value="1">×1 · без бонуса</option><option value="2" selected>×2</option><option value="3">×3</option><option value="5">×5</option><option value="10">×10</option></select></label>
+   <label style="font-size:12px">Начало<input id="eventStartInput" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:10px 6px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#fff"></label>
+  </div>
+  <label style="font-size:12px">Окончание<input id="eventEndInput" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border-radius:10px;border:1px solid #414b83;background:#0c1120;color:#fff"></label>
+  <button class="btn primary" id="eventCreateButton" type="button" style="width:100%">🚀 Создать и опубликовать событие</button>
+  <button class="btn danger" id="eventStopButton" type="button" style="width:100%" disabled>⏹️ Остановить текущее событие</button>
+ </div>
+ <div style="margin-top:14px;padding-top:12px;border-top:1px solid #ffffff1c"><b style="font-size:13px">📚 Архив событий</b><div id="creatorEventHistory" style="display:grid;gap:7px;margin-top:8px"><div class="empty">Архив пока пуст.</div></div></div>
+ <p style="font-size:11px;color:var(--muted);line-height:1.45;margin:10px 0 0">Глобальный множитель применяется к начислению обычных лапок в текущем клиенте игры. Не используй его как защиту от читов: для полностью доверенной экономики начисления нужно проверять на сервере.</p>
 </div>
 <p id="adminStatus" style="font-size:12px;color:var(--muted);margin:10px 0 0">Панель доступна только создателю и администраторам.</p>
 </section>
@@ -1350,7 +1371,7 @@ window.addEventListener('janik:admin-currency',event=>{
  render();
  save();
 });
-function tapCat(){playTone('clicker');if(miniTimer)miniClicks++;let gain=clickGain();state.clicks++;if(Date.now()-state.comboAt<1400)state.combo=Math.min(100,(state.combo||0)+1);else state.combo=1;state.comboAt=Date.now();ensureDaily();state.dailyClicks=(state.dailyClicks||0)+1;const critChance=Math.min(75,8+state.prestige*2+safeNum(state.superPrestige,0)*2+(state.skills.critical||0)*3);if(Math.random()*100<critChance){gain*=3+(state.skills.critical||0);state.gold=Math.min(MAX_VALUE,state.gold+1);toast('💥 КРИТ! ×'+(3+(state.skills.critical||0))+' лапок и +1 золото!')}state.paws=Math.min(MAX_VALUE,state.paws+gain);state.totalEarned=Math.min(MAX_VALUE,state.totalEarned+gain);checkAchievements();renderStats();renderFeatures();saveSoon()}
+function tapCat(){playTone('clicker');if(miniTimer)miniClicks++;let gain=clickGain();const globalEvent=typeof window!=='undefined'&&typeof window.__janikGlobalEventMultiplier==='function'?window.__janikGlobalEventMultiplier():1;gain=Math.floor(gain*globalEvent);state.clicks++;if(Date.now()-state.comboAt<1400)state.combo=Math.min(100,(state.combo||0)+1);else state.combo=1;state.comboAt=Date.now();ensureDaily();state.dailyClicks=(state.dailyClicks||0)+1;const critChance=Math.min(75,8+state.prestige*2+safeNum(state.superPrestige,0)*2+(state.skills.critical||0)*3);if(Math.random()*100<critChance){gain*=3+(state.skills.critical||0);state.gold=Math.min(MAX_VALUE,state.gold+1);toast('💥 КРИТ! ×'+(3+(state.skills.critical||0))+' лапок и +1 золото!')}state.paws=Math.min(MAX_VALUE,state.paws+gain);state.totalEarned=Math.min(MAX_VALUE,state.totalEarned+gain);checkAchievements();renderStats();renderFeatures();saveSoon()}
 // Pointer events count each finger independently on touchscreens.
 $('cat').addEventListener('pointerdown',e=>{if(e.button>0)return;e.preventDefault();tapCat()});
 $('cat').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tapCat()}});$('bonus').addEventListener('click',()=>{if(state.bonusTaken){toast('Бонус уже забран в этой игре 😺');return}state.bonusTaken=true;const gift=Math.min(MAX_VALUE,Math.max(100,state.clickPower*100+state.autoRate*30));state.paws=Math.min(MAX_VALUE,state.paws+gift);state.totalEarned=Math.min(MAX_VALUE,state.totalEarned+gift);save();render();toast('Бонус: +'+fmt(gift)+' лапок! 🎁');$('bonus').textContent='✅ Бонус получен'});$('save').addEventListener('click',()=>save(false));$('reset').addEventListener('click',()=>{if(confirm('Начать новую игру? Все лапки и улучшения будут сброшены.')){state=defaultState();if(window.zhanikResetExtra)window.zhanikResetExtra();document.body.classList.remove('secret-mode');save();recalc();render();$('bonus').textContent='🎁 Забрать бонус';toast('Новая игра началась!')}});document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{category=b.dataset.cat;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));renderShop()}));let searchTimer=null;$('search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderShop,250)});
@@ -2126,7 +2147,7 @@ const pretty=n=>typeof fmt==='function'?fmt(n):Math.floor(n).toLocaleString('ru-
 const persistU7=()=>{try{localStorage.setItem(UKEY,JSON.stringify(u7))}catch(e){if(typeof toast==='function')toast('Не удалось сохранить прогресс ULTRA 7.0. Освободи место в браузере.')}};
 const tell=s=>{if(typeof toast==='function')toast(s)};
 const spend=n=>{if(typeof state==='undefined'||!Number.isFinite(n)||state.paws<n){tell('Не хватает лапок! 🐾');return false}state.paws-=n;return true};
-const gain=n=>{if(typeof state==='undefined')return;const boost=(1+u7.prestige*.05)*(1+u7.base*.05);const v=Math.max(0,Math.floor((Number(n)||0)*boost));state.paws=Math.min(typeof MAX_VALUE!=='undefined'?MAX_VALUE:1e100,state.paws+v);state.totalEarned=Math.min(typeof MAX_VALUE!=='undefined'?MAX_VALUE:1e100,(state.totalEarned||0)+v)};
+const gain=n=>{if(typeof state==='undefined')return;const boost=(1+u7.prestige*.05)*(1+u7.base*.05);const globalEvent=typeof window!=='undefined'&&typeof window.__janikGlobalEventMultiplier==='function'?window.__janikGlobalEventMultiplier():1;const v=Math.max(0,Math.floor((Number(n)||0)*boost*globalEvent));state.paws=Math.min(typeof MAX_VALUE!=='undefined'?MAX_VALUE:1e100,state.paws+v);state.totalEarned=Math.min(typeof MAX_VALUE!=='undefined'?MAX_VALUE:1e100,(state.totalEarned||0)+v)};
 function refresh(){
  if(!$('ultra7Page'))return;
  $('u7Shards').textContent=pretty(u7.shards);
@@ -2406,6 +2427,85 @@ function setCreatorMonitorAccess(){
   const list=$('creatorMonitorList');if(list)list.textContent='Не удалось загрузить монитор: '+err.message;
  });
 }
+// GLOBAL EVENT MANAGER — creator publishes one shared event for every signed-in player.
+let stopGlobalEventWatch=null,globalEventCache=null,stopEventHistoryWatch=null;
+function globalEventMultiplier(){
+ const ev=globalEventCache,now=Date.now();
+ if(!ev||ev.active!==true||!Number.isFinite(Number(ev.startAt))||!Number.isFinite(Number(ev.endAt)))return 1;
+ if(now<Number(ev.startAt)||now>=Number(ev.endAt))return 1;
+ return Math.max(1,Math.min(10,Number(ev.multiplier)||1));
+}
+window.__janikGlobalEventMultiplier=globalEventMultiplier;
+function formatEventDate(ts){const n=Number(ts)||0;return n?new Date(n).toLocaleString('ru-RU',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—'}
+function renderGlobalEventBanner(ev){
+ const banner=$('globalEventBanner');if(!banner)return;
+ if(!ev||ev.active!==true){banner.hidden=true;return}
+ const start=Number(ev.startAt)||0,end=Number(ev.endAt)||0,now=Date.now();
+ if(!start||!end||now>=end){banner.hidden=true;return}
+ $('globalEventTitle').textContent=String(ev.title||'Глобальное событие').slice(0,50);
+ $('globalEventDescription').textContent=String(ev.description||'').slice(0,200);
+ $('globalEventMultiplier').textContent='×'+Math.max(1,Math.min(10,Number(ev.multiplier)||1));
+ $('globalEventTime').textContent=now<start?'🕒 Начало: '+formatEventDate(start):'🟢 Событие активно до '+formatEventDate(end);
+ banner.hidden=false;
+}
+function renderCreatorEvent(ev){
+ const title=$('creatorEventCurrentTitle'),meta=$('creatorEventCurrentMeta'),stop=$('eventStopButton');if(!title||!meta)return;
+ if(!ev){title.textContent='Нет активного события';meta.textContent='Создай первое глобальное событие.';if(stop)stop.disabled=true;return}
+ const now=Date.now(),start=Number(ev.startAt)||0,end=Number(ev.endAt)||0;
+ const status=ev.active!==true?'Остановлено':now<start?'Запланировано':now<end?'Активно':'Завершено по времени';
+ title.textContent=String(ev.title||'Без названия');
+ meta.textContent=status+' · ×'+(Number(ev.multiplier)||1)+' · '+formatEventDate(start)+' — '+formatEventDate(end);
+ if(stop)stop.disabled=ev.active!==true;
+}
+function renderEventHistory(data){
+ const box=$('creatorEventHistory');if(!box)return;box.replaceChildren();
+ const items=Object.values(data||{}).filter(x=>x&&typeof x==='object').sort((a,b)=>(Number(b.archivedAt)||0)-(Number(a.archivedAt)||0)).slice(0,15);
+ if(!items.length){const empty=document.createElement('div');empty.className='empty';empty.textContent='Архив пока пуст.';box.append(empty);return}
+ items.forEach(ev=>{const row=document.createElement('div');row.className='creator-event-history-row';const name=document.createElement('b');name.textContent='🎉 '+String(ev.title||'Событие').slice(0,50);const detail=document.createElement('div');detail.style.cssText='color:var(--muted);margin-top:4px';detail.textContent='×'+(Number(ev.multiplier)||1)+' · '+formatEventDate(ev.startAt)+' — '+formatEventDate(ev.endAt);row.append(name,detail);box.append(row)});
+}
+function watchGlobalEvents(){
+ if(!currentUser){if(stopGlobalEventWatch){stopGlobalEventWatch();stopGlobalEventWatch=null}if(stopEventHistoryWatch){stopEventHistoryWatch();stopEventHistoryWatch=null}globalEventCache=null;renderGlobalEventBanner(null);return}
+ if(!stopGlobalEventWatch){
+  const connection=$('eventManagerConnection');
+  stopGlobalEventWatch=onValue(ref(db,'globalEvents/current'),snap=>{globalEventCache=snap.val()||null;window.__janikGlobalEvent=globalEventCache;renderGlobalEventBanner(globalEventCache);renderCreatorEvent(globalEventCache);if(connection)connection.textContent='🟢 Синхронизация активна';},err=>{if(connection)connection.textContent='Ошибка Firebase: '+err.message;});
+ }
+ if(currentUser.uid===CREATOR_UID&&!stopEventHistoryWatch){
+  stopEventHistoryWatch=onValue(ref(db,'globalEvents/history'),snap=>renderEventHistory(snap.val()||{}),err=>{const box=$('creatorEventHistory');if(box)box.textContent='Ошибка архива: '+err.message;});
+ }
+ if(currentUser.uid!==CREATOR_UID&&stopEventHistoryWatch){stopEventHistoryWatch();stopEventHistoryWatch=null}
+}
+function localDateTimeValue(ts){const d=new Date(ts),pad=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())}
+const eventStartInput=$('eventStartInput'),eventEndInput=$('eventEndInput');
+if(eventStartInput&&eventEndInput){const now=Date.now();eventStartInput.value=localDateTimeValue(now);eventEndInput.value=localDateTimeValue(now+86400000)}
+$('eventCreateButton')?.addEventListener('click',async()=>{
+ if(currentUser?.uid!==CREATOR_UID){adminStatus('Создавать глобальные события может только создатель.',true);return}
+ const title=String($('eventTitleInput')?.value||'').trim(),description=String($('eventDescriptionInput')?.value||'').trim();
+ const multiplier=Number($('eventMultiplierInput')?.value||1),startAt=new Date($('eventStartInput')?.value||'').getTime(),endAt=new Date($('eventEndInput')?.value||'').getTime();
+ if(!title||title.length>50){adminStatus('Название события должно содержать от 1 до 50 символов.',true);return}
+ if(description.length>200){adminStatus('Описание не должно превышать 200 символов.',true);return}
+ if(!Number.isFinite(startAt)||!Number.isFinite(endAt)||startAt<=0||endAt<=startAt){adminStatus('Проверь даты: окончание должно быть позже начала.',true);return}
+ if(endAt-startAt>31*86400000){adminStatus('Одно событие может длиться не более 31 дня.',true);return}
+ if(![1,2,3,5,10].includes(multiplier)){adminStatus('Недопустимый множитель.',true);return}
+ const button=$('eventCreateButton');button.disabled=true;button.textContent='Публикуем…';
+ try{
+  const previous=globalEventCache;
+  if(previous){await push(ref(db,'globalEvents/history'),{...previous,archivedAt:Date.now(),archivedBy:currentUser.uid,archiveReason:'replaced'});}
+  const eventId='event_'+Date.now().toString(36);
+  const record={id:eventId,title,description,multiplier,active:true,startAt,endAt,createdBy:currentUser.uid,createdAt:Date.now(),updatedAt:Date.now()};
+  await set(ref(db,'globalEvents/current'),record);
+  adminStatus(startAt>Date.now()?'✅ Событие опубликовано и запланировано для всех игроков.':'✅ Глобальное событие запущено для всех игроков.');
+  $('eventTitleInput').value='';$('eventDescriptionInput').value='';
+ }catch(e){adminStatus('Не удалось опубликовать событие: '+e.message,true)}
+ finally{button.disabled=false;button.textContent='🚀 Создать и опубликовать событие'}
+});
+$('eventStopButton')?.addEventListener('click',async()=>{
+ if(currentUser?.uid!==CREATOR_UID){adminStatus('Останавливать глобальные события может только создатель.',true);return}
+ const ev=globalEventCache;if(!ev||ev.active!==true){adminStatus('Нет активного события для остановки.',true);return}
+ if(!confirm('Остановить событие «'+String(ev.title||'Событие')+'» для всех игроков?'))return;
+ const button=$('eventStopButton');button.disabled=true;
+ try{await push(ref(db,'globalEvents/history'),{...ev,archivedAt:Date.now(),archivedBy:currentUser.uid,archiveReason:'stopped'});await update(ref(db,'globalEvents/current'),{active:false,updatedAt:Date.now(),stoppedAt:Date.now()});adminStatus('⏹️ Глобальное событие остановлено для всех игроков.');}
+ catch(e){adminStatus('Не удалось остановить событие: '+e.message,true);button.disabled=false}
+});
 $('creatorMonitorRefresh')?.addEventListener('click',()=>renderCreatorMonitor(creatorMonitorCache));
 $('adminLoadPlayers').addEventListener('click',loadAdminPlayers);$('adminGiveCurrency').addEventListener('click',giveCurrency);$('adminUnban').addEventListener('click',unbanTarget);$('creatorMakeAdmin').addEventListener('click',()=>setAdminRole('admin'));$('creatorRemoveAdmin').addEventListener('click',()=>setAdminRole(''));
 document.querySelectorAll('[data-ban]').forEach(b=>b.addEventListener('click',()=>banTarget(b.dataset.ban==='permanent'?'permanent':Number(b.dataset.ban))));
@@ -2655,7 +2755,7 @@ $('onlineLogout').addEventListener('click',async()=>{try{await signOut(auth)}cat
 $('onlineAccountLogout').addEventListener('click',async()=>{try{await signOut(auth)}catch(e){message(friendly(e),true)}});
 $('onlineSync').addEventListener('click',()=>uploadGame(true));
 setupProfile();
-onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;if(!user&&publicProfileHeartbeat){clearInterval(publicProfileHeartbeat);publicProfileHeartbeat=null;}$('onlinePanel').hidden=!!user;$('onlineAccountLogout').hidden=!user;$('onlineLogout').hidden=!user;$('onlineSync').hidden=!user;$('onlineEmail').disabled=!!user;$('onlinePassword').disabled=!!user;$('onlineRegister').hidden=!!user;$('onlineLogin').hidden=!!user;
+onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;watchGlobalEvents();if(!user&&publicProfileHeartbeat){clearInterval(publicProfileHeartbeat);publicProfileHeartbeat=null;}$('onlinePanel').hidden=!!user;$('onlineAccountLogout').hidden=!user;$('onlineLogout').hidden=!user;$('onlineSync').hidden=!user;$('onlineEmail').disabled=!!user;$('onlinePassword').disabled=!!user;$('onlineRegister').hidden=!!user;$('onlineLogin').hidden=!!user;
  if(!user){if(stopCreatorMonitor){stopCreatorMonitor();stopCreatorMonitor=null}if(stopBanWatch){stopBanWatch();stopBanWatch=null}if(stopFriendRequests){stopFriendRequests();stopFriendRequests=null}if(stopFriendships){stopFriendships();stopFriendships=null}friendshipCache={};staffRole='';refreshAdminVisibility();clearGuildChat();activeGuildId=null;guildPanel.hidden=true;loadGuildDirectory();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
  status('Выполнен вход: '+(user.email||'игрок'));message('Проверяем облачное сохранение…');
  try{
