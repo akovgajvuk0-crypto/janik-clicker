@@ -2378,13 +2378,16 @@ function renderCreatorMonitor(data){
  shown.forEach(player=>{
   const isOnline=now-Number(player.updatedAt)<120000;
   const row=document.createElement('div');row.className='creator-live-row';
-  const info=document.createElement('div');info.style.minWidth='0';
-  const name=document.createElement('div');name.className='creator-live-name';name.textContent=(player.avatar||'🐱')+' '+String(player.name||'Игрок').slice(0,32);
+  row.style.cssText+=';display:flex;align-items:center;gap:10px;min-width:0';
+  const avatar=avatarNode(player.avatar||'🐱',38);
+  avatar.style.flex='0 0 38px';
+  const info=document.createElement('div');info.style.cssText='min-width:0;flex:1 1 auto;overflow:hidden';
+  const name=document.createElement('div');name.className='creator-live-name';name.textContent=String(player.name||'Игрок').slice(0,32);name.style.cssText+=';overflow-wrap:anywhere';
   const uid=document.createElement('div');uid.className='creator-live-meta';uid.textContent='UID: '+String(player.uid);
   const last=document.createElement('div');last.className='creator-live-meta';last.textContent=creatorFormatActivity(player.updatedAt);
   info.append(name,uid,last);
-  const state=document.createElement('div');state.className='creator-live-state';state.style.color=isOnline?'#72f0c0':'#9da9c9';state.textContent=isOnline?'🟢 В СЕТИ':'⚪ НЕ В СЕТИ';
-  row.append(info,state);list.append(row);
+  const state=document.createElement('div');state.className='creator-live-state';state.style.color=isOnline?'#72f0c0':'#9da9c9';state.style.cssText+=';flex:0 0 auto;text-align:right';state.textContent=isOnline?'🟢 В СЕТИ':'⚪ НЕ В СЕТИ';
+  row.append(avatar,info,state);list.append(row);
  });
 }
 function setCreatorMonitorAccess(){
