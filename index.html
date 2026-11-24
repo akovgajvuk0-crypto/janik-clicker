@@ -775,6 +775,7 @@ html.light-mode .creator-live-row{background:#f4f6fb}
 <button class="menu-btn" data-page="leaderboard"><span class="menu-icon">🏆</span><span><span class="menu-label">Таблица лидеров</span><span class="menu-sub">Лучшие игроки онлайн</span></span></button>
 <button class="menu-btn" data-page="profile"><span class="menu-icon">👤</span><span><span class="menu-label">Мой профиль</span><span class="menu-sub">Ник и аватар</span></span></button>
 <button class="menu-btn" data-page="friends"><span class="menu-icon">👥</span><span><span class="menu-label">Друзья</span><span class="menu-sub">Поиск и заявки</span></span></button>
+<button class="menu-btn" data-page="growth"><span class="menu-icon">🚀</span><span><span class="menu-label">Приглашения и новости</span><span class="menu-sub">Бонусы, события, NOVEX NEWS</span></span></button>
 <button class="menu-btn" data-page="admin" id="adminMenuButton" hidden><span class="menu-icon">👑</span><span><span class="menu-label" id="adminMenuLabel">Панель управления</span><span class="menu-sub">Выдача лапок и баны</span></span></button>
 <button class="menu-btn" data-page="settings"><span class="menu-icon settings-menu-icon">⚙️</span><span><span class="menu-label">Настройки</span><span class="menu-sub">Графика и эффекты</span></span></button>
 <button class="menu-btn" data-page="pets"><span class="menu-icon">🐾</span><span><span class="menu-label">Команда питомцев</span><span class="menu-sub">3 активных помощника</span></span></button>
@@ -839,6 +840,31 @@ html.light-mode .creator-live-row{background:#f4f6fb}
 <div id="friendSearchStatus" style="font-size:12px;color:var(--muted);margin:8px 0"></div><div id="friendSearchResults" style="display:grid;gap:8px"></div>
 <h3 style="font-size:15px;margin:18px 0 8px">📨 Входящие заявки</h3><div id="friendRequestsList" style="display:grid;gap:8px"><div class="empty">Войди в аккаунт, чтобы увидеть заявки.</div></div>
 <h3 style="font-size:15px;margin:18px 0 8px">💙 Мои друзья</h3><div id="friendsList" style="display:grid;gap:8px"><div class="empty">Пока нет друзей.</div></div>
+</section>
+<section class="panel menu-page" id="growthPage" style="margin-top:13px">
+<h2 style="margin:0 0 6px">🚀 NOVEX GROWTH CENTER</h2>
+<p style="font-size:12px;color:var(--muted);margin:0 0 12px">Приглашай друзей, получай награды и следи за новостями Janik Clicker ULTRA.</p>
+<div id="growthWelcomeCard" style="display:none;padding:13px;border:1px solid #e7b94e88;border-radius:14px;background:linear-gradient(120deg,#49320d,#30204f);margin-bottom:12px">
+ <b id="growthWelcomeTitle">🎉 WELCOME EVENT</b><p id="growthWelcomeDescription" style="font-size:12px;line-height:1.5;margin:6px 0"></p>
+ <div id="growthWelcomeReward" style="font-size:12px;color:#ffe49a;margin-bottom:9px"></div>
+ <button class="btn primary" id="growthWelcomeClaim" type="button" style="width:100%">🎁 Забрать награду новичка</button>
+ <small id="growthWelcomeStatus" style="display:block;color:#f5e8c4;margin-top:7px"></small>
+</div>
+<div style="padding:13px;border:1px solid #4e83d988;border-radius:14px;background:linear-gradient(145deg,#172c50,#17182e);margin-bottom:12px">
+ <b>👥 REFERRAL SYSTEM</b><p style="font-size:12px;color:var(--muted);line-height:1.5;margin:6px 0 10px">Отправь личную ссылку другу. Когда он зарегистрируется и наиграет 100 кликов и 3 покупки, приглашение засчитается.</p>
+ <div style="display:flex;gap:7px;flex-wrap:wrap"><input id="growthInviteLink" readonly placeholder="Войди в аккаунт, чтобы получить ссылку" style="flex:1;min-width:160px;padding:10px;border-radius:9px;border:1px solid #414b83;background:#0c1120;color:#fff"><button class="btn primary" id="growthCopyInvite" type="button">📋 Копировать</button></div>
+ <div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:10px"><div class="stat"><span>👥 Приглашено</span><strong id="growthInviteCount">0</strong></div><div class="stat"><span>✅ Выполнили задания</span><strong id="growthInviteCompleted">0</strong></div></div>
+ <button class="btn" id="growthClaimReferrals" type="button" style="width:100%;margin-top:9px">🎁 Забрать награды за друзей</button><small id="growthReferralStatus" style="display:block;color:var(--muted);margin-top:7px">За каждого друга, выполнившего задания: +2 500 лапок.</small>
+</div>
+<div style="padding:13px;border:1px solid var(--line);border-radius:14px;margin-bottom:12px">
+ <b>🏆 INVITE LEADERBOARD</b><p style="font-size:12px;color:var(--muted);margin:5px 0 9px">Самые активные приглашающие игроки.</p>
+ <div id="growthInviteLeaderboard" style="display:grid;gap:7px"><div class="empty">Войди в аккаунт, чтобы загрузить рейтинг.</div></div>
+</div>
+<div style="padding:13px;border:1px solid var(--line);border-radius:14px">
+ <b>📰 NEWS CENTER · NOVEX GAMES</b><p style="font-size:12px;color:var(--muted);margin:5px 0 9px">Новости, обновления и объявления разработчика.</p>
+ <div id="growthNewsList" style="display:grid;gap:8px"><div class="empty">Новости появятся здесь.</div></div>
+</div>
+<p id="growthLoginHint" style="font-size:12px;color:var(--muted);margin:10px 0 0">Для приглашений и наград войди в аккаунт.</p>
 </section>
 <section class="panel menu-page" id="leaderboardPage" style="margin-top:13px">
 <h2 style="margin:0 0 6px">🏆 Таблица лидеров</h2>
@@ -915,6 +941,26 @@ html.light-mode .creator-live-row{background:#f4f6fb}
  </div>
  <div style="margin-top:14px;padding-top:12px;border-top:1px solid #ffffff1c"><b style="font-size:13px">📚 Архив событий</b><div id="creatorEventHistory" style="display:grid;gap:7px;margin-top:8px"><div class="empty">Архив пока пуст.</div></div></div>
  <p style="font-size:11px;color:var(--muted);line-height:1.45;margin:10px 0 0">Глобальный множитель применяется к начислению обычных лапок в текущем клиенте игры. Не используй его как защиту от читов: для полностью доверенной экономики начисления нужно проверять на сервере.</p>
+</div>
+<div id="creatorGrowthManager" hidden style="margin-top:14px;padding:14px;border:1px solid #43b6a688;border-radius:16px;background:linear-gradient(145deg,#102e31aa,#11182bee)">
+ <strong style="color:#8ef0d2">🚀 NOVEX GROWTH CONTROL</strong>
+ <div style="margin-top:12px;padding-top:10px;border-top:1px solid #ffffff1c">
+  <b style="font-size:13px">📰 NEWS CENTER · новая публикация</b>
+  <input id="growthNewsTitleInput" maxlength="70" placeholder="Заголовок новости" style="display:block;width:100%;box-sizing:border-box;margin-top:8px;padding:10px;border-radius:9px;border:1px solid #414b83;background:#0c1120;color:#fff">
+  <textarea id="growthNewsBodyInput" maxlength="500" rows="3" placeholder="Текст новости или объявления" style="display:block;width:100%;box-sizing:border-box;margin-top:7px;padding:10px;border-radius:9px;border:1px solid #414b83;background:#0c1120;color:#fff;resize:vertical"></textarea>
+  <button class="btn primary" id="growthNewsPublish" type="button" style="width:100%;margin-top:7px">📢 Опубликовать новость</button>
+  <div id="creatorNewsList" style="display:grid;gap:7px;margin-top:9px"></div>
+ </div>
+ <div style="margin-top:14px;padding-top:12px;border-top:1px solid #ffffff1c">
+  <b style="font-size:13px">🎉 WELCOME EVENT · событие для новичков</b>
+  <input id="welcomeTitleInput" maxlength="50" placeholder="Например: Добро пожаловать!" style="display:block;width:100%;box-sizing:border-box;margin-top:8px;padding:10px;border-radius:9px;border:1px solid #414b83;background:#0c1120;color:#fff">
+  <textarea id="welcomeDescriptionInput" maxlength="200" rows="2" placeholder="Описание события" style="display:block;width:100%;box-sizing:border-box;margin-top:7px;padding:10px;border-radius:9px;border:1px solid #414b83;background:#0c1120;color:#fff;resize:vertical"></textarea>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px"><input id="welcomePawsInput" type="number" min="0" max="1000000" value="10000" placeholder="Лапки" style="min-width:0;padding:10px;border-radius:9px;border:1px solid #414b83;background:#0c1120;color:#fff"><input id="welcomeGoldInput" type="number" min="0" max="10000" value="5" placeholder="Золото" style="min-width:0;padding:10px;border-radius:9px;border:1px solid #414b83;background:#0c1120;color:#fff"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px"><label style="font-size:11px">Начало<input id="welcomeStartInput" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:8px;border-radius:8px;border:1px solid #414b83;background:#0c1120;color:#fff"></label><label style="font-size:11px">Окончание<input id="welcomeEndInput" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:8px;border-radius:8px;border:1px solid #414b83;background:#0c1120;color:#fff"></label></div>
+  <button class="btn primary" id="welcomePublishButton" type="button" style="width:100%;margin-top:8px">🌟 Запустить WELCOME EVENT</button>
+  <button class="btn danger" id="welcomeStopButton" type="button" style="width:100%;margin-top:7px">⏹️ Остановить WELCOME EVENT</button>
+  <small id="creatorGrowthStatus" style="display:block;color:var(--muted);margin-top:8px">Управление доступно только создателю.</small>
+ </div>
 </div>
 <p id="adminStatus" style="font-size:12px;color:var(--muted);margin:10px 0 0">Панель доступна только создателю и администраторам.</p>
 </section>
@@ -1449,6 +1495,8 @@ function showMenuPage(page){
   $('leaderboardPage').classList.toggle('menu-visible',page==='leaderboard');
   $('profilePage').classList.toggle('menu-visible',page==='profile');
   $('friendsPage')?.classList.toggle('menu-visible',page==='friends');
+  $('growthPage')?.classList.toggle('menu-visible',page==='growth');
+  if(page==='growth'&&typeof window.refreshGrowthCenter==='function')window.refreshGrowthCenter();
   if(page==='friends'&&typeof refreshFriends==='function')refreshFriends();
   $('adminPage').classList.toggle('menu-visible',page==='admin');
   if(page==='leaderboard'&&typeof refreshLeaderboard==='function')setTimeout(refreshLeaderboard,0);
@@ -1456,7 +1504,7 @@ function showMenuPage(page){
   $('settingsPage').classList.toggle('menu-visible',page==='settings');
   $('petsPage').classList.toggle('menu-visible',page==='pets');$('basePage').classList.toggle('menu-visible',page==='base');$('offlinePage').classList.toggle('menu-visible',page==='offline');
   $('ultra7Page')?.classList.toggle('menu-visible',page==='ultra7');
-  const labels={home:'Главная',shop:'Магазин',features:'Особые механики',adventure:'Приключения',leaderboard:'Таблица лидеров',profile:'Мой профиль',friends:'Друзья',admin:'Панель управления',settings:'Настройки графики',pets:'Команда питомцев',base:'База Жаника',offline:'Оффлайн-центр',ultra7:'ULTRA 7.0 — MEGA UPDATE'};
+  const labels={home:'Главная',shop:'Магазин',features:'Особые механики',adventure:'Приключения',leaderboard:'Таблица лидеров',profile:'Мой профиль',friends:'Друзья',growth:'Приглашения и новости',admin:'Панель управления',settings:'Настройки графики',pets:'Команда питомцев',base:'База Жаника',offline:'Оффлайн-центр',ultra7:'ULTRA 7.0 — MEGA UPDATE'};
   document.title='Janik Clicker — '+(labels[page]||'Меню');
   if(page==='shop' && typeof renderShop==='function') renderShop();
 }
@@ -2241,12 +2289,24 @@ refresh();
 </script>
 
 
+<script id="janik-growth-award-bridge">
+/* Growth rewards are applied to the live game state, then saved through the existing save pipeline. */
+window.addEventListener('janik:growth-award',event=>{
+ const d=event.detail||{};const paws=Math.max(0,Math.min(1000000,Number(d.paws)||0));const gold=Math.max(0,Math.min(10000,Number(d.gold)||0));
+ if(paws)state.paws=Math.min(MAX_VALUE,(Number(state.paws)||0)+paws);
+ if(gold)state.gold=Math.min(MAX_VALUE,(Number(state.gold)||0)+gold);
+ if(d.starterPet){state.petLevel=Math.max(1,Number(state.petLevel)||0);state.petRarity=Math.max(1,Number(state.petRarity)||0)}
+ save();render();if(typeof toast==='function')toast(String(d.message||('🎁 Награда получена: +'+paws.toLocaleString('ru-RU')+' лапок!')));
+});
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
 import { getDatabase, ref, get, set, update, push, onChildAdded, onValue, query, orderByChild, limitToLast, runTransaction } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyD43sMaVlzgABfIDUrbo0vBHpjB15ah6pQ",authDomain:"janik-clicker-online.firebaseapp.com",databaseURL:"https://janik-clicker-online-default-rtdb.europe-west1.firebasedatabase.app",projectId:"janik-clicker-online",storageBucket:"janik-clicker-online.firebasestorage.app",messagingSenderId:"249823838375",appId:"1:249823838375:web:c146b8d19a37962e2e1b82"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
+try{const incomingReferral=new URLSearchParams(location.search).get('ref');if(incomingReferral)sessionStorage.setItem('janik_referrer_uid',incomingReferral)}catch(e){}
 const CREATOR_UID='7tkM3l6lGJcWsiANTxT7o3lYYA13';let staffRole='';
 const $=id=>document.getElementById(id), KEY='janik_clicker_ultra_lite_300_v1';
 let currentUser=null,cloudReady=false,writeTimer=null,banScreen=null,stopBanWatch=null,banCleanupUid=null;
@@ -2369,7 +2429,7 @@ async function syncLeaderboard(){if(!currentUser)return;const game=localGame();i
 
 const isStaff=()=>currentUser&&(currentUser.uid===CREATOR_UID||staffRole==='admin');
 function adminStatus(t,error=false){const e=$('adminStatus');if(e){e.textContent=t;e.style.color=error?'#ff8d9d':'var(--muted)'}}
-function refreshAdminVisibility(){const allowed=isStaff(),creator=currentUser?.uid===CREATOR_UID;$('adminMenuButton').hidden=!allowed;$('creatorRoleControls').hidden=!creator;$('creatorMonitorPanel').hidden=!creator;$('adminHeading').textContent=creator?'👑 Панель создателя':'🛡️ Панель администратора';$('adminMenuLabel').textContent=creator?'Панель создателя':'Панель администратора';$('adminIntro').textContent=creator?'Ты — единственный создатель. Можно выдавать валюту, блокировать игроков и управлять администраторами.':'Можно выдавать обычные и золотые лапки себе или любому игроку, а также блокировать игроков.';setCreatorMonitorAccess();}
+function refreshAdminVisibility(){const allowed=isStaff(),creator=currentUser?.uid===CREATOR_UID;$('adminMenuButton').hidden=!allowed;$('creatorRoleControls').hidden=!creator;$('creatorMonitorPanel').hidden=!creator;$('creatorGrowthManager').hidden=!creator;$('adminHeading').textContent=creator?'👑 Панель создателя':'🛡️ Панель администратора';$('adminMenuLabel').textContent=creator?'Панель создателя':'Панель администратора';$('adminIntro').textContent=creator?'Ты — единственный создатель. Можно выдавать валюту, блокировать игроков и управлять администраторами.':'Можно выдавать обычные и золотые лапки себе или любому игроку, а также блокировать игроков.';setCreatorMonitorAccess();}
 async function loadAdminPlayers(){if(!isStaff())return;try{const snap=await get(ref(db,'leaderboard'));const entries=Object.values(snap.val()||{}).filter(x=>x&&x.uid);const box=$('adminPlayerList');box.replaceChildren();entries.slice(0,100).forEach(x=>{const b=document.createElement('button');b.type='button';b.className='btn';b.style.textAlign='left';b.textContent=(x.name||'Игрок')+' · '+x.uid;b.addEventListener('click',()=>{$('adminTargetUid').value=x.uid});box.append(b)});adminStatus('Игроков в рейтинге: '+entries.length+'. Нажми на игрока, чтобы подставить UID.')}catch(e){adminStatus('Не удалось загрузить игроков: '+e.message,true)}}
 async function targetAllowed(){const uid=$('adminTargetUid').value.trim();if(!uid||uid.length<10){adminStatus('Введи корректный UID игрока.',true);return null}if(uid===CREATOR_UID&&currentUser.uid!==CREATOR_UID){adminStatus('Администратор не может управлять создателем.',true);return null}return uid}
 async function giveCurrency(){if(!isStaff()){adminStatus('Нет доступа.',true);return}const uid=await targetAllowed();if(!uid)return;const paws=Number($('adminPaws').value||0),gold=Number($('adminGold').value||0);if(!Number.isSafeInteger(paws)||!Number.isSafeInteger(gold)||paws<0||gold<0||paws+gold<=0){adminStatus('Укажи положительное целое количество хотя бы для одной валюты.',true);return}try{const snap=await get(ref(db,'users/'+uid+'/game'));if(!snap.exists()||!snap.val()?.data){adminStatus('У игрока пока нет облачного сохранения.',true);return}const game=snap.val().data;game.paws=Math.min(Number.MAX_SAFE_INTEGER,(Number(game.paws)||0)+paws);game.gold=Math.min(Number.MAX_SAFE_INTEGER,(Number(game.gold)||0)+gold);await set(ref(db,'users/'+uid+'/game'),{data:game,updatedAt:Date.now()});const profileSnap=await get(ref(db,'users/'+uid+'/profile'));const profile=profileSnap.val()||{};await set(ref(db,'leaderboard/'+uid),{uid,name:profile.name||'Игрок',avatar:profile.avatar||'🐱',paws:game.paws,gold:game.gold,prestige:Number(game.prestige)||0,updatedAt:Date.now()});adminStatus('✅ Выдано! '+(paws?fmtLeaderboard(paws)+' обычных лапок ':'')+(gold?fmtLeaderboard(gold)+' золотых лапок':''));$('adminPaws').value='';$('adminGold').value='';if(uid===currentUser.uid){window.dispatchEvent(new CustomEvent('janik:admin-currency',{detail:game}));} }catch(e){adminStatus('Ошибка выдачи: '+e.message,true)}}
@@ -2756,7 +2816,7 @@ $('onlineAccountLogout').addEventListener('click',async()=>{try{await signOut(au
 $('onlineSync').addEventListener('click',()=>uploadGame(true));
 setupProfile();
 onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;watchGlobalEvents();if(!user&&publicProfileHeartbeat){clearInterval(publicProfileHeartbeat);publicProfileHeartbeat=null;}$('onlinePanel').hidden=!!user;$('onlineAccountLogout').hidden=!user;$('onlineLogout').hidden=!user;$('onlineSync').hidden=!user;$('onlineEmail').disabled=!!user;$('onlinePassword').disabled=!!user;$('onlineRegister').hidden=!!user;$('onlineLogin').hidden=!!user;
- if(!user){if(stopCreatorMonitor){stopCreatorMonitor();stopCreatorMonitor=null}if(stopBanWatch){stopBanWatch();stopBanWatch=null}if(stopFriendRequests){stopFriendRequests();stopFriendRequests=null}if(stopFriendships){stopFriendships();stopFriendships=null}friendshipCache={};staffRole='';refreshAdminVisibility();clearGuildChat();activeGuildId=null;guildPanel.hidden=true;loadGuildDirectory();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
+ if(!user){stopGrowthListeners();if(stopCreatorMonitor){stopCreatorMonitor();stopCreatorMonitor=null}if(stopBanWatch){stopBanWatch();stopBanWatch=null}if(stopFriendRequests){stopFriendRequests();stopFriendRequests=null}if(stopFriendships){stopFriendships();stopFriendships=null}friendshipCache={};staffRole='';refreshAdminVisibility();clearGuildChat();activeGuildId=null;guildPanel.hidden=true;loadGuildDirectory();profileData={name:'',avatar:'🐱'};setupProfile();paintProfile();$('profileStatus').textContent='Войди в аккаунт, чтобы настроить профиль.';status('Не выполнен вход');message('Создай аккаунт или войди, чтобы включить облачное сохранение.');return}
  status('Выполнен вход: '+(user.email||'игрок'));message('Проверяем облачное сохранение…');
  try{
   staffRole='';if(user.uid!==CREATOR_UID){const roleSnap=await get(ref(db,'staff/'+user.uid));staffRole=roleSnap.val()?.role==='admin'?'admin':'';}
@@ -2784,6 +2844,7 @@ onAuthStateChanged(auth,async user=>{currentUser=user;cloudReady=false;watchGlob
    if(localTime>=cloudTime){await uploadGame(false);message('Локальный прогресс сохранён в облаке.')}else{message('Оставили локальный прогресс. Для загрузки облака выйди и войди снова, затем подтверди загрузку.')}
   }else{await uploadGame(false);message('Первое сохранение отправлено в облако!')}
   cloudReady=true;
+  await initGrowthSystems();
  }catch(e){message('Не удалось прочитать базу: '+e.message,true)}
  loadMyGuild();loadGuildDirectory();
 });
@@ -2835,6 +2896,101 @@ async function openPublicPlayerProfile(uid){
  }catch(e){publicProfileContent.textContent='Не удалось загрузить профиль: '+e.message;}
 }
 document.addEventListener('click',e=>{const target=e.target.closest('[data-profile-uid]');if(target&&target.dataset.profileUid){e.preventDefault();e.stopPropagation();openPublicPlayerProfile(target.dataset.profileUid)}});
+
+// NOVEX GROWTH SYSTEM: referrals, starter bonus, invite leaderboard, welcome event and news.
+const growthStops=[];let growthProgressTimer=null,growthReferralCache={},growthNewsCache={},growthWelcomeCache=null;
+const growthNow=()=>Date.now();
+const growthText=(id,value)=>{const el=$(id);if(el)el.textContent=String(value??'')};
+function growthDateInputValue(date){const d=new Date(date);const z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+'T'+z(d.getHours())+':'+z(d.getMinutes())}
+function growthAward(detail){window.dispatchEvent(new CustomEvent('janik:growth-award',{detail}))}
+function growthSetStatus(id,text,error=false){const el=$(id);if(el){el.textContent=text;el.style.color=error?'#ff8d9d':'var(--muted)'}}
+function growthRenderNews(data){
+ growthNewsCache=data||{};const box=$('growthNewsList'),adminBox=$('creatorNewsList');if(!box)return;
+ const items=Object.entries(growthNewsCache).filter(([,v])=>v&&v.active!==false).sort((a,b)=>(Number(b[1].createdAt)||0)-(Number(a[1].createdAt)||0)).slice(0,20);
+ box.replaceChildren();if(!items.length){const e=document.createElement('div');e.className='empty';e.textContent='Пока нет новостей. Загляни позже!';box.append(e)}
+ items.forEach(([id,n])=>{const card=document.createElement('article');card.style.cssText='padding:11px;border:1px solid var(--line);border-radius:11px;background:#11182b22';const h=document.createElement('b');h.textContent='📣 '+String(n.title||'Новость').slice(0,70);const p=document.createElement('p');p.textContent=String(n.body||'').slice(0,500);p.style.cssText='white-space:pre-wrap;font-size:12px;line-height:1.5;margin:6px 0';const time=document.createElement('small');time.style.color='var(--muted)';time.textContent=new Date(Number(n.createdAt)||Date.now()).toLocaleString('ru-RU');card.append(h,p,time);box.append(card)});
+ if(adminBox){adminBox.replaceChildren();if(currentUser?.uid===CREATOR_UID){items.forEach(([id,n])=>{const row=document.createElement('div');row.style.cssText='display:flex;gap:8px;align-items:center;padding:7px;border:1px solid var(--line);border-radius:9px;font-size:12px';const title=document.createElement('span');title.textContent=String(n.title||'Новость');title.style.flex='1';const del=document.createElement('button');del.className='btn danger';del.type='button';del.textContent='Скрыть';del.addEventListener('click',async()=>{try{await set(ref(db,'news/posts/'+id),null);growthSetStatus('creatorGrowthStatus','Новость скрыта.')}catch(e){growthSetStatus('creatorGrowthStatus','Ошибка: '+e.message,true)}});row.append(title,del);adminBox.append(row)})}}
+}
+function growthRenderWelcome(ev){
+ growthWelcomeCache=ev||null;const card=$('growthWelcomeCard');if(!card)return;
+ const active=!!(ev&&ev.active===true&&Number(ev.startAt)<=growthNow()&&Number(ev.endAt)>growthNow());card.style.display=active?'block':'none';if(!active)return;
+ growthText('growthWelcomeTitle','🎉 '+(ev.title||'WELCOME EVENT'));growthText('growthWelcomeDescription',ev.description||'Добро пожаловать в Janik Clicker ULTRA!');growthText('growthWelcomeReward','🎁 Награда: '+Number(ev.rewardPaws||0).toLocaleString('ru-RU')+' лапок · '+Number(ev.rewardGold||0)+' золотых лапок');
+}
+function growthRenderReferralLeaderboard(data){
+ growthReferralCache=data||{};const counts={};for(const rec of Object.values(growthReferralCache)){if(!rec||!rec.referrerUid)continue;const x=counts[rec.referrerUid]||(counts[rec.referrerUid]={total:0,completed:0});x.total++;if(rec.completed===true)x.completed++}
+ const sorted=Object.entries(counts).sort((a,b)=>b[1].completed-a[1].completed||b[1].total-a[1].total).slice(0,20);const box=$('growthInviteLeaderboard');if(!box)return;box.replaceChildren();
+ if(!sorted.length){const e=document.createElement('div');e.className='empty';e.textContent='Пока нет приглашений. Стань первым!';box.append(e)}
+ sorted.forEach(([uid,c],i)=>{const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--line);border-radius:10px';const rank=document.createElement('b');rank.textContent=['🥇','🥈','🥉'][i]||('#'+(i+1));const name=document.createElement('span');name.textContent=uid===currentUser?.uid?'Ты · '+uid.slice(-5):'Игрок · '+uid.slice(-5);name.style.flex='1';const score=document.createElement('strong');score.textContent=c.completed+' / '+c.total;row.append(rank,name,score);box.append(row)});
+ const mine=Object.values(growthReferralCache).filter(r=>r&&r.referrerUid===currentUser?.uid);growthText('growthInviteCount',mine.length);growthText('growthInviteCompleted',mine.filter(r=>r.completed===true).length);
+}
+async function growthEnsureReferral(){
+ if(!currentUser)return;let referrer='';try{referrer=new URLSearchParams(location.search).get('ref')||sessionStorage.getItem('janik_referrer_uid')||''}catch(e){}
+ if(!referrer||referrer===currentUser.uid||!/^[A-Za-z0-9_-]{10,128}$/.test(referrer))return;
+ const created=Date.parse(currentUser.metadata?.creationTime||'');if(!created||growthNow()-created>24*60*60*1000)return;
+ const result=await runTransaction(ref(db,'referrals/'+currentUser.uid),old=>old?undefined:{referrerUid:referrer,createdAt:growthNow(),completed:false});
+ if(result.committed&&result.snapshot.val()?.referrerUid===referrer)growthSetStatus('growthReferralStatus','✅ Приглашение привязано. Выполни 100 кликов и 3 покупки, чтобы оно засчиталось.');
+}
+async function growthClaimStarterBonus(){
+ if(!currentUser)return;const created=Date.parse(currentUser.metadata?.creationTime||'');if(!created||growthNow()-created>24*60*60*1000)return;
+ const claim=await runTransaction(ref(db,'growth/newPlayerClaims/'+currentUser.uid),old=>old?undefined:{claimedAt:growthNow(),paws:5000,starterPet:true});
+ if(claim.committed){growthAward({paws:5000,starterPet:true,message:'🎁 Стартовый сундук открыт! +5 000 лапок и питомец Жаник-малыш!'});await uploadGame(false);await syncLeaderboard();}
+}
+async function growthCheckReferralProgress(){
+ if(!currentUser||!cloudReady)return;const game=localGame();if(!game)return;
+ const clicks=Number(game.clicks)||0,purchases=Number(game.purchases)||0;if(clicks<100||purchases<3)return;
+ try{const snap=await get(ref(db,'referrals/'+currentUser.uid));const rec=snap.val();if(rec&&rec.completed!==true){await update(ref(db,'referrals/'+currentUser.uid),{completed:true,completedAt:growthNow(),taskClicks:100,taskPurchases:3});growthSetStatus('growthReferralStatus','🎉 Твои задания выполнены! Приглашение засчитано.');}}
+ catch(e){console.warn('Referral progress:',e.message)}
+}
+async function growthClaimReferralRewards(){
+ if(!currentUser){growthSetStatus('growthReferralStatus','Сначала войди в аккаунт.',true);return}
+ const button=$('growthClaimReferrals');button.disabled=true;let claimed=0;
+ try{const snap=await get(ref(db,'referrals'));const all=snap.val()||{};for(const [newUid,rec] of Object.entries(all)){if(!rec||rec.referrerUid!==currentUser.uid||rec.completed!==true)continue;
+  const result=await runTransaction(ref(db,'referralRewardClaims/'+currentUser.uid+'/'+newUid),old=>old?undefined:{claimedAt:growthNow()});if(result.committed)claimed++;
+ }
+ if(claimed){growthAward({paws:claimed*2500,message:'🎁 Награда за друзей: +'+(claimed*2500).toLocaleString('ru-RU')+' лапок!'});await uploadGame(false);await syncLeaderboard();growthSetStatus('growthReferralStatus','Получено наград: '+claimed+' · +'+(claimed*2500).toLocaleString('ru-RU')+' лапок.');}
+ else growthSetStatus('growthReferralStatus','Пока нет новых наград. Друг должен выполнить 100 кликов и 3 покупки.');
+ }catch(e){growthSetStatus('growthReferralStatus','Не удалось получить награды: '+e.message,true)}finally{button.disabled=false}
+}
+async function growthClaimWelcome(){
+ if(!currentUser||!growthWelcomeCache){growthSetStatus('growthWelcomeStatus','Войди в аккаунт и проверь событие.',true);return}
+ const accountCreatedAt=Date.parse(currentUser.metadata?.creationTime||'');if(!accountCreatedAt||growthNow()-accountCreatedAt>7*86400000){growthSetStatus('growthWelcomeStatus','WELCOME EVENT доступен новым аккаунтам в течение первых 7 дней.',true);return}
+ const ev=growthWelcomeCache;if(ev.active!==true||Number(ev.startAt)>growthNow()||Number(ev.endAt)<=growthNow()){growthSetStatus('growthWelcomeStatus','Событие сейчас недоступно.',true);return}
+ const button=$('growthWelcomeClaim');button.disabled=true;
+ try{const result=await runTransaction(ref(db,'welcomeEvent/claims/'+currentUser.uid),old=>old?undefined:{claimedAt:growthNow(),eventId:String(ev.id||'welcome')});if(!result.committed){growthSetStatus('growthWelcomeStatus','Ты уже забрал награду этого события.');return}
+  growthAward({paws:Number(ev.rewardPaws)||0,gold:Number(ev.rewardGold)||0,message:'🎉 Награда WELCOME EVENT получена!'});await uploadGame(false);await syncLeaderboard();growthSetStatus('growthWelcomeStatus','✅ Награда получена!');
+ }catch(e){growthSetStatus('growthWelcomeStatus','Ошибка получения награды: '+e.message,true)}finally{button.disabled=false}
+}
+function refreshGrowthCenter(){
+ if(!currentUser){growthText('growthLoginHint','Войди в аккаунт, чтобы получить ссылку и участвовать в событиях.');$('growthInviteLink').value='';return}
+ growthText('growthLoginHint','Твоя личная ссылка готова. Делись ею с друзьями!');$('growthInviteLink').value=location.origin+location.pathname+'?ref='+encodeURIComponent(currentUser.uid);
+ growthRenderReferralLeaderboard(growthReferralCache);growthRenderNews(growthNewsCache);growthRenderWelcome(growthWelcomeCache);
+}
+window.refreshGrowthCenter=refreshGrowthCenter;
+function stopGrowthListeners(){while(growthStops.length){try{growthStops.pop()()}catch(e){}}if(growthProgressTimer){clearInterval(growthProgressTimer);growthProgressTimer=null}}
+async function initGrowthSystems(){
+ stopGrowthListeners();if(!currentUser)return;
+ try{await growthEnsureReferral();await growthClaimStarterBonus()}catch(e){console.warn('Growth onboarding:',e.message)}
+ growthStops.push(onValue(ref(db,'referrals'),snap=>growthRenderReferralLeaderboard(snap.val()||{}),err=>growthSetStatus('growthReferralStatus','Ошибка рейтинга: '+err.message,true)));
+ growthStops.push(onValue(ref(db,'news/posts'),snap=>growthRenderNews(snap.val()||{}),err=>{const box=$('growthNewsList');if(box)box.textContent='Ошибка новостей: '+err.message}));
+ growthStops.push(onValue(ref(db,'welcomeEvent/current'),snap=>growthRenderWelcome(snap.val()),err=>growthSetStatus('growthWelcomeStatus','Ошибка события: '+err.message,true)));
+ growthProgressTimer=setInterval(growthCheckReferralProgress,5000);
+ refreshGrowthCenter();
+}
+$('growthCopyInvite')?.addEventListener('click',async()=>{const value=$('growthInviteLink')?.value;if(!value){growthSetStatus('growthReferralStatus','Сначала войди в аккаунт.',true);return}try{await navigator.clipboard.writeText(value);growthSetStatus('growthReferralStatus','✅ Ссылка скопирована. Отправь её другу!')}catch(e){$('growthInviteLink').focus();$('growthInviteLink').select();growthSetStatus('growthReferralStatus','Выделил ссылку — скопируй её вручную.')}});
+$('growthClaimReferrals')?.addEventListener('click',growthClaimReferralRewards);
+$('growthWelcomeClaim')?.addEventListener('click',growthClaimWelcome);
+$('growthNewsPublish')?.addEventListener('click',async()=>{
+ if(currentUser?.uid!==CREATOR_UID){growthSetStatus('creatorGrowthStatus','Публиковать новости может только создатель.',true);return}
+ const title=$('growthNewsTitleInput').value.trim(),body=$('growthNewsBodyInput').value.trim();if(title.length<3||!body){growthSetStatus('creatorGrowthStatus','Добавь заголовок (от 3 символов) и текст новости.',true);return}
+ const b=$('growthNewsPublish');b.disabled=true;try{const id=push(ref(db,'news/posts')).key;await set(ref(db,'news/posts/'+id),{title,body,active:true,createdAt:growthNow(),createdBy:currentUser.uid});$('growthNewsTitleInput').value='';$('growthNewsBodyInput').value='';growthSetStatus('creatorGrowthStatus','✅ Новость опубликована для всех игроков.')}catch(e){growthSetStatus('creatorGrowthStatus','Ошибка публикации: '+e.message,true)}finally{b.disabled=false}
+});
+$('welcomePublishButton')?.addEventListener('click',async()=>{
+ if(currentUser?.uid!==CREATOR_UID){growthSetStatus('creatorGrowthStatus','WELCOME EVENT может запускать только создатель.',true);return}
+ const title=$('welcomeTitleInput').value.trim()||'Добро пожаловать в Janik Clicker!';const description=$('welcomeDescriptionInput').value.trim()||'Получи подарок новичка и начни своё приключение!';const rewardPaws=Math.max(0,Math.min(1000000,Math.floor(Number($('welcomePawsInput').value)||0)));const rewardGold=Math.max(0,Math.min(10000,Math.floor(Number($('welcomeGoldInput').value)||0)));const startAt=$('welcomeStartInput').value?new Date($('welcomeStartInput').value).getTime():growthNow();const endAt=$('welcomeEndInput').value?new Date($('welcomeEndInput').value).getTime():startAt+7*86400000;
+ if(!Number.isFinite(startAt)||!Number.isFinite(endAt)||endAt<=startAt){growthSetStatus('creatorGrowthStatus','Проверь даты события.',true);return}
+ try{await set(ref(db,'welcomeEvent/current'),{id:'welcome-'+growthNow(),title,description,rewardPaws,rewardGold,active:true,startAt,endAt,createdAt:growthNow(),createdBy:currentUser.uid});growthSetStatus('creatorGrowthStatus','🌟 WELCOME EVENT опубликован!')}catch(e){growthSetStatus('creatorGrowthStatus','Ошибка запуска: '+e.message,true)}
+});
+$('welcomeStopButton')?.addEventListener('click',async()=>{if(currentUser?.uid!==CREATOR_UID)return;try{await update(ref(db,'welcomeEvent/current'),{active:false,updatedAt:growthNow()});growthSetStatus('creatorGrowthStatus','WELCOME EVENT остановлен.')}catch(e){growthSetStatus('creatorGrowthStatus','Ошибка остановки: '+e.message,true)}});
 
 // Звуковое объявление создателя отключено по просьбе пользователя.
 
