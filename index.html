@@ -776,6 +776,7 @@ html.light-mode .creator-live-row{background:#f4f6fb}
 <button class="menu-btn" data-page="profile"><span class="menu-icon">👤</span><span><span class="menu-label">Мой профиль</span><span class="menu-sub">Ник и аватар</span></span></button>
 <button class="menu-btn" data-page="friends"><span class="menu-icon">👥</span><span><span class="menu-label">Друзья</span><span class="menu-sub">Поиск и заявки</span></span></button>
 <button class="menu-btn" data-page="growth"><span class="menu-icon">🚀</span><span><span class="menu-label">Приглашения и новости</span><span class="menu-sub">Бонусы, события, NOVEX NEWS</span></span></button>
+<button class="menu-btn" data-page="copyright"><span class="menu-icon">©️</span><span><span class="menu-label">Авторские права</span><span class="menu-sub">Информация об авторстве игры</span></span></button>
 <button class="menu-btn" data-page="admin" id="adminMenuButton" hidden><span class="menu-icon">👑</span><span><span class="menu-label" id="adminMenuLabel">Панель управления</span><span class="menu-sub">Выдача лапок и баны</span></span></button>
 <button class="menu-btn" data-page="settings"><span class="menu-icon settings-menu-icon">⚙️</span><span><span class="menu-label">Настройки</span><span class="menu-sub">Графика и эффекты</span></span></button>
 <button class="menu-btn" data-page="pets"><span class="menu-icon">🐾</span><span><span class="menu-label">Команда питомцев</span><span class="menu-sub">3 активных помощника</span></span></button>
@@ -885,6 +886,29 @@ html.light-mode .creator-live-row{background:#f4f6fb}
     <span id="leaderboardRewardInfo" style="font-size:12px;color:var(--muted)">🥇 Топ-1: +1000 золота · 🥈 Топ-3: +500 · 🏅 Топ-10: +200</span>
   </div>
 </div>
+</section>
+<section class="panel menu-page" id="copyrightPage" style="margin-top:13px">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+    <div style="width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#253d70,#38265f);font-size:30px">©️</div>
+    <div><h2 style="margin:0 0 4px;font-size:21px">Авторские права</h2><p style="margin:0;color:var(--muted);font-size:12px">Janik Clicker ULTRA · NOVEX Games</p></div>
+  </div>
+  <div class="panel" style="padding:14px;margin:10px 0;background:linear-gradient(145deg,#151d37,#101426)">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:5px">АВТОР ПРОЕКТА</div>
+    <div style="font-size:20px;font-weight:800">Яков</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px">Игровая студия: <b style="color:var(--text)">NOVEX Games</b></div>
+  </div>
+  <h3 style="font-size:16px;margin:18px 0 7px">1. Авторство</h3>
+  <p style="font-size:13px;line-height:1.65;color:var(--muted);margin:0">Автором оригинальных материалов, созданных для Janik Clicker ULTRA, является их создатель — Яков.</p>
+  <h3 style="font-size:16px;margin:16px 0 7px">2. Защита материалов</h3>
+  <p style="font-size:13px;line-height:1.65;color:var(--muted);margin:0">Авторским правом могут охраняться оригинальные материалы проекта: программный код, графика, тексты, дизайн интерфейса, персонажи и другие творческие элементы.</p>
+  <h3 style="font-size:16px;margin:16px 0 7px">3. Использование материалов</h3>
+  <p style="font-size:13px;line-height:1.65;color:var(--muted);margin:0">Пожалуйста, не копируйте и не распространяйте оригинальные материалы игры и не выдавайте чужую работу за свою без разрешения соответствующего правообладателя.</p>
+  <h3 style="font-size:16px;margin:16px 0 7px">4. Сторонние материалы</h3>
+  <p style="font-size:13px;line-height:1.65;color:var(--muted);margin:0">Библиотеки, шрифты, музыка и другие материалы сторонних авторов используются согласно условиям их лицензий. Это уведомление не отменяет права их создателей.</p>
+  <div style="margin-top:18px;padding:13px;border:1px solid var(--line);border-radius:13px;text-align:center;background:#0c1120">
+    <div style="font-weight:800">© 2026 NOVEX Games</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px">Janik Clicker ULTRA · Создано с увлечением</div>
+  </div>
 </section>
 <section class="panel menu-page" id="adminPage" style="margin-top:13px">
 <h2 style="margin:0 0 6px" id="adminHeading">👑 Панель управления</h2>
@@ -1488,7 +1512,7 @@ $('bossAttackBtn').addEventListener('click',attackBoss);$('worldBtn').addEventLi
 
 function showMenuPage(page){
   // The admin route is available only after Firebase confirms creator/staff access.
-  if(page==='admin'&&!isStaff()){
+  if(page==='admin'&&!(typeof window.janikIsStaff==='function'&&window.janikIsStaff())){
     page='home';
     toast('⛔ Нет доступа к панели управления.');
   }
@@ -1501,6 +1525,7 @@ function showMenuPage(page){
   $('profilePage').classList.toggle('menu-visible',page==='profile');
   $('friendsPage')?.classList.toggle('menu-visible',page==='friends');
   $('growthPage')?.classList.toggle('menu-visible',page==='growth');
+  $('copyrightPage')?.classList.toggle('menu-visible',page==='copyright');
   if(page==='growth'&&typeof window.refreshGrowthCenter==='function')window.refreshGrowthCenter();
   if(page==='friends'&&typeof refreshFriends==='function')refreshFriends();
   $('adminPage').classList.toggle('menu-visible',page==='admin');
@@ -1509,7 +1534,7 @@ function showMenuPage(page){
   $('settingsPage').classList.toggle('menu-visible',page==='settings');
   $('petsPage').classList.toggle('menu-visible',page==='pets');$('basePage').classList.toggle('menu-visible',page==='base');$('offlinePage').classList.toggle('menu-visible',page==='offline');
   $('ultra7Page')?.classList.toggle('menu-visible',page==='ultra7');
-  const labels={home:'Главная',shop:'Магазин',features:'Особые механики',adventure:'Приключения',leaderboard:'Таблица лидеров',profile:'Мой профиль',friends:'Друзья',growth:'Приглашения и новости',admin:'Панель управления',settings:'Настройки графики',pets:'Команда питомцев',base:'База Жаника',offline:'Оффлайн-центр',ultra7:'ULTRA 7.0 — MEGA UPDATE'};
+  const labels={home:'Главная',shop:'Магазин',features:'Особые механики',adventure:'Приключения',leaderboard:'Таблица лидеров',profile:'Мой профиль',friends:'Друзья',growth:'Приглашения и новости',copyright:'Авторские права',admin:'Панель управления',settings:'Настройки графики',pets:'Команда питомцев',base:'База Жаника',offline:'Оффлайн-центр',ultra7:'ULTRA 7.0 — MEGA UPDATE'};
   document.title='Janik Clicker — '+(labels[page]||'Меню');
   if(page==='shop' && typeof renderShop==='function') renderShop();
 }
@@ -2433,6 +2458,8 @@ async function refreshLeaderboard(){if(!currentUser){leaderboardStatus('Снач
 async function syncLeaderboard(){if(!currentUser)return;const game=localGame();if(!game)return;const record={uid:currentUser.uid,name:profileData.name||playerName(),avatar:profileData.avatar||'🐱',paws:Math.max(0,Number(game.paws)||0),gold:Math.max(0,Number(game.gold)||0),prestige:Math.max(0,Number(game.prestige)||0),updatedAt:Date.now()};try{await set(ref(db,'leaderboard/'+currentUser.uid),record)}catch(e){leaderboardStatus('Не удалось обновить рейтинг: '+e.message,true)}}
 
 const isStaff=()=>currentUser&&(currentUser.uid===CREATOR_UID||staffRole==='admin');
+// Expose the Firebase-backed access check to the classic menu script.
+window.janikIsStaff=isStaff;
 function adminStatus(t,error=false){const e=$('adminStatus');if(e){e.textContent=t;e.style.color=error?'#ff8d9d':'var(--muted)'}}
 function refreshAdminVisibility(){const allowed=!!isStaff(),creator=currentUser?.uid===CREATOR_UID;const menuButton=$('adminMenuButton');if(menuButton){menuButton.hidden=!allowed;menuButton.style.display=allowed?'':'none';} $('creatorRoleControls').hidden=!creator;$('creatorMonitorPanel').hidden=!creator;$('creatorGrowthManager').hidden=!creator;$('adminHeading').textContent=creator?'👑 Панель создателя':'🛡️ Панель администратора';$('adminMenuLabel').textContent=creator?'Панель создателя':'Панель администратора';$('adminIntro').textContent=creator?'Ты — единственный создатель. Можно выдавать валюту, блокировать игроков и управлять администраторами.':'Можно выдавать обычные и золотые лапки себе или любому игроку, а также блокировать игроков.';setCreatorMonitorAccess();}
 async function loadAdminPlayers(){if(!isStaff())return;try{const snap=await get(ref(db,'leaderboard'));const entries=Object.values(snap.val()||{}).filter(x=>x&&x.uid);const box=$('adminPlayerList');box.replaceChildren();entries.slice(0,100).forEach(x=>{const b=document.createElement('button');b.type='button';b.className='btn';b.style.textAlign='left';b.textContent=(x.name||'Игрок')+' · '+x.uid;b.addEventListener('click',()=>{$('adminTargetUid').value=x.uid});box.append(b)});adminStatus('Игроков в рейтинге: '+entries.length+'. Нажми на игрока, чтобы подставить UID.')}catch(e){adminStatus('Не удалось загрузить игроков: '+e.message,true)}}
